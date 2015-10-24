@@ -221,5 +221,6 @@ public class SystemSettingsValidators {
                         return true;
                     }
                 });
+        VALIDATORS.put(System.LOCKSCREEN_MEDIA_METADATA, BOOLEAN_VALIDATOR);
     }
 }
