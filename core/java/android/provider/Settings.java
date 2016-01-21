@@ -6241,6 +6241,18 @@ public final class Settings {
         public static final String GAMING_MODE_USE_OVERLAY_MENU = "gaming_mode_use_overlay_menu";
 
        /**
+         * Transparent power menu and dialogs
+         * @hide
+         */
+        public static final String TRANSPARENT_POWER_MENU = "transparent_power_menu";
+
+        /**
+         * Dim amount around power/reboot menu dialogs
+         * @hide
+         */
+        public static final String TRANSPARENT_POWER_DIALOG_DIM = "transparent_power_dialog_dim";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
@@ -6383,6 +6395,8 @@ public final class Settings {
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_POSITION);
             PRIVATE_SETTINGS.add(NETWORK_TRAFFIC_VIEW_LOCATION);
             PRIVATE_SETTINGS.add(BACK_GESTURE_HAPTIC);
+            PRIVATE_SETTINGS.add(TRANSPARENT_POWER_MENU);
+            PRIVATE_SETTINGS.add(TRANSPARENT_POWER_DIALOG_DIM);
         }
 
         /**
