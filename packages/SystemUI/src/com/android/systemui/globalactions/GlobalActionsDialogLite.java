@@ -503,6 +503,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
         mCurrentMenuActions = mRootMenuActions;
         mRebootMenu = false;
         if (mDialog != null && mDialog.isShowing()) {
+            mDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             // In order to force global actions to hide on the same affordance press, we must
             // register a call to onGlobalActionsShown() first to prevent the default actions
             // menu from showing. This will be followed by a subsequent call to
@@ -527,6 +528,9 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
      * Dismiss the global actions dialog, if it's currently shown
      */
     public void dismissDialog() {
+        if (mDialog != null) {
+            mDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        }
         mHandler.removeMessages(MESSAGE_DISMISS);
         mHandler.sendEmptyMessage(MESSAGE_DISMISS);
     }
@@ -598,7 +602,10 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
 
         attrs.setTitle("ActionsDialog");
         attrs.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
+        attrs.alpha = setPowerMenuAlpha();
         mDialog.getWindow().setAttributes(attrs);
+        mDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        mDialog.getWindow().setDimAmount(setPowerMenuDialogDim());
         // Don't acquire soft keyboard focus, to avoid destroying state when capturing bugreports
         mDialog.getWindow().addFlags(FLAG_ALT_FOCUSABLE_IM);
 
@@ -638,6 +645,22 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
     private int getPowermenuAnimations() {
         return Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.POWER_MENU_ANIMATIONS, 0);
+    }
+
+    private float setPowerMenuAlpha() {
+        int mPowerMenuAlpha = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.TRANSPARENT_POWER_MENU, 100);
+        double dAlpha = mPowerMenuAlpha / 100.0;
+        float alpha = (float) dAlpha;
+        return alpha;
+    }
+
+    private float setPowerMenuDialogDim() {
+        int mPowerMenuDialogDim = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.TRANSPARENT_POWER_DIALOG_DIM, 50);
+        double dDim = mPowerMenuDialogDim / 100.0;
+        float dim = (float) dDim;
+        return dim;
     }
 
     /**
@@ -2411,6 +2434,7 @@ public class GlobalActionsDialogLite implements DialogInterface.OnDismissListene
                             mDialog.hide();
                             mDialog.dismiss();
                         } else {
+                            mDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                             mDialog.dismiss();
                         }
                         mDialog = null;
