@@ -1448,6 +1448,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     protected void registerBroadcastReceiver() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        filter.addAction(Intent.ACTION_SCREEN_CAMERA_GESTURE);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(DevicePolicyManager.ACTION_SHOW_DEVICE_MONITORING_DIALOG);
         filter.addAction(Intent.ACTION_SCREEN_CAMERA_GESTURE);
@@ -3466,6 +3467,18 @@ public class StatusBar extends SystemUI implements DemoMode,
             }
             else if (NotificationPanelViewController.CANCEL_NOTIFICATION_PULSE_ACTION.equals(action)) {
                 mNotificationPanelViewController.stopNotificationPulse();
+            }
+            else if (Intent.ACTION_SCREEN_CAMERA_GESTURE.equals(action)) {
+                boolean userSetupComplete = Settings.Secure.getInt(mContext.getContentResolver(),
+                        Settings.Secure.USER_SETUP_COMPLETE, 0) != 0;
+                if (!userSetupComplete) {
+                    if (DEBUG) Log.d(TAG, String.format(
+                            "userSetupComplete = %s, ignoring camera launch gesture.",
+                            userSetupComplete));
+                    return;
+                }
+
+                onCameraLaunchGestureDetected(StatusBarManager.CAMERA_LAUNCH_SOURCE_SCREEN_GESTURE);
             }
         }
     };
