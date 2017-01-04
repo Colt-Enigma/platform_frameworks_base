@@ -90,6 +90,8 @@ public class SystemSettings {
         Settings.System.ALARM_ALERT,
         Settings.System.NOTIFICATION_LIGHT_PULSE,
         Settings.System.QS_PANEL_STYLE
-        Settings.System.DOUBLE_TAP_SLEEP_GESTURE
+        Settings.System.DOUBLE_TAP_SLEEP_GESTURE,
+        Settings.System.NETWORK_TRAFFIC_STATE,
+        Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD,
     };
 }
