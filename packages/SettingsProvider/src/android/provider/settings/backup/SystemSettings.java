@@ -100,5 +100,8 @@ public class SystemSettings {
         Settings.System.QS_LAYOUT,
         Settings.System.QQS_LAYOUT,
         Settings.System.USE_OLD_MOBILETYPE,
+        Settings.System.STATUS_BAR_LOGO,
+        Settings.System.STATUS_BAR_LOGO_POSITION,
+        Settings.System.STATUS_BAR_LOGO_STYLE,
     };
 }
