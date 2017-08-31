@@ -147,4 +147,9 @@ interface IStatusBarService
      * display.
      */
     void suppressAmbientDisplay(boolean suppress);
+
+    /**
+     * ColtOS additions
+     */
+    void toggleCameraFlash();
 }
