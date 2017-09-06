@@ -47,4 +47,9 @@
     <!-- Running service button -->
     <string name="accessibility_quick_settings_running_services">Open Running Services screen.</string>
 
+    <!-- Caffeine QS Tile -->
+    <string name="quick_settings_caffeine_label">Caffeine</string>
+    <string name="accessibility_quick_settings_caffeine_off">Caffeine off</string>
+    <string name="accessibility_quick_settings_caffeine_on">Caffeine on</string>
+
 </resources>
