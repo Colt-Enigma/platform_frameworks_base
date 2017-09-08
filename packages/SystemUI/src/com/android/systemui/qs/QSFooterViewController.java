@@ -178,6 +178,10 @@ public class QSFooterViewController extends ViewController<QSFooterView> impleme
                         mView.updateAnimator(
                                 right - left, mQuickQSPanelController.getNumQuickTiles()));
         mSettingsButton.setOnClickListener(mSettingsOnClickListener);
+        mSettingsButton.setOnLongClickListener(view -> {
+            startColtEnigmaActivity();
+            return true;
+        });
         mBuildText.setOnLongClickListener(view -> {
             CharSequence buildText = mBuildText.getText();
             if (!TextUtils.isEmpty(buildText)) {
@@ -281,6 +285,17 @@ public class QSFooterViewController extends ViewController<QSFooterView> impleme
         intent.setClassName("com.android.settings",
                 "com.android.settings.Settings$DevRunningServicesActivity");
         mActivityStarter.startActivity(intent, true /* dismissShade */, animationController);
+    }
+
+    private void startColtEnigmaActivity() {
+        ActivityLaunchAnimator.Controller animationController =
+                mSettingsButtonContainer != null ? ActivityLaunchAnimator.Controller.fromView(
+                        mSettingsButtonContainer,
+                        InteractionJankMonitor.CUJ_SHADE_APP_LAUNCH_FROM_SETTINGS_BUTTON) : null;
+        Intent nIntent = new Intent(Intent.ACTION_MAIN);
+        nIntent.setClassName("com.android.settings",
+            "com.android.settings.Settings$ColtEnigmaActivity");
+        mActivityStarter.startActivity(nIntent, true /* dismissShade */, animationController);
     }
 
     private boolean isTunerEnabled() {
