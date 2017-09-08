@@ -203,10 +203,26 @@ internal class FooterActionsController @Inject constructor(
                 true /* dismissShade */, animationController)
     }
 
+    private fun startColtActivity() {
+        val animationController = settingsButtonContainer?.let {
+            ActivityLaunchAnimator.Controller.fromView(
+                    it,
+                    InteractionJankMonitor.CUJ_SHADE_APP_LAUNCH_FROM_SETTINGS_BUTTON)
+            }
+        var nIntent: Intent = Intent(Intent.ACTION_DEFAULT)
+        nIntent.setClassName("com.android.settings",
+            "com.android.settings.Settings\$ColtEnigmaActivity")
+        activityStarter.startActivity(nIntent, true /* dismissShade */, animationController)
+    }
+
     @VisibleForTesting
     public override fun onViewAttached() {
         globalActionsDialog = globalActionsDialogProvider.get()
         settingsButtonContainer.setOnClickListener(onClickListener)
+        settingsButtonContainer.setOnLongClickListener { view ->
+            startColtActivity()
+            true
+        }
         multiUserSetting.isListening = true
 
         val securityFooter = securityFooterController.view
