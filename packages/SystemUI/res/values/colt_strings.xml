@@ -31,7 +31,9 @@
     <string name="global_action_reboot_bootloader">Bootloader</string>
     <string name="global_action_settings">Settings</string>
 
-    <!-- Statusbar tuner -->
+    <!-- SystemUI Tuner -->
     <string name="statusbar_items_title">Statusbar icon</string>
+    <string name="lockscreen_default">Default</string>
+    <string name="lockscreen_hidden">None</string>
 
 </resources>
