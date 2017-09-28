@@ -433,6 +433,8 @@ public interface CentralSurfaces extends Dumpable, ActivityStarter, LifecycleOwn
     void onVoiceAssistHintStarted();
 
     void onPhoneHintStarted();
+    
+    void onCustomHintStarted();
 
     void onTrackingStopped(boolean expand);
 
