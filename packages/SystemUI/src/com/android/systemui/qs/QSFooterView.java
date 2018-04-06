@@ -57,6 +57,7 @@ public class QSFooterView extends FrameLayout {
 
     private PageIndicator mPageIndicator;
     private TextView mUsageText;
+    private View mEditLayout;
     private View mEditButton;
 
     @Nullable
@@ -69,6 +70,7 @@ public class QSFooterView extends FrameLayout {
     private boolean mHideDataUsage;
     private boolean mShouldShowUsageText;
     private boolean mShouldShowSuffix;
+    private boolean mShowEditIcon;
 
     @Nullable
     private OnClickListener mExpandClickListener;
@@ -94,6 +96,7 @@ public class QSFooterView extends FrameLayout {
         mPageIndicator = findViewById(R.id.footer_page_indicator);
         mUsageText = findViewById(R.id.build);
         mEditButton = findViewById(android.R.id.edit);
+        mEditLayout = findViewById(R.id.edit_layout);
 
         updateResources();
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
@@ -298,5 +301,11 @@ public class QSFooterView extends FrameLayout {
     private void updateVisibilities() {
         mUsageText.setVisibility(!mHideDataUsage && mExpanded && mShouldShowUsageText
                 ? View.VISIBLE : View.INVISIBLE);
+        mShowEditIcon = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.QS_FOOTER_SHOW_EDIT, 1,
+                UserHandle.USER_CURRENT) == 1;
+
+        mEditButton.setVisibility(mShowEditIcon ? View.VISIBLE : View.GONE);
+        mEditLayout.setVisibility(mShowEditIcon ? View.VISIBLE : View.GONE);
     }
 }
