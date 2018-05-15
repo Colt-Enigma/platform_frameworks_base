@@ -22,7 +22,12 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.UserHandle;
@@ -110,6 +115,7 @@ public class QSContainerImpl extends FrameLayout implements
     private int mQsSBBackgroundAlpha = 255;
     private Drawable mQsBackGround;
     private int mQsBackGroundAlpha;
+    private int mQsBackGroundColor;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -163,13 +169,19 @@ public class QSContainerImpl extends FrameLayout implements
 	    getContext().getContentResolver().registerContentObserver(Settings.System
                             .getUriFor(Settings.System.QS_PANEL_BG_ALPHA), false,
                     this, UserHandle.USER_ALL);
+            getContext().getContentResolver().registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.QS_PANEL_BG_COLOR), false,
+                    this, UserHandle.USER_ALL);
         }
 
         @Override
-	public void onChange(boolean selfChange, Uri uri) {
-            if (uri.equals(Settings.System.getUriFor(Settings.System.QS_PANEL_BG_ALPHA))) {
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.System.getUriFor(Settings.System.QS_PANEL_BG_ALPHA)) ||
+                            uri.equals(Settings.System.getUriFor(Settings.System.QS_PANEL_BG_COLOR))) {
                 mQsBackGroundAlpha = Settings.System.getIntForUser(getContext().getContentResolver(),
                         Settings.System.QS_PANEL_BG_ALPHA, 255, UserHandle.USER_CURRENT);
+                mQsBackGroundColor = Settings.System.getIntForUser(getContext().getContentResolver(),
+                        Settings.System.QS_PANEL_BG_COLOR, Color.WHITE, UserHandle.USER_CURRENT);
                 setQsBackground();
             updateSettings();
         }
@@ -181,6 +193,8 @@ public class QSContainerImpl extends FrameLayout implements
                 Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
         mQsBackGroundAlpha = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.QS_PANEL_BG_ALPHA, 255, UserHandle.USER_CURRENT);
+        mQsBackGroundColor = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.QS_PANEL_BG_COLOR, Color.WHITE, UserHandle.USER_CURRENT);
 
         setQsBackground();
     }
@@ -257,6 +271,7 @@ public class QSContainerImpl extends FrameLayout implements
 
     private void setQsBackground() {
         if (mQsBackGround != null) {
+            mQsBackGround.setColorFilter(mQsBackGroundColor, PorterDuff.Mode.SRC_ATOP);
             mQsBackGround.setAlpha(mQsBackGroundAlpha);
             mBackground.setBackground(mQsBackGround);
         }

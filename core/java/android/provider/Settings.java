@@ -6296,12 +6296,24 @@ public final class Settings {
          */
         public static final String QS_PANEL_BG_ALPHA = "qs_panel_bg_alpha";
 
-
 	/**
          * Whether to disco the QS tiles or not
          * @hide
          */
         public static final String QS_TILES_BG_DISCO = "qs_tiles_bg_disco";
+
+        /**
+         * Whether to change the color of the qs panel
+         * @hide
+         */
+        public static final String QS_PANEL_BG_COLOR = "qs_panel_bg_color";
+
+        /**
+         * IMPORTANT: If you add a new public settings you also have to add it to
+         * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
+         * it to PRIVATE_SETTINGS below. Also add a validator that can validate
+         * the setting value. See an example above.
+         */
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
@@ -6482,6 +6494,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(QS_PANEL_BG_USE_NEW_TINT);
             PRIVATE_SETTINGS.add(QS_TILES_BG_DISCO);
             PRIVATE_SETTINGS.add(QS_PANEL_BG_ALPHA);
+            PRIVATE_SETTINGS.add(QS_PANEL_BG_COLOR);
         }
 
         /**
