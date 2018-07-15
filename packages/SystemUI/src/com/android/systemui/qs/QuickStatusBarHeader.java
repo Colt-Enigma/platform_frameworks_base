@@ -215,7 +215,8 @@ public class QuickStatusBarHeader extends FrameLayout
                 STATUS_BAR_BATTERY_STYLE,
                 QS_BATTERY_STYLE,
                 QS_SHOW_BATTERY_PERCENT,
-                QS_WEATHER_POSITION);
+                QS_WEATHER_POSITION,
+		ICON_HIDE_LIST);
     }
 
     void onAttach(TintedIconManager iconManager,
@@ -733,6 +734,8 @@ public class QuickStatusBarHeader extends FrameLayout
             default:
                 break;
         }
+	mClockView.setClockVisibleByUser(!StatusBarIconController.getIconHideList(
+                mContext, newValue).contains("clock"));
     }
 
     private void setBatteryRemainingOnClick(boolean enable) {
