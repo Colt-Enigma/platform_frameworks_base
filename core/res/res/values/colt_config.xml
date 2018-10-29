@@ -208,4 +208,7 @@
     </string-array>
 
     <bool name="config_has_weird_dt_sensor">false</bool>
+
+    <!-- Whether device supports gestures on fingerprint sensor -->
+    <bool name="config_supportsGesturesOnFingerprintSensor">false</bool>
 </resources>
