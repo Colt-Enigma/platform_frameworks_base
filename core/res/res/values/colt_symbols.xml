@@ -82,4 +82,9 @@
     <!-- Settings Restart -->
    <java-symbol type="string" name="settings_restart_title" />
    <java-symbol type="string" name="settings_restart_message" />
+
+   <!-- Powermenu animations -->
+   <java-symbol type="style" name="GlobalActionsAnimation" />
+   <java-symbol type="style" name="GlobalActionsAnimationTop" />
+   <java-symbol type="style" name="GlobalActionsAnimationEnter" />
 </resources>
