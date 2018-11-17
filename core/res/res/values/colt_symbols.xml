@@ -89,4 +89,10 @@
 
     <!-- Device model (Build.MODEL) to spoof for netflix, if not empty -->
     <java-symbol type="string" name="config_netflixSpoofModel" />
+
+    <!-- Power menu animations -->
+    <java-symbol type="style" name="GlobalActionsAnimation" />
+    <java-symbol type="style" name="GlobalActionsAnimationTop" />
+    <java-symbol type="style" name="GlobalActionsAnimationEnter" />
+
 </resources>
