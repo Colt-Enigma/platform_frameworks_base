@@ -258,4 +258,7 @@
 
   <!-- Switch USB controller on Asus ROG devices-->
   <java-symbol type="bool" name="config_switchUsbController" />
+
+  <!-- System fonts -->
+  <java-symbol type="array" name="config_fontPackages" />
 </resources>
