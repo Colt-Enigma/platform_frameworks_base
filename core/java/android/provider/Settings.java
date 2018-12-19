@@ -5331,6 +5331,12 @@ public final class Settings {
         public static final String SCREEN_STATE_THREEG = "screen_state_threeg";
 
         /**
+         * Volume panel on left
+         * @hide
+         */
+        public static final String VOLUME_PANEL_ON_LEFT = "volume_panel_on_left";
+
+        /**
          * @hide
          */
         public static final String SCREEN_STATE_GPS = "screen_state_gps";
@@ -5508,6 +5514,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(HIDE_SMART_REPLIES);
             PRIVATE_SETTINGS.add(HEADS_UP_STOPLIST_VALUES);
             PRIVATE_SETTINGS.add(HEADS_UP_BLACKLIST_VALUES);
+            PRIVATE_SETTINGS.add(VOLUME_PANEL_ON_LEFT);
         }
 
         /**
