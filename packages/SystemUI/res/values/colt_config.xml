@@ -82,4 +82,6 @@
     <!-- Whether to invert the sim slots for VoLTE/VoWiFi icon -->
     <bool name="config_invertImsSlots">true</bool>
 
+    <!-- Allow devices override audio panel location to the left side -->
+    <bool name="config_audioPanelOnLeftSide">false</bool>
 </resources>

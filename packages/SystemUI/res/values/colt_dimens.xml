@@ -128,4 +128,6 @@
     <dimen name="weather_icon_size">24dp</dimen>
     <dimen name="current_weather_image_size">30dp</dimen>
 
+    <!-- Volume panel -->
+    <dimen name="volume_dialog_panel_transparent_padding_left">20dp</dimen>
 </resources>
