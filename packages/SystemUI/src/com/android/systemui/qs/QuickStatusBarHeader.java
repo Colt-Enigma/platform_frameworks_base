@@ -35,6 +35,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.AlarmClock;
 import android.provider.CalendarContract;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.DisplayCutout;
@@ -81,6 +82,9 @@ public class QuickStatusBarHeader extends FrameLayout
             "system:" + Settings.System.QS_SHOW_BATTERY_PERCENT;
     private static final String QS_WEATHER_POSITION =
             "system:" + Settings.System.QS_WEATHER_POSITION;
+
+    private static final String SHOW_QS_CLOCK =
+            "system:" + Settings.System.SHOW_QS_CLOCK;
 
     private boolean mExpanded;
     private boolean mQsDisabled;
@@ -194,6 +198,7 @@ public class QuickStatusBarHeader extends FrameLayout
 
         mClockContainer = findViewById(R.id.clock_container);
         mClockView = findViewById(R.id.clock);
+        mClockView.setQsHeader();
         mClockView.setOnClickListener(this);
         mDatePrivacySeparator = findViewById(R.id.space);
         // Tint for the battery icons are handled in setupHost()
@@ -216,7 +221,8 @@ public class QuickStatusBarHeader extends FrameLayout
                 QS_BATTERY_STYLE,
                 QS_SHOW_BATTERY_PERCENT,
                 QS_WEATHER_POSITION,
-		ICON_HIDE_LIST);
+                StatusBarIconController.ICON_HIDE_LIST,
+                SHOW_QS_CLOCK);
     }
 
     void onAttach(TintedIconManager iconManager,
@@ -730,6 +736,11 @@ public class QuickStatusBarHeader extends FrameLayout
                 mQQSWeather =
                        TunerService.parseInteger(newValue, 2);
                 updateQSWeatherPosition();
+		break;
+            case SHOW_QS_CLOCK:
+                boolean showClock =
+                        TunerService.parseIntegerSwitch(newValue, true);
+                mClockView.setClockVisibleByUser(showClock);
                 break;
             default:
                 break;
