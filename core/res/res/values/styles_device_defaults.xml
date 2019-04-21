@@ -132,11 +132,7 @@ easier.
     <style name="Widget.DeviceDefault.AbsListView" parent="Widget.Material.AbsListView"/>
     <style name="Widget.DeviceDefault.Spinner.DropDown.ActionBar" parent="Widget.Material.Spinner.DropDown.ActionBar"/>
     <style name="Widget.DeviceDefault.PopupWindow.ActionMode" parent="Widget.Material.PopupWindow.ActionMode"/>
-    <style name="Widget.DeviceDefault.CompoundButton.Switch" parent="Widget.Material.CompoundButton.Switch">
-        <item name="switchTextAppearance">@style/TextAppearance.DeviceDefault.Widget.Switch</item>
-        <item name="track">@drawable/x_switch_track_material</item>
-        <item name="thumb">@drawable/x_switch_thumb_material_anim</item>
-    </style>
+    <style name="Widget.DeviceDefault.CompoundButton.Switch" parent="Widget.Material.CompoundButton.Switch"/>
     <style name="Widget.DeviceDefault.ExpandableListView.White" parent="Widget.Material.ExpandableListView.White"/>
     <style name="Widget.DeviceDefault.FastScroll" parent="Widget.Material.FastScroll"/>
     <!-- The FragmentBreadCrumbs widget is deprecated starting in API level 21 ({@link android.os.Build.VERSION_CODES#.L}). -->
