@@ -232,4 +232,6 @@ oneway interface IStatusBar
      * ColtOS additions
      */
     void toggleCameraFlash();
+    void toggleCameraFlashState(boolean enable);
+
 }

@@ -152,4 +152,5 @@ interface IStatusBarService
      * ColtOS additions
      */
     void toggleCameraFlash();
+    void toggleCameraFlashState(boolean enable);
 }
