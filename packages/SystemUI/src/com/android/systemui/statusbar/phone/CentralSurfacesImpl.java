@@ -3919,6 +3919,9 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces {
                     Settings.System.HEADS_UP_STOPLIST_VALUES), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.HEADS_UP_BLACKLIST_VALUES), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.LESS_BORING_HEADS_UP),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -3938,6 +3941,7 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces {
             setLockscreenDoubleTapToSleep();
             setHeadsUpStoplist();
             setHeadsUpBlacklist();
+            setUseLessBoringHeadsUp();
         }
     }
 
@@ -3955,6 +3959,13 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces {
     private void setHeadsUpBlacklist() {
         if (mNotificationInterruptStateProvider != null)
             mNotificationInterruptStateProvider.setHeadsUpBlacklist();
+    }
+
+    private void setUseLessBoringHeadsUp() {
+        boolean lessBoringHeadsUp = Settings.System.getIntForUser(mContext.getContentResolver(),
+                Settings.System.LESS_BORING_HEADS_UP, 1,
+                UserHandle.USER_CURRENT) == 1;
+        mNotificationInterruptStateProvider.setUseLessBoringHeadsUp(lessBoringHeadsUp);
     }
 
     private final BroadcastReceiver mBannerActionBroadcastReceiver = new BroadcastReceiver() {
