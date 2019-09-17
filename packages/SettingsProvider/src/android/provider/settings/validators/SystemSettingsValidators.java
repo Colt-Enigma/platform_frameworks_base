@@ -214,5 +214,16 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.FINGERPRINT_WAKE_UNLOCK, NON_NEGATIVE_INTEGER_VALIDATOR);
         VALIDATORS.put(System.ENABLE_RIPPLE_EFFECT, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(
+                System.COLOR_BUCKET_OVERLAY,
+                new Validator() {
+                    @Override
+                    public boolean validate(String value) {
+                        if (value == null && value.isEmpty()) {
+                            return false;
+                        }
+                        return true;
+                    }
+                });
     }
 }

@@ -5700,6 +5700,13 @@ public final class Settings {
         public static final String SCREENSHOT_SHUTTER_SOUND = "screenshot_shutter_sound";
 
         /**
+         * Setting to hold the current set overlay for color bucket.
+         * overlay package name (String)
+         * @hide
+         */
+        public static final String COLOR_BUCKET_OVERLAY = "color_bucket_overlay";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
@@ -5846,6 +5853,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(DOUBLE_TAP_SLEEP_GESTURE);
             PRIVATE_SETTINGS.add(VOLUME_BUTTON_MUSIC_CONTROL);
             PRIVATE_SETTINGS.add(VOLUME_ROCKER_WAKE);
+            PRIVATE_SETTINGS.add(COLOR_BUCKET_OVERLAY);
         }
 
         /**
