@@ -119,6 +119,7 @@ public class NavigationBarInflaterView extends FrameLayout
     private boolean mIsHintEnabled;
 
     private int mHomeHandleWidthMode = 0;
+    private boolean mNavBarLayoutInverse = false;
 
     public NavigationBarInflaterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -127,6 +128,8 @@ public class NavigationBarInflaterView extends FrameLayout
         final NavigationModeController controller = Dependency.get(NavigationModeController.class);
         mNavBarMode = controller.addListener(this);
         mHomeHandleWidthMode = controller.getNavigationHandleWidthMode();
+        mNavBarLayoutInverse = controller.shouldInvertNavBarLayout();
+        updateLayoutInversion();
     }
 
     @VisibleForTesting
@@ -190,6 +193,26 @@ public class NavigationBarInflaterView extends FrameLayout
                 clearViews();
                 inflateLayout(getDefaultLayout());
             }
+        }
+    }
+
+    @Override
+    public void onNavBarLayoutInverseChanged(boolean inverse) {
+        if (mNavBarLayoutInverse == inverse) return;
+        mNavBarLayoutInverse = inverse;
+        if (mNavBarMode != NAV_BAR_MODE_3BUTTON) return;
+        updateLayoutInversion();
+    }
+
+    private void updateLayoutInversion() {
+        if (mNavBarLayoutInverse) {
+            final int layoutDirection = mContext.getResources()
+                .getConfiguration().getLayoutDirection();
+            setLayoutDirection(layoutDirection == LAYOUT_DIRECTION_RTL
+                ? LAYOUT_DIRECTION_LTR
+                : LAYOUT_DIRECTION_RTL);
+        } else {
+            setLayoutDirection(LAYOUT_DIRECTION_INHERIT);
         }
     }
 
