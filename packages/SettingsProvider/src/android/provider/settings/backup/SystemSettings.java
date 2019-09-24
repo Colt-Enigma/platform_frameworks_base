@@ -89,6 +89,7 @@ public class SystemSettings {
         Settings.System.DISPLAY_COLOR_MODE,
         Settings.System.ALARM_ALERT,
         Settings.System.NOTIFICATION_LIGHT_PULSE,
-        Settings.System.QS_PANEL_STYLE
+        Settings.System.QS_PANEL_STYLE,
+        Settings.System.DOUBLE_TAP_SLEEP_GESTURE
     };
 }
