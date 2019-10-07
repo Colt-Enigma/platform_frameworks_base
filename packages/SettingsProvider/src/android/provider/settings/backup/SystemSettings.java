@@ -86,5 +86,6 @@ public class SystemSettings {
         Settings.System.NOTIFICATION_LIGHT_PULSE,
         Settings.System.FULLSCREEN_GESTURES,
         Settings.System.LOCKSCREEN_SMALL_CLOCK,
+        Settings.System.DOZE_ON_CHARGE,
     };
 }
