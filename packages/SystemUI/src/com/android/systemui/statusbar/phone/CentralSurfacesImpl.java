@@ -169,6 +169,7 @@ import com.android.systemui.fragments.ExtensionFragmentListener;
 import com.android.systemui.fragments.FragmentHostManager;
 import com.android.systemui.fragments.FragmentService;
 import com.android.systemui.keyguard.KeyguardService;
+import com.android.systemui.keyguard.KeyguardSliceProvider;
 import com.android.systemui.keyguard.KeyguardUnlockAnimationController;
 import com.android.systemui.keyguard.KeyguardViewMediator;
 import com.android.systemui.keyguard.ScreenLifecycle;
@@ -3996,6 +3997,9 @@ public class CentralSurfacesImpl implements CoreStartable, PackageChangedListene
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIF_PANEL_MAX_NOTIF_CONFIG),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.PULSE_ON_NEW_TRACKS),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -4016,6 +4020,9 @@ public class CentralSurfacesImpl implements CoreStartable, PackageChangedListene
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.NOTIF_PANEL_CUSTOM_NOTIF)) ||
                 uri.equals(Settings.System.getUriFor(Settings.System.NOTIF_PANEL_MAX_NOTIF_CONFIG))) {
 		setMaxNotifPanelNotifConfig();
+            } else if (uri.equals(Settings.Secure.getUriFor(
+                    Settings.Secure.PULSE_ON_NEW_TRACKS))) {
+                setPulseOnNewTracks();
             }
             update();
         }
@@ -4028,6 +4035,7 @@ public class CentralSurfacesImpl implements CoreStartable, PackageChangedListene
             setCustomQsAlpha();
             setMaxKeyguardNotifConfig();
             setMaxNotifPanelNotifConfig();
+            setPulseOnNewTracks();
         }
     }
 
@@ -4078,6 +4086,16 @@ public class CentralSurfacesImpl implements CoreStartable, PackageChangedListene
                  Settings.System.NOTIF_PANEL_MAX_NOTIF_CONFIG, 3, UserHandle.USER_CURRENT);
 
         mNotificationPanelViewController.updateMaxDisplayedNotifications(customMaxNotifPanel);
+    }
+
+    private void setPulseOnNewTracks() {
+        boolean showPulseOnNewTracks = Settings.Secure.getIntForUser(mContext.getContentResolver(),
+                Settings.Secure.PULSE_ON_NEW_TRACKS, 0,
+                UserHandle.USER_CURRENT) == 1;
+        KeyguardSliceProvider sliceProvider = KeyguardSliceProvider.getAttachedInstance();
+        if (sliceProvider != null) {
+                sliceProvider.setPulseOnNewTracks(showPulseOnNewTracks);
+        }
     }
 
     private final BroadcastReceiver mBannerActionBroadcastReceiver = new BroadcastReceiver() {
