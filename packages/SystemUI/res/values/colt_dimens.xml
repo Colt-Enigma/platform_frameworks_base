@@ -44,7 +44,7 @@
 
     <!-- Network traffic monitor -->
     <dimen name="net_traffic_multi_text_size">8dp</dimen>
-    <dimen name="net_traffic_txt_img_padding">2dp</dimen>
+    <dimen name="net_traffic_txt_img_padding">4dp</dimen>
 
     <!-- Old style mobile data indicators -->
     <dimen name="status_bar_mobile_signal_with_type_height">18dp</dimen>
