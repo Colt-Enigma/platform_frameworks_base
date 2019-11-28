@@ -172,20 +172,24 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     }
 
     private void setBuildText() {
-        String baseVersion = SystemProperties.get("ro.colt.build.version");
         if (mBuildText == null) return;
         boolean isShow = Settings.System.getIntForUser(mContext.getContentResolver(),
                         Settings.System.FOOTER_TEXT_SHOW, 0,
                         UserHandle.USER_CURRENT) == 1;
+        String text = Settings.System.getStringForUser(mContext.getContentResolver(),
+                        Settings.System.FOOTER_TEXT_STRING,
+                        UserHandle.USER_CURRENT);
         if (isShow) {
-            mBuildText.setText("ColtOS " + baseVersion);
+            mBuildText.setText(text == null || text == "" ? "ColtOS" : text);
             // Set as selected for marquee before its made visible, then it won't be announced when
             // it's made visible.
             mBuildText.setSelected(true);
             mShouldShowBuildText = true;
+            mBuildText.setVisibility(View.VISIBLE);
         } else {
             mShouldShowBuildText = false;
             mBuildText.setSelected(false);
+            mBuildText.setVisibility(View.GONE);
         }
     }
 
@@ -269,6 +273,9 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         super.onAttachedToWindow();
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.FOOTER_TEXT_SHOW), false,
+                mSettingsObserver, UserHandle.USER_ALL);
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.FOOTER_TEXT_STRING), false,
                 mSettingsObserver, UserHandle.USER_ALL);
     }
 

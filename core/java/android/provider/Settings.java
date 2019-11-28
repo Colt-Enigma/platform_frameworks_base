@@ -5941,6 +5941,12 @@ public final class Settings {
         public static final String FOOTER_TEXT_SHOW = "footer_text_show";
 
         /**
+         * QS footer text
+         * @hide
+         */
+        public static final String FOOTER_TEXT_STRING = "footer_text_string";
+
+        /**
          * @hide
          */
         public static final String STATUSBAR_BATTERY_BAR_BLEND_COLORS_REVERSE =
