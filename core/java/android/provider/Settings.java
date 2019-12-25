@@ -6066,6 +6066,12 @@ public final class Settings {
                 "status_bar_file_header_image";
 
         /**
+         * Whether to vibrate on notifications
+         * @hide
+         */
+        public static final String VIBRATE_ON_NOTIFICATIONS = "vibrate_on_notifications";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
