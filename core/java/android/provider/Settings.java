@@ -6296,6 +6296,12 @@ public final class Settings {
         public static final String CUSTOM_RINGTONE_VIBRATION_PATTERN = "custom_ringtone_vibration_pattern";
 
         /**
+         * Whether to show status bar on lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_STATUS_BAR = "lockscreen_status_bar";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
