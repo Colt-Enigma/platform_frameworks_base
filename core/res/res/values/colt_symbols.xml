@@ -274,4 +274,7 @@
     <!-- Pulse brightness -->
     <java-symbol type="integer" name="config_screenBrightnessPulse" />
 
+    <!-- Light / Regular style fonts -->
+    <java-symbol type="string" name="config_lightFontFamily" />
+    <java-symbol type="string" name="config_regularFontFamily" />
 </resources>
