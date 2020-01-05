@@ -93,4 +93,8 @@
    <java-symbol type="style" name="GlobalActionsAnimationXylon" />
    <java-symbol type="style" name="GlobalActionsAnimationCard" />
    <java-symbol type="style" name="GlobalActionsAnimationRotate" />
+
+   <!-- Light / Regular style fonts -->
+    <java-symbol type="string" name="config_lightFontFamily" />
+    <java-symbol type="string" name="config_regularFontFamily" />
 </resources>
