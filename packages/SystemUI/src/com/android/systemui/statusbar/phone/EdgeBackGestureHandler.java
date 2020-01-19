@@ -230,6 +230,8 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
 
     private final Vibrator mVibrator;
 
+    private boolean mBlockedGesturalNavigation;
+
     private final GestureNavigationSettingsObserver mGestureNavigationSettingsObserver;
 
     private final NavigationEdgeBackPlugin.BackCallback mBackCallback =
@@ -865,6 +867,10 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
         return topActivity != null && mGestureBlockingActivities.contains(topActivity);
     }
 
+    public void setBlockedGesturalNavigation(boolean blocked) {
+        mBlockedGesturalNavigation = blocked;
+    }
+
     @Override
     public void writeToProto(SystemUiTraceProto proto) {
         if (proto.edgeBackGestureHandler == null) {
@@ -879,7 +885,9 @@ public class EdgeBackGestureHandler extends CurrentUserTracker implements Displa
         }
 
         public void onInputEvent(InputEvent event) {
-            EdgeBackGestureHandler.this.onInputEvent(event);
+            if (!mBlockedGesturalNavigation) {
+                EdgeBackGestureHandler.this.onInputEvent(event);
+            }
             finishInputEvent(event, true);
         }
     }
