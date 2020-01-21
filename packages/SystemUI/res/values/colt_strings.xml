@@ -261,4 +261,7 @@
 
     <!-- Oneplus Analog clock -->
     <string name="clock_title_minimalism" translatable="false">Minimalism</string>
+
+    <!-- Daily data usage -->
+    <string name="daily_data_usage_title">Today\'s usage</string>
 </resources>
