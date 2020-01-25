@@ -550,6 +550,7 @@ public class KeyguardIndicationController implements StateListener,
         final ContentResolver resolver = mContext.getContentResolver();
         mChargingIndication = Settings.System.getIntForUser(resolver,
                 Settings.System.LOCKSCREEN_CHARGING_ANIMATION_STYLE, 1, UserHandle.USER_CURRENT);
+        if (mChargingIndicationView == null) return;
         if (mChargingIndication > 0 && !mDozing && mPowerPluggedIn) {
             if (hasActiveInDisplayFp()) {
                 if (mFODPositionY != 0) {
