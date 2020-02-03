@@ -235,5 +235,6 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.STATUS_BAR_LOGO_POSITION, ANY_INTEGER_VALIDATOR);
         VALIDATORS.put(System.STATUS_BAR_LOGO_STYLE, ANY_INTEGER_VALIDATOR);
         VALIDATORS.put(System.SWIPE_TO_SCREENSHOT, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.RINGTONE_VIBRATION_PATTERN, new InclusiveIntegerRangeValidator(0, 4));
     }
 }
