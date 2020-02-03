@@ -90,5 +90,6 @@ public class SystemSettings {
         Settings.System.LOCKSCREEN_MEDIA_METADATA,
         Settings.System.NOTIFICATION_HEADERS,
 	Settings.System.ACCENT_COLOR,
+        Settings.System.RINGTONE_VIBRATION_PATTERN,
     };
 }
