@@ -47,6 +47,7 @@ import javax.inject.Inject;
 
 public class AODTile extends QSTileImpl<State> implements
         BatteryController.BatteryStateChangeCallback {
+
     private boolean mListening;
     private final Icon mIcon = ResourceIcon.get(R.drawable.ic_qs_aod);
     private final SecureSettings mSecureSettings;
@@ -93,6 +94,14 @@ public class AODTile extends QSTileImpl<State> implements
     @Override
     public void onPowerSaveChanged(boolean isPowerSave) {
         refreshState();
+    }
+
+    private int getAodState() {
+        int aodState = mSecureSettings.getInt(Settings.Secure.DOZE_ALWAYS_ON, 0);
+        if (aodState == 0) {
+            aodState = mSystemSettings.getInt(Settings.System.DOZE_ON_CHARGE, 0) == 1 ? 2 : 0;
+        }
+        return aodState;
     }
 
     private int getAodState() {
