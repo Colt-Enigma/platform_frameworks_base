@@ -7441,5 +7441,7 @@ message MetricsEvent {
     // COLTOS Metrics
     COLT = 2772;
 
+    // Panel for Mobile Data
+    PANEL_MOBILE_DATA = 4002;
   }
 }
