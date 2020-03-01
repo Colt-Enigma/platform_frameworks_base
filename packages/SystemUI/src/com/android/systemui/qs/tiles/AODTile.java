@@ -104,13 +104,6 @@ public class AODTile extends QSTileImpl<State> implements
         return aodState;
     }
 
-    private int getAodState() {
-        int aodState = mSecureSettings.getInt(Settings.Secure.DOZE_ALWAYS_ON, 0);
-        if (aodState == 0) {
-            aodState = mSystemSettings.getInt(Settings.System.DOZE_ON_CHARGE, 0) == 1 ? 2 : 0;
-        }
-        return aodState;
-    }
 
     @Override
     public boolean isAvailable() {
