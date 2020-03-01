@@ -157,6 +157,11 @@ interface IStatusBarService
     void toggleSplitScreen();
     void preloadRecentApps();
     void cancelPreloadRecentApps();
+    void killForegroundApp();
+
+    /**
+     * Starts the default assistant app.
+     */
     void startAssist(in Bundle args);
 
     /**

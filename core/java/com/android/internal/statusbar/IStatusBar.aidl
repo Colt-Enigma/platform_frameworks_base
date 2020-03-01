@@ -233,6 +233,7 @@ oneway interface IStatusBar
      */
     void toggleCameraFlash();
     void toggleCameraFlashState(boolean enable);
+    void killForegroundApp();
 
     /**
      *  Used to show or hide in display fingerprint view.
