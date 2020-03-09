@@ -260,5 +260,6 @@ public class SystemSettingsValidators {
                     }
                 });
         VALIDATORS.put(System.NAVIGATION_BAR_INVERSE, BOOLEAN_VALIDATOR);
+        VALIDATORS.put(System.NAV_BAR_COMPACT_LAYOUT, BOOLEAN_VALIDATOR);
     }
 }
