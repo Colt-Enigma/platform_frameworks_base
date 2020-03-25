@@ -55,6 +55,7 @@ import com.airbnb.lottie.LottieAnimationView;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.app.IBatteryStats;
+import com.android.internal.util.colt.ColtUtils;
 import com.android.internal.widget.ViewClippingUtil;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
@@ -724,8 +725,9 @@ public class KeyguardIndicationController implements StateListener,
                         String.format("%.1f", (float) (mChargingVoltage / 1000 / 1000)) + "V";
             }
             if (mTemperature > 0) {
-                batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") +
-                        mTemperature / 10 + "°C";
+                String batteryTemp = ColtUtils.mccCheck(mContext) ?
+                          mTemperature * 9 / 50 + 32 + "°F" : mTemperature / 10 + "°C";
+                batteryInfo = (batteryInfo == "" ? "" : batteryInfo + " · ") + batteryTemp;
             }
             if (batteryInfo != "") {
                 batteryInfo = "\n" + batteryInfo;
