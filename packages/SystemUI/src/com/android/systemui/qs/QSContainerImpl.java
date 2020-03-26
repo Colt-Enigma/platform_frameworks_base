@@ -22,6 +22,9 @@ import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import android.annotation.SuppressLint;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.ContentResolver;
+import android.content.om.IOverlayManager;
+import android.content.res.ColorUtils;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.graphics.Color;
@@ -204,8 +207,8 @@ public class QSContainerImpl extends FrameLayout implements
                         Settings.System.QS_PANEL_BG_ALPHA, 255, UserHandle.USER_CURRENT);
                 setQsBackground();
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.QS_PANEL_BG_COLOR))) {
-                mQsBackGroundColor = Settings.System.getIntForUser(getContext().getContentResolver(),
-                        Settings.System.QS_PANEL_BG_COLOR, Color.WHITE, UserHandle.USER_CURRENT);
+                mQsBackGroundColor = ColorUtils.getValidQsColor(Settings.System.getIntForUser(getContext().getContentResolver(),
+                        Settings.System.QS_PANEL_BG_COLOR, ColorUtils.genRandomQsColor(), UserHandle.USER_CURRENT));
                 setQsBackground();
             } else if (uri.equals(Settings.System.getUriFor(Settings.System.SYSUI_COLORS_ACTIVE))) {
                 mSetQsFromWall = Settings.System.getIntForUser(getContext().getContentResolver(),
@@ -224,8 +227,8 @@ public class QSContainerImpl extends FrameLayout implements
                 Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
         mQsBackGroundAlpha = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.QS_PANEL_BG_ALPHA, 255, UserHandle.USER_CURRENT);
-        mQsBackGroundColor = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.QS_PANEL_BG_COLOR, Color.WHITE, UserHandle.USER_CURRENT);
+        mQsBackGroundColor = ColorUtils.getValidQsColor(Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.QS_PANEL_BG_COLOR, ColorUtils.genRandomQsColor(), UserHandle.USER_CURRENT));
         mSetQsFromWall = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.SYSUI_COLORS_ACTIVE, 0, UserHandle.USER_CURRENT) == 1;
         mSetQsFromResources = Settings.System.getIntForUser(getContext().getContentResolver(),
@@ -295,7 +298,8 @@ public class QSContainerImpl extends FrameLayout implements
 
     private int getWallpaperColor() {
         // TODO: Find a way to trigger setBackground on lock event, and use FLAG_LOCK there
-        return mColorExtractor.getWallpaperColors(WallpaperManager.FLAG_SYSTEM).getPrimaryColor().toArgb();
+        return ColorUtils.getValidQsColor(mColorExtractor.getWallpaperColors(WallpaperManager.FLAG_SYSTEM)
+                        .getPrimaryColor().toArgb());
     }
 
     @Override
