@@ -102,4 +102,6 @@
     <!-- Wheter device supports an gaming mode profiles -->
     <bool name="config_gamingmode_performance">true</bool>
 
+    <!-- Enable face auth only when swiping security view -->
+    <bool name="config_faceAuthOnlyOnSecurityView">false</bool>
 </resources>
