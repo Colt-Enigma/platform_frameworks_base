@@ -24,11 +24,14 @@ import android.graphics.Paint.Style;
 import android.util.MathUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.provider.Settings;
+import android.content.Context;
 
 import com.android.internal.colorextraction.ColorExtractor;
 import com.android.systemui.R;
 import com.android.systemui.colorextraction.SysuiColorExtractor;
 import com.android.systemui.plugins.ClockPlugin;
+import com.android.internal.util.colt.ColtUtils;
 
 import java.util.TimeZone;
 
@@ -72,6 +75,8 @@ public class TypeClockController implements ClockPlugin {
     private View mView;
     private TypographicClock mTypeClock;
 
+    private Context mContext;
+
     /**
      * Small clock shown on lock screen above stack scroller.
      */
@@ -90,10 +95,11 @@ public class TypeClockController implements ClockPlugin {
      * @param colorExtractor Extracts accent color from wallpaper.
      */
     TypeClockController(Resources res, LayoutInflater inflater,
-            SysuiColorExtractor colorExtractor) {
+	    SysuiColorExtractor colorExtractor, Context context) {
         mResources = res;
         mLayoutInflater = inflater;
         mColorExtractor = colorExtractor;
+        mContext = context;
         mStatusBarHeight = res.getDimensionPixelSize(R.dimen.status_bar_height);
         mKeyguardLockPadding = res.getDimensionPixelSize(R.dimen.keyguard_lock_padding);
         mKeyguardLockHeight = res.getDimensionPixelSize(R.dimen.keyguard_lock_height);
@@ -183,8 +189,13 @@ public class TypeClockController implements ClockPlugin {
 
     @Override
     public void setTextColor(int color) {
-        mTypeClock.setTextColor(color);
-        mLockClock.setTextColor(color);
+	if(ColtUtils.useLockscreenCustomClockAccentColor(mContext)) {
+            mTypeClock.setTextColor(mContext.getResources().getColor(R.color.lockscreen_clock_accent_color));
+            mLockClock.setTextColor(mContext.getResources().getColor(R.color.lockscreen_clock_accent_color));
+        } else {
+            mTypeClock.setTextColor(color);
+            mLockClock.setTextColor(color);
+        }
     }
 
     @Override
@@ -193,8 +204,12 @@ public class TypeClockController implements ClockPlugin {
             return;
         }
         final int color = colorPalette[Math.max(0, colorPalette.length - 5)];
-        mTypeClock.setTextColor(color);
-        mLockClock.setTextColor(color);
+	if(ColtUtils.useLockscreenCustomClockAccentColor(mContext)) {
+            mTypeClock.setClockColor(mContext.getResources().getColor(R.color.lockscreen_clock_accent_color));
+        } else {
+            mTypeClock.setClockColor(color);
+            mLockClock.setClockColor(color);
+        }
     }
 
     @Override
@@ -209,7 +224,6 @@ public class TypeClockController implements ClockPlugin {
         if (mDarkController != null) {
             mDarkController.setDarkAmount(darkAmount);
         }
-        mClockPosition.setDarkAmount(darkAmount);
     }
 
     @Override
