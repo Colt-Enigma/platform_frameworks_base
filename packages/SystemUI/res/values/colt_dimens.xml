@@ -77,4 +77,7 @@
     <dimen name="opa_return_translation">-1.0dip</dimen>
     <dimen name="opa_rest_to_collapse">7.0dip</dimen>
 
+    <!-- App Lock -->
+    <dimen name="applock_icon_dimension">54dp</dimen>
+
 </resources>
