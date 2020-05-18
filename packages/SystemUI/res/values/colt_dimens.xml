@@ -41,14 +41,14 @@
     <dimen name="keyguard_charging_indication_height">60dp</dimen>
     <dimen name="keyguard_charging_indication_width">35dp</dimen>
 
-    <!-- Biometric Prompt -->
-    <dimen name="biometric_dialog_fod_margin">44dp</dimen>
-
     <!-- Recognizing fingerprint animation -->
     <dimen name="fod_animation_size">280dp</dimen>
     <dimen name="fod_animation_offset">0dp</dimen>
 
     <!-- Bottom margin size when fingerprint in display is active -->
     <dimen name="keyguard_indication_margin_bottom_fingerprint_in_display">30dp</dimen>
+
+    <!-- Biometric Prompt -->
+    <dimen name="biometric_dialog_fod_margin">12dp</dimen>
 
 </resources>
