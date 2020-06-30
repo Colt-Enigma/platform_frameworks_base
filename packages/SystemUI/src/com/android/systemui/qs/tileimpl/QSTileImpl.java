@@ -558,6 +558,9 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                 System.QS_PANEL_BG_COLOR, defaultColor, UserHandle.USER_CURRENT));
         int qsBackGroundColorWall = ColorUtils.getValidQsColor(getWallpaperColor(defaultColor));
 
+        boolean qsIconPrimary = Settings.System.getIntForUser(context.getContentResolver(),
+                    Settings.System.QS_TILE_ICON_PRIMARY, 0, UserHandle.USER_CURRENT) == 1;
+
         switch (state) {
             case Tile.STATE_UNAVAILABLE:
                 return Utils.getDisabled(context,
@@ -583,7 +586,9 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                     return context.getResources().getColor(R.color.qs_tile_oos);
                 } else if (setQsUseNewTint == 3){
                     return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse);
-		} else {
+		} else if (qsIconPrimary) {
+                         return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary);
+                     } else {
                         return Utils.getColorAttrDefaultColor(context, android.R.attr.colorPrimary);
                     }
                 } else {
