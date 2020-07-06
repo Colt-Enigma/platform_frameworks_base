@@ -6560,6 +6560,14 @@ public final class Settings {
         public static final String QS_TILE_ICON_PRIMARY_INACTIVE = "qs_tile_icon_primary_inactive";
 
         /**
+         * Data usage period
+         * 0: Daily
+         * 1: Monthly
+         * @hide
+         */
+        public static final String DATA_USAGE_PERIOD = "data_usage_period";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
