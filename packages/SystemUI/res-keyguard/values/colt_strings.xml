@@ -36,4 +36,5 @@
     <string name="clock_title_mnml_box" translatable="false">MNML\'s Box</string>
     <string name="clock_title_mnml_minimal" translatable="false">MNML\'s Minimal</string>
     <string name="clock_title_binary" translatable="false">Binary</string>
+    <string name="clock_title_tux" translatable="false">Tux</string>
 </resources>
