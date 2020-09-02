@@ -176,6 +176,8 @@ public final class ClockManager {
         addBuiltinClock(() -> new FireCircleClockController(res, layoutInflater, colorExtractor, context));
         addBuiltinClock(() -> new RainbowCircleClockController(res, layoutInflater, colorExtractor, context));
         addBuiltinClock(() -> new ExplosionCircleClockController(res, layoutInflater, colorExtractor, context));
+        addBuiltinClock(() -> new BlueCircleClockController(res, layoutInflater, colorExtractor, context));
+        addBuiltinClock(() -> new BlueV2CircleClockController(res, layoutInflater, colorExtractor, context));
 
         // Store the size of the display for generation of clock preview.
         DisplayMetrics dm = res.getDisplayMetrics();
