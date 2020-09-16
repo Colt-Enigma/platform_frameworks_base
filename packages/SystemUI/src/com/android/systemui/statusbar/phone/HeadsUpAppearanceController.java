@@ -139,7 +139,7 @@ public class HeadsUpAppearanceController implements OnHeadsUpChangedListener,
         panelView.addTrackingHeadsUpListener(mSetTrackingHeadsUp);
         panelView.addVerticalTranslationListener(mUpdatePanelTranslation);
         panelView.setHeadsUpAppearanceController(this);
-        mStackScroller.addOnExpandedHeightChangedListener(mSetExpandedHeight);
+        mStackScroller.addOnExpandedHeightListener(mSetExpandedHeight);
         mStackScroller.addOnLayoutChangeListener(mStackScrollLayoutChangeListener);
         mStackScroller.setHeadsUpAppearanceController(this);
         mClockView = clockView;

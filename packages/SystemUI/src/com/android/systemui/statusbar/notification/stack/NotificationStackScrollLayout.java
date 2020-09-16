@@ -577,7 +577,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
                 res.getBoolean(R.bool.config_fadeNotificationsOnDismiss);
         mRoundnessManager.setAnimatedChildren(mChildrenToAddAnimated);
         mRoundnessManager.setOnRoundingChangedCallback(this::invalidate);
-        addOnExpandedHeightChangedListener(mRoundnessManager::setExpanded);
+        addOnExpandedHeightListener(mRoundnessManager::setExpanded);
         mLockscreenUserManager.addUserChangedListener(userId ->
                 updateSensitiveness(false /* animated */));
         setOutlineProvider(mOutlineProvider);
@@ -585,7 +585,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
         // Blocking helper manager wants to know the expanded state, update as well.
         NotificationBlockingHelperManager blockingHelperManager =
                 Dependency.get(NotificationBlockingHelperManager.class);
-        addOnExpandedHeightChangedListener((height, unused) -> {
+	addOnExpandedHeightListener((height, unused) -> {
             blockingHelperManager.setNotificationShadeExpanded(height);
         });
 
@@ -5470,7 +5470,7 @@ public class NotificationStackScrollLayout extends ViewGroup implements ScrollAd
      * @param listener the listener to notify.
      */
     @ShadeViewRefactor(RefactorComponent.SHADE_VIEW)
-    public void addOnExpandedHeightChangedListener(BiConsumer<Float, Float> listener) {
+    public void addOnExpandedHeightListener(BiConsumer<Float, Float> listener) {
         mExpandedHeightListeners.add(listener);
     }
 

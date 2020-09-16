@@ -715,6 +715,7 @@ public class WallpaperManagerService extends IWallpaperManager.Stub
                         estimateCrop.bottom = estimateCrop.top + newHeight;
                         cropHint.set(estimateCrop);
                         estimateCrop.scale(1f / options.inSampleSize);
+
                     }
 
                     // We've got the safe cropHint; now we want to scale it properly to
