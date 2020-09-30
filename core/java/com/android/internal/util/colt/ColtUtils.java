@@ -74,6 +74,7 @@ import java.util.Locale;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.android.internal.statusbar.IStatusBarService;
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -100,7 +101,7 @@ public class ColtUtils {
         }
     }
 
-    private static OverlayManager mOverlayService;
+    private static OverlayManager sOverlayService;
 
     /**
      * Returns whether the device is voice-capable (meaning, it is also a phone).
@@ -506,10 +507,15 @@ public class ColtUtils {
 
     // Method to detect whether an overlay is enabled or not
     public static boolean isThemeEnabled(String packageName) {
-        mOverlayService = new OverlayManager();
+	if (sOverlayService == null) {
+            sOverlayService = new OverlayManager();
+        }
         try {
-            List<OverlayInfo> infos = mOverlayService.getOverlayInfosForTarget("android",
-                    UserHandle.myUserId());
+	    ArrayList<OverlayInfo> infos = new ArrayList<OverlayInfo>();
+            infos.addAll(sOverlayService.getOverlayInfosForTarget("android",
+                    UserHandle.myUserId()));
+            infos.addAll(sOverlayService.getOverlayInfosForTarget("com.android.systemui",
+                    UserHandle.myUserId()));
             for (int i = 0, size = infos.size(); i < size; i++) {
                 if (infos.get(i).packageName.equals(packageName)) {
                     return infos.get(i).isEnabled();
