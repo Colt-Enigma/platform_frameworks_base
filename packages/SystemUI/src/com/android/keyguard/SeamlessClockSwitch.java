@@ -49,7 +49,8 @@ public class SeamlessClockSwitch {
         "com.android.keyguard.clock.RainbowCircleClockController",
         "com.android.keyguard.clock.ExplosionCircleClockController",
         "com.android.keyguard.clock.BlueCircleClockController",
-        "com.android.keyguard.clock.BlueV2CircleClockController"
+        "com.android.keyguard.clock.BlueV2CircleClockController",
+        "com.android.keyguard.clock.SquaryClockController"
     };
 
     public static int getCurrentPosition(String currentClockFace) {

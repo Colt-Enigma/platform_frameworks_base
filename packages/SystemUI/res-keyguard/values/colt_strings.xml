@@ -46,6 +46,7 @@
     <string name="clock_title_explosion_animation" translatable="false">Explosion circle</string>
     <string name="clock_title_blue_circle_animation" translatable="false">Blue circle</string>
     <string name="clock_title_bluev2_circle_animation" translatable="false">Blue v2 circle</string>
+    <string name="clock_title_squary_clock">Cal Clock</string>
 
     <!-- Change clockface -->
     <string name="change_clock_face">Swipe to change the clock face</string>
