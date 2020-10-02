@@ -32,7 +32,7 @@ import java.util.TimeZone;
 /**
  * Controller for Stretch clock that can appear on lock screen and AOD.
  */
-public class SneekyClockController implements ClockPlugin {
+public class SpideyClockController implements ClockPlugin {
 
     /**
      * Resources used to get title and thumbnail.
@@ -63,7 +63,7 @@ public class SneekyClockController implements ClockPlugin {
      * Custom clock shown on AOD screen and behind stack scroller on lock.
      */
     private ClockLayout mBigClockView;
-    private ImageClock mSneekyClock;
+    private ImageClock mSpideyClock;
 
     /**
      * Small clock shown on lock screen above stack scroller.
@@ -83,7 +83,7 @@ public class SneekyClockController implements ClockPlugin {
      * @param inflater Inflater used to inflate custom clock views.
      * @param colorExtractor Extracts accent color from wallpaper.
      */
-    public SneekyClockController(Resources res, LayoutInflater inflater,
+    public SpideyClockController(Resources res, LayoutInflater inflater,
             SysuiColorExtractor colorExtractor) {
         mResources = res;
         mLayoutInflater = inflater;
@@ -92,8 +92,8 @@ public class SneekyClockController implements ClockPlugin {
     }
 
     private void createViews() {
-        mBigClockView = (ClockLayout) mLayoutInflater.inflate(R.layout.sneeky_clock, null);
-        mSneekyClock = mBigClockView.findViewById(R.id.analog_clock);
+        mBigClockView = (ClockLayout) mLayoutInflater.inflate(R.layout.spidey_clock, null);
+        mSpideyClock = mBigClockView.findViewById(R.id.analog_clock);
 
         mView = mLayoutInflater.inflate(R.layout.digital_clock, null);
         mLockClock = mView.findViewById(R.id.lock_screen_clock);
@@ -102,24 +102,24 @@ public class SneekyClockController implements ClockPlugin {
     @Override
     public void onDestroyView() {
         mBigClockView = null;
-        mSneekyClock = null;
+        mSpideyClock = null;
         mView = null;
         mLockClock = null;
     }
 
     @Override
     public String getName() {
-        return "sneeky";
+        return "spidey";
     }
 
     @Override
     public String getTitle() {
-        return mResources.getString(R.string.clock_title_sneeky);
+        return mResources.getString(R.string.clock_title_spidey);
     }
 
     @Override
     public Bitmap getThumbnail() {
-        return BitmapFactory.decodeResource(mResources, R.drawable.sneeky_thumbnail);
+        return BitmapFactory.decodeResource(mResources, R.drawable.spidey_thumbnail);
     }
 
     @Override
@@ -178,12 +178,12 @@ public class SneekyClockController implements ClockPlugin {
         final int primary = mPalette.getPrimaryColor();
         final int secondary = mPalette.getSecondaryColor();
         mLockClock.setTextColor(secondary);
-        //mSneekyClock.setClockColors(primary, secondary);
+        //mSpideyClock.setClockColors(primary, secondary);
     }
 
     @Override
     public void onTimeTick() {
-        mSneekyClock.onTimeChanged();
+        mSpideyClock.onTimeChanged();
         mBigClockView.onTimeChanged();
         mLockClock.refreshTime();
     }
@@ -197,7 +197,7 @@ public class SneekyClockController implements ClockPlugin {
 
     @Override
     public void onTimeZoneChanged(TimeZone timeZone) {
-        mSneekyClock.onTimeZoneChanged(timeZone);
+        mSpideyClock.onTimeZoneChanged(timeZone);
     }
 
     @Override
