@@ -88,5 +88,6 @@ public class SystemSettings {
         Settings.System.DOUBLE_TAP_SLEEP_LOCKSCREEN,
         Settings.System.COLOR_BUCKET_OVERLAY,
         Settings.System.LOCKSCREEN_MEDIA_METADATA,
+        Settings.System.NOTIFICATION_HEADERS,
     };
 }
