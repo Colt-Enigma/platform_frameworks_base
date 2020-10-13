@@ -10680,7 +10680,7 @@ public class PackageManagerService extends IPackageManager.Stub
                     continue;
                 }
                 final PackageSetting staticLibPkgSetting = getPackageSetting(
-                        toStaticSharedLibraryPackageName(sharedLibraryInfo.getPackageName(),
+                        toStaticSharedLibraryPackageName(sharedLibraryInfo.getName(),
                                 sharedLibraryInfo.getLongVersion()));
                 if (staticLibPkgSetting == null) {
                     Slog.wtf(TAG, "Shared lib without setting: " + sharedLibraryInfo);
