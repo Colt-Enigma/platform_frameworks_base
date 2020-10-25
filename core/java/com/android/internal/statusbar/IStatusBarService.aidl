@@ -178,4 +178,7 @@ interface IStatusBarService
     void killForegroundApp();
     // Used to block or unblock usage of gestural navigation
     void setBlockedGesturalNavigation(boolean blocked);
+
+    void killForegroundApp();
+    void screenPinningStateChanged(boolean enabled);
 }
