@@ -158,6 +158,7 @@ interface IStatusBarService
     void preloadRecentApps();
     void cancelPreloadRecentApps();
     void killForegroundApp();
+    void screenPinningStateChanged(boolean enabled);
 
     /**
      * Starts the default assistant app.

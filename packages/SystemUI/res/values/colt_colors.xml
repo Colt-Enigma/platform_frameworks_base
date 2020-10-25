@@ -25,4 +25,7 @@
 
    <color name="accent_device_default_light">@*android:color/accent_device_default_light</color>
 
+    <!-- Pulse accent color -->
+    <color name="pulseAccentColor">@*android:color/accent_device_default_light</color>
+
 </resources>
