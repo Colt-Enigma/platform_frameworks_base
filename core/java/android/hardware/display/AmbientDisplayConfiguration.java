@@ -38,6 +38,7 @@ public class AmbientDisplayConfiguration {
     private final Context mContext;
     private final boolean mAlwaysOnByDefault;
     private final boolean mDozeEnabledByDefault;
+    private final boolean mDeviceWithWeirdDtSensor;
 
     /** {@hide} */
     @TestApi
@@ -45,6 +46,7 @@ public class AmbientDisplayConfiguration {
         mContext = context;
         mAlwaysOnByDefault = mContext.getResources().getBoolean(R.bool.config_dozeAlwaysOnEnabled);
         mDozeEnabledByDefault = mContext.getResources().getBoolean(R.bool.config_doze_enabled_by_default);
+        mDeviceWithWeirdDtSensor = mContext.getResources().getBoolean(R.bool.config_has_weird_dt_sensor);
     }
 
     /** {@hide} */
@@ -273,5 +275,10 @@ public class AmbientDisplayConfiguration {
             return ambientLightsActivated && alwaysOnEnabled(user);
         }
         return false;
+    }
+
+    /** {@hide} */
+    public boolean deviceHasWeirtdDtSensor() {
+        return mDeviceWithWeirdDtSensor;
     }
 }
