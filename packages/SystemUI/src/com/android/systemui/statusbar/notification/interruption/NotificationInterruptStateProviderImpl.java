@@ -31,8 +31,10 @@ import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.Settings;
+import android.provider.Telephony.Sms;
 import android.service.dreams.IDreamManager;
 import android.service.notification.StatusBarNotification;
+import android.telecom.TelecomManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -80,7 +82,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     @VisibleForTesting
     protected boolean mUseHeadsUp = false;
 
-    private boolean mLessBoringHeadsUp;
     private boolean mSkipHeadsUp = false;
     private boolean mLessBoringHeadsUp = false;
     private TelecomManager mTm;
@@ -128,6 +129,9 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
                         mHeadsUpManager.releaseAllImmediately();
                     }
                 }
+                mLessBoringHeadsUp = Settings.System.getIntForUser(mContentResolver,
+                        Settings.System.LESS_BORING_HEADS_UP, 0,
+                        UserHandle.USER_CURRENT) == 1;
             }
         };
 
@@ -138,6 +142,10 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
                     mHeadsUpObserver);
             mContentResolver.registerContentObserver(
                     Settings.Global.getUriFor(SETTING_HEADS_UP_TICKER), true,
+                    mHeadsUpObserver);
+            mContentResolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.LESS_BORING_HEADS_UP),
+                    true,
                     mHeadsUpObserver);
         }
         mHeadsUpObserver.onChange(true); // set up
@@ -472,20 +480,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
         return true;
     }
 
-    @Override
-    public void setUseLessBoringHeadsUp(boolean lessBoring) {
-        mLessBoringHeadsUp = lessBoring;
-    }
-
-    public boolean shouldSkipHeadsUp(StatusBarNotification sbn) {
-        boolean isImportantHeadsUp = false;
-        String notificationPackageName = sbn.getPackageName().toLowerCase();
-        isImportantHeadsUp = notificationPackageName.contains("dialer") ||
-                notificationPackageName.contains("messaging") ||
-                notificationPackageName.contains("clock");
-        return !mStatusBarStateController.isDozing() && mLessBoringHeadsUp && !isImportantHeadsUp;
-    }
-
     /**
      * Common checks between alerts that occur while the device is awake (heads up & bubbles).
      *
@@ -503,12 +497,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
                 }
                 return false;
             }
-        }
-        if (shouldSkipHeadsUp(sbn)) {
-            if (DEBUG_HEADS_UP) {
-                Log.d(TAG, "No alerting: less boring headsup enabled");
-            }
-            return false;
         }
         return true;
     }
