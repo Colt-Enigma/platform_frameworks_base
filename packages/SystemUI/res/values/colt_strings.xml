@@ -115,5 +115,9 @@
     <string name="screenrecord_lowquality_label">Lower quality for smaller file size</string>
     <string name="screenrecord_longer_timeout_switch_label">Bigger file size limit\nLimit recording size to 15GiB</string>
 
+    <string name="app_picker_dialog_title">Select an app</string>
+    <string name="active_edge_app_select_title">Select app</string>
+    <string name="active_edge_activity_select_title">Select activity</string>
+
 </resources>
 
