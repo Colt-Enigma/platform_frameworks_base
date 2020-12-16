@@ -6148,6 +6148,25 @@ public final class Settings {
         public static final String NOTIFICATION_BG_ALPHA = "notification_bg_alpha";
 
         /**
+         * User definable value of pulse notification screen brightness
+         *
+         * @hide
+         */
+        public static final String PULSE_BRIGHTNESS = "pulse_brightness";
+
+        /**
+         * User definable value of aod screen brightness
+         *
+         * @hide
+         */
+        public static final String DOZE_BRIGHTNESS = "doze_brightness";
+
+        /**
+         * @hide
+         */
+        public static final String DOZE_BRIGHTNESS_FORCE = "doze_brightness_force";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
@@ -6320,6 +6339,9 @@ public final class Settings {
             PRIVATE_SETTINGS.add(OMNIJAWS_WEATHER_ICON_PACK);
             PRIVATE_SETTINGS.add(OMNI_LOCKSCREEN_WEATHER_ENABLED);
             PRIVATE_SETTINGS.add(AICP_LOCKSCREEN_WEATHER_STYLE);
+            PRIVATE_SETTINGS.add(PULSE_BRIGHTNESS);
+            PRIVATE_SETTINGS.add(DOZE_BRIGHTNESS);
+            PRIVATE_SETTINGS.add(DOZE_BRIGHTNESS_FORCE);
         }
 
         /**
