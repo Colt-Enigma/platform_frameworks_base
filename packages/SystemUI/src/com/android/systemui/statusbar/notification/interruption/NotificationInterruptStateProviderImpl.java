@@ -66,7 +66,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     private final StatusBarStateController mStatusBarStateController;
     private final NotificationFilter mNotificationFilter;
     private final ContentResolver mContentResolver;
-    private final Context mContext;
     private final PowerManager mPowerManager;
     private final IDreamManager mDreamManager;
     private final AmbientDisplayConfiguration mAmbientDisplayConfiguration;
@@ -83,6 +82,9 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
 
     private boolean mLessBoringHeadsUp;
     private boolean mSkipHeadsUp = false;
+    private boolean mLessBoringHeadsUp = false;
+    private TelecomManager mTm;
+    private Context mContext;
 
     @Inject
     public NotificationInterruptStateProviderImpl(
@@ -97,6 +99,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
             HeadsUpManager headsUpManager,
             @Main Handler mainHandler) {
         mContext = context;
+        mTm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
         mContentResolver = contentResolver;
         mPowerManager = powerManager;
         mDreamManager = dreamManager;
