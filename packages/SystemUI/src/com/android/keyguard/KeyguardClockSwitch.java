@@ -11,6 +11,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.SystemProperties;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionListenerAdapter;
@@ -733,9 +734,13 @@ public class KeyguardClockSwitch extends RelativeLayout {
 
         @Override
         public void onKeyguardVisibilityChanged(boolean showing) {
-            Log.d("Error", "event called");
+            if (SystemProperties.getBoolean("coltos.debug", false)) {
+                Log.d(TAG, "onKeyguardVisibilityChanged");
+            }
             if (!showing) {
-                Log.d("Error", "not showing");
+                if (SystemProperties.getBoolean("coltos.debug", false)) {
+                    Log.d(TAG, "onKeyguardVisibilityChanged value of boolean is false");
+                }
                 if (mAnimationStatus) {
                     SeamlessClockSwitch.blinkInfo(mChangeClockface, false, getCurrentTextColor(), mContext);
                     SeamlessClockSwitch.shakeClock(mSmallClockFrame, false);

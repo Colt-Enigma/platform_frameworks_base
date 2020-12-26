@@ -26,6 +26,8 @@ import android.view.View;
 
 import com.android.systemui.shared.system.QuickStepContract;
 import com.android.systemui.statusbar.CommandQueue;
+import android.os.SystemProperties;
+import android.util.Log;
 
 import java.util.HashSet;
 import java.util.List;
@@ -161,4 +163,10 @@ public class Utils {
         }
         return apps;
     }
+
+}
+    public static boolean iscoltosDebug() {
+        return SystemProperties.getBoolean("coltos.debug", false);
+    }
+
 }
