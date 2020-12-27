@@ -894,7 +894,11 @@ public class FingerprintService extends BiometricServiceBase {
                 getLockoutBroadcastPermission(), null /* handler */);
         mLockPatternUtils = new LockPatternUtils(context);
         PackageManager packageManager = context.getPackageManager();
-        mHasFod = FodUtils.hasFodSupport(context);
+        if (FodUtils.hasFodSupport(context)){
+            mHasFod = true;
+        }else{
+            mHasFod = false;
+        }
 
     }
 

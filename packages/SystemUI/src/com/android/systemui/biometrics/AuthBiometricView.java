@@ -44,7 +44,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.internal.annotations.VisibleForTesting;
-import com.android.internal.util.custom.FodUtils;
+import com.android.internal.util.colt.fod.FodUtils;
 import com.android.systemui.R;
 
 import java.lang.annotation.Retention;
