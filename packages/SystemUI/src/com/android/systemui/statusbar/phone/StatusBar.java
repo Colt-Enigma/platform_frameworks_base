@@ -608,6 +608,7 @@ public class StatusBar extends SystemUI implements DemoMode,
     private boolean mWallpaperSupported;
 
     private int mChargingAnimation;
+    private PulseController mPulseController;
     private VisualizerView mVisualizerView;
 
     private final BroadcastReceiver mWallpaperChangedReceiver = new BroadcastReceiver() {
@@ -992,7 +993,8 @@ public class StatusBar extends SystemUI implements DemoMode,
         mCommandQueue.addCallback(this);
 
         // this will initialize Pulse and begin listening for media events
-        mMediaManager.addCallback(Dependency.get(PulseController.class));
+        mPulseController = Dependency.get(PulseController.class);
+        mMediaManager.addCallback(mPulseController);
 
         RegisterStatusBarResult result = null;
         try {
@@ -4042,7 +4044,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         mKeyguardIndicationController.setVisible(false);
         mKeyguardStateController.notifyKeyguardGoingAway(true);
         mCommandQueue.appTransitionPending(mDisplayId, true /* forced */);
-        Dependency.get(PulseController.class).notifyKeyguardGoingAway();
+        mPulseController.notifyKeyguardGoingAway();
     }
 
     /**
@@ -4114,7 +4116,7 @@ public class StatusBar extends SystemUI implements DemoMode,
                 || (mDozing && mDozeServiceHost.shouldAnimateScreenOff() && visibleNotOccluded);
 
         mNotificationPanelViewController.setDozing(mDozing, animate, mWakeUpTouchLocation);
-        Dependency.get(PulseController.class).setDozing(mDozing);
+        mPulseController.setDozing(mDozing);
         updateQsExpansionEnabled();
         Trace.endSection();
     }
@@ -4252,7 +4254,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         checkBarModes();
         updateScrimController();
         mPresenter.updateMediaMetaData(false, mState != StatusBarState.KEYGUARD);
-        Dependency.get(PulseController.class).setKeyguardShowing(mState == StatusBarState.KEYGUARD);
+        mPulseController.setKeyguardShowing(mState == StatusBarState.KEYGUARD);
         updateKeyguardState();
         Trace.endSection();
     }
@@ -4454,6 +4456,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             updateNotificationPanelTouchState();
             notifyHeadsUpGoingToSleep();
             dismissVolumeDialog();
+            mPulseController.onStartedGoingToSleep();
             mWakeUpCoordinator.setFullyAwake(false);
             mBypassHeadsUpNotifier.setFullyAwake(false);
             mKeyguardBypassController.onStartedGoingToSleep();
