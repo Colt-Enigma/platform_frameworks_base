@@ -67,9 +67,14 @@ import android.util.DisplayMetrics;
 import com.android.internal.R;
 import com.android.internal.statusbar.IStatusBarService;
 
+import android.util.TypedValue;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import com.android.internal.statusbar.IStatusBarService;
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -533,6 +538,12 @@ public class ColtUtils {
                 throws RemoteException {
             return mService.getOverlayInfosForTarget(target, userId);
         }
+    }
+
+    public static int getThemeAccentColor (final Context context) {
+        final TypedValue value = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.colorAccent, value, true);
+        return value.data;
     }
 
     // Check if device is connected to Wi-Fi
