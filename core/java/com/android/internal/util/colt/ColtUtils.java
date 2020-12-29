@@ -78,6 +78,12 @@ import android.os.UserHandle;
 import com.android.internal.R;
 import com.android.internal.statusbar.IStatusBarService;
 
+import android.util.TypedValue;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Locale;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
@@ -354,6 +360,12 @@ public class ColtUtils {
         } else {
             return hasNavigationBar == 1;
         }
+    }
+
+   public static int getThemeAccentColor (final Context context) {
+        final TypedValue value = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.colorAccent, value, true);
+        return value.data;
     }
 
    public static void toggleCameraFlash() {
