@@ -38,4 +38,5 @@
     <string name="clock_title_binary" translatable="false">Binary</string>
     <string name="clock_title_tux" translatable="false">Tux</string>
     <string name="clock_title_lineage" translatable="false">LineageOS</string>
+    <string name="clock_title_swing" translatable="false">Swing animation</string>
 </resources>
