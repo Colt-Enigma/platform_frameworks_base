@@ -26,11 +26,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
-
 import androidx.annotation.VisibleForTesting;
 
 import com.android.internal.colorextraction.ColorExtractor;
 import com.android.internal.colorextraction.ColorExtractor.OnColorsChangedListener;
+import com.android.internal.util.colt.ColtUtils;
 import com.android.keyguard.clock.ClockManager;
 import com.android.keyguard.KeyguardSliceView;
 import com.android.systemui.Interpolators;
@@ -279,7 +279,11 @@ public class KeyguardClockSwitch extends RelativeLayout {
         // Initialize plugin parameters.
         mClockPlugin = plugin;
         mClockPlugin.setStyle(getPaint().getStyle());
-        mClockPlugin.setTextColor(getCurrentTextColor());
+        if(ColtUtils.useLockscreenClockAccentColor(mContext)) {
+            mClockPlugin.setTextColor(mContext.getResources().getColor(R.color.lockscreen_clock_accent_color));
+        } else {
+            mClockPlugin.setTextColor(getCurrentTextColor());
+        }
         mClockPlugin.setDarkAmount(mDarkAmount);
         if (mColorPalette != null) {
             mClockPlugin.setColorPalette(mSupportsDarkText, mColorPalette);
@@ -315,10 +319,18 @@ public class KeyguardClockSwitch extends RelativeLayout {
      * It will also update plugin setTextColor if plugin is connected.
      */
     public void setTextColor(int color) {
-        mClockView.setTextColor(color);
-        mClockViewBold.setTextColor(color);
-        if (mClockPlugin != null) {
-            mClockPlugin.setTextColor(color);
+        if(ColtUtils.useLockscreenClockAccentColor(mContext)) {
+            mClockView.setTextColor(mContext.getResources().getColor(R.color.lockscreen_clock_accent_color));
+            mClockViewBold.setTextColor(mContext.getResources().getColor(R.color.lockscreen_clock_accent_color));
+            if (mClockPlugin != null) {
+                mClockPlugin.setTextColor(mContext.getResources().getColor(R.color.lockscreen_clock_accent_color));
+            }
+        } else {
+            mClockView.setTextColor(color);
+            mClockViewBold.setTextColor(color);
+            if (mClockPlugin != null) {
+                mClockPlugin.setTextColor(color);
+            }
         }
     }
 
