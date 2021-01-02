@@ -170,6 +170,7 @@ public final class ClockManager {
         addBuiltinClock(() -> new FluidClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new LineageClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new SwingClockController(res, layoutInflater, colorExtractor, context));
+        addBuiltinClock(() -> new LoadingClockController(res, layoutInflater, colorExtractor, context));
 
         // Store the size of the display for generation of clock preview.
         DisplayMetrics dm = res.getDisplayMetrics();
