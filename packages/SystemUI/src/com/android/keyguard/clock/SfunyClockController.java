@@ -74,6 +74,7 @@ public class SfunyClockController implements ClockPlugin {
      */
     private TextClock mHourClock;
     private TextClock mMinuteClock;
+    private TextClock mDate;
 
     private Context mContext;
 
@@ -127,12 +128,12 @@ public class SfunyClockController implements ClockPlugin {
         View previewView = mLayoutInflater.inflate(R.layout.digital_sfuny_preview, null);
         TextClock previewHourTime = previewView.findViewById(R.id.clockHour);
         TextClock previewMinuteTime = previewView.findViewById(R.id.clockMinute);
-        TextClock previewDate = previewView.findViewById(R.id.date);
+        //TextClock previewDate = previewView.findViewById(R.id.date);
 
         // Initialize state of plugin before generating preview.
         previewHourTime.setTextColor(Color.WHITE);
         previewMinuteTime.setTextColor(Color.WHITE);
-        previewDate.setTextColor(Color.WHITE);
+        //previewDate.setTextColor(Color.WHITE);
         ColorExtractor.GradientColors colors = mColorExtractor.getColors(
                 WallpaperManager.FLAG_LOCK);
         setColorPalette(colors.supportsDarkText(), colors.getColorPalette());
@@ -164,12 +165,11 @@ public class SfunyClockController implements ClockPlugin {
 
     @Override
     public void setTextColor(int color) {
+        mMinuteClock.setTextColor(Color.WHITE);
         if(ColtUtils.useLockscreenClockAccentColor(mContext)) {
-            mLockClock.setTextColor(mContext.getResources().getColor(R.color.lockscreen_clock_accent_color));
-            mAnalogClock.setClockColors(primary, mContext.getResources().getColor(R.color.lockscreen_clock_accent_color));
+            mHourClock.setTextColor((mContext.getResources().getColor(R.color.lockscreen_clock_accent_color)));
         } else {
             mHourClock.setTextColor(color);
-            mMinuteClock.setTextColor(color);
         }
     }
 
