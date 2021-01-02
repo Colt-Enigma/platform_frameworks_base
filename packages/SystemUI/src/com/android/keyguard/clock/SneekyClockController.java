@@ -183,7 +183,7 @@ public class SneekyClockController implements ClockPlugin {
     private void updateColor() {
         final int primary = mPalette.getPrimaryColor();
         final int secondary = mPalette.getSecondaryColor();
-        if(ColtUtils.useLockscreenClockAccentColor(mContext)) {
+        if(ColtUtils.useLockscreenCustomClockAccentColor(mContext)) {
             mLockClock.setTextColor(mContext.getResources().getColor(R.color.lockscreen_clock_accent_color));
         } else {
             mLockClock.setTextColor(secondary);
