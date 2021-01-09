@@ -6259,6 +6259,13 @@ public final class Settings {
          */
         public static final String ARTWORK_MEDIA_BACKGROUND = "artwork_media_background";
 
+
+        /**
+         * Weather an oos like  qs clock should be shown
+         * @hide
+         */
+        public static final String OOS_QSCLOCK = "oos_qsclock";
+
         /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
