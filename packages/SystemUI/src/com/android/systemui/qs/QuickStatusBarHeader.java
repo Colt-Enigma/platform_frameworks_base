@@ -490,8 +490,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mClockView.useWallpaperTextColor(shouldUseWallpaperTextColor);
      }
 
- }
-
     private void updateStatusIconAlphaAnimator() {
         mStatusIconsAlphaAnimator = new TouchAnimator.Builder()
                 .addFloat(mQuickQsStatusIcons, "alpha", 1, 0, 0)
