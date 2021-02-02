@@ -114,8 +114,8 @@ public class PageIndicator extends ViewGroup {
     }
 
     /** Overload of setNumPages that allows the indicator color to be specified.*/
-    public void setNumPages(int numPages, int color) {
-        setVisibility(numPages > 1 ? View.VISIBLE : View.GONE);
+	public void setNumPages(int numPages, int color) {
+	        setVisibility(numPages > 1 ? View.VISIBLE : View.GONE);
         if (numPages == getChildCount()) {
             return;
         }
