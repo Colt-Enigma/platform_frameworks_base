@@ -129,7 +129,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             Settings.Secure.QS_SHOW_AUTO_BRIGHTNESS;
     public static final String QQS_SHOW_BRIGHTNESS_SLIDER = "qqs_show_brightness_slider";
     public static final String STATUS_BAR_CUSTOM_HEADER =
-                                Settings.System.STATUS_BAR_CUSTOM_HEADER;
+            "system:" + Settings.System.STATUS_BAR_CUSTOM_HEADER;
 
     private final NextAlarmController mAlarmController;
     private final ZenModeController mZenController;
@@ -487,6 +487,11 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                     R.dimen.qs_tile_margin_top);
         }
 
+        if (mHeaderImageEnabled) {
+            qqsHeight += mContext.getResources().getDimensionPixelSize(
+                    R.dimen.qs_header_image_offset);
+        }
+
         setMinimumHeight(sbHeight + qqsHeight);
     }
 
@@ -504,7 +509,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mHeaderTextContainerView.setLayoutParams(mHeaderTextContainerView.getLayoutParams());
 
         int topMargin = resources.getDimensionPixelSize(
-                com.android.internal.R.dimen.quick_qs_offset_height);
+                com.android.internal.R.dimen.quick_qs_offset_height) + (mHeaderImageEnabled ?
+                resources.getDimensionPixelSize(R.dimen.qs_header_image_offset) : 0);
 
         mSystemIconsView.getLayoutParams().height = topMargin;
         mSystemIconsView.setLayoutParams(mSystemIconsView.getLayoutParams());
