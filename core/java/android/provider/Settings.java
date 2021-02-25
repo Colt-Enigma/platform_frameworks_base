@@ -16538,6 +16538,12 @@ public final class Settings {
          * @hide
          */
         public static final String SCREEN_IS_DIMMING = "screen_is_dimming";
+
+	/**
+         * The amount of time in milliseconds before wifi is turned off
+         * @hide
+         */
+        public static final String WIFI_OFF_TIMEOUT = "wifi_off_timeout";
     }
 
     /**
