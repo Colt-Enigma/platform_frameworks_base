@@ -213,4 +213,8 @@
   <!-- NightLight FOD -->
   <java-symbol type="bool" name="disable_fod_night_light"/>
 
+  <!-- Smart cutoff temperature -->
+  <java-symbol type="integer" name="config_smartCutoffTemperature" />
+  <java-symbol type="integer" name="config_smartCutoffResumeTemperature" />
+
 </resources>
