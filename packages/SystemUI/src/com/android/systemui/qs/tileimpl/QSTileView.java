@@ -25,6 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.provider.Settings;
+import android.os.UserHandle;
 
 import com.android.settingslib.Utils;
 import com.android.systemui.FontSizeUtils;
@@ -130,17 +132,17 @@ public class QSTileView extends QSTileBaseView {
             mSecondLine.setVisibility(TextUtils.isEmpty(state.secondaryLabel) ? View.GONE
                     : View.VISIBLE);
         }
-        boolean setQsUseNewTint = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT) == 1;
+        int setQsUseNewTint = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.QS_PANEL_BG_USE_NEW_TINT, 2, UserHandle.USER_CURRENT);
         boolean shouldDisco = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.QS_TILES_BG_DISCO, 0, UserHandle.USER_CURRENT) == 1;
-        if (setQsUseNewTint && shouldDisco) {
+        if (setQsUseNewTint == 1 && shouldDisco) {
             if (state.state == Tile.STATE_ACTIVE) {
                 mLabel.setTextColor(mColorLabelDefault);
             } else if (state.state == Tile.STATE_INACTIVE) {
                 mLabel.setTextColor(mColorLabelDefault);
             }
-        } else if (setQsUseNewTint && !shouldDisco) {
+        } else if (setQsUseNewTint == 1 && !shouldDisco) {
             if (state.state == Tile.STATE_ACTIVE) {
                 mLabel.setTextColor(mColorLabelActive);
             } else if (state.state == Tile.STATE_INACTIVE) {
