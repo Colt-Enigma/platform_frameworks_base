@@ -243,6 +243,6 @@ public class IDEClockController implements ClockPlugin {
 
     @Override
     public boolean shouldShowStatusArea() {
-        return true;
+        return false;
     }
 }
