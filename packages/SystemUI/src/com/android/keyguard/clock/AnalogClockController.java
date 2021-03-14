@@ -71,7 +71,7 @@ public class AnalogClockController implements ClockPlugin {
      */
     private ClockLayout mBigClockView;
     private ImageClock mAnalogClock;
-    private TextClock mLockClock;
+    
 
     /**
      * Small clock shown on lock screen above stack scroller.

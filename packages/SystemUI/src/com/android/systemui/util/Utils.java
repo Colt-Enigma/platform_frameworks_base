@@ -164,7 +164,6 @@ public class Utils {
         return apps;
     }
 
-}
     public static boolean iscoltosDebug() {
         return SystemProperties.getBoolean("coltos.debug", false);
     }

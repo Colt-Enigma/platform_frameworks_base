@@ -154,10 +154,10 @@ public final class ClockManager {
         addBuiltinClock(() -> new SamsungClockController(res, layoutInflater, colorExtractor, context));
         addBuiltinClock(() -> new SamsungBoldClockController(res, layoutInflater, colorExtractor, context));
         addBuiltinClock(() -> new SamsungHighlightClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new AnalogClockController(res, layoutInflater, colorExtractor,context));
-        addBuiltinClock(() -> new SpectrumClockController(res, layoutInflater, colorExtractor, context));
-        addBuiltinClock(() -> new DotClockController(res, layoutInflater, colorExtractor, context));
-        addBuiltinClock(() -> new SneekyClockController(res, layoutInflater, colorExtractor, context));
+        //addBuiltinClock(() -> new AnalogClockController(res, layoutInflater, colorExtractor,context));
+        //addBuiltinClock(() -> new SpectrumClockController(res, layoutInflater, colorExtractor, context));
+        //addBuiltinClock(() -> new DotClockController(res, layoutInflater, colorExtractor, context));
+        //addBuiltinClock(() -> new SneekyClockController(res, layoutInflater, colorExtractor, context));
 	addBuiltinClock(() -> new TypeClockController(res, layoutInflater, colorExtractor, context));
         addBuiltinClock(() -> new TypeClockAltController(res, layoutInflater, colorExtractor, context));
         addBuiltinClock(() -> new DividedLinesClockController(res, layoutInflater, colorExtractor));
@@ -165,7 +165,7 @@ public final class ClockManager {
         addBuiltinClock(() -> new MNMLBoxClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new MNMLMinimalClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new SammyClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new BinaryClockController(res, layoutInflater, colorExtractor));
+        //addBuiltinClock(() -> new BinaryClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new TuxClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new FluidClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new LineageClockController(res, layoutInflater, colorExtractor));
