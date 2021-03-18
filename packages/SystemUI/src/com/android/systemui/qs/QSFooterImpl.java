@@ -32,6 +32,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemProperties;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
@@ -87,6 +89,8 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
     private QSPanel mQsPanel;
     private QuickQSPanel mQuickQsPanel;
 
+    private final Vibrator mVibrator;
+
     private boolean mExpanded;
 
     private boolean mListening;
@@ -122,6 +126,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         mActivityStarter = activityStarter;
         mUserInfoController = userInfoController;
         mDeviceProvisionedController = deviceProvisionedController;
+	mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     @VisibleForTesting
@@ -422,6 +427,7 @@ public class QSFooterImpl extends FrameLayout implements QSFooter,
         nIntent.setClassName("com.android.settings",
             "com.android.settings.Settings$ColtEnigmaActivity");
         mActivityStarter.startActivity(nIntent, true /* dismissShade */);
+	mVibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
     }
 
     @Override
