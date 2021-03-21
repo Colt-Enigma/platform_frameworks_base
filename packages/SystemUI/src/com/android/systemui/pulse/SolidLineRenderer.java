@@ -37,6 +37,9 @@ import android.provider.Settings;
 import androidx.core.graphics.ColorUtils;
 
 public class SolidLineRenderer extends Renderer {
+    private static final int GRAVITY_BOTTOM = 0;
+    private static final int GRAVITY_TOP = 1;
+    private static final int GRAVITY_CENTER = 2;
     private final Paint mPaint;
     private int mUnitsOpacity = 255;
     private int mColor = Color.WHITE;
@@ -47,9 +50,10 @@ public class SolidLineRenderer extends Renderer {
     private int mDbFuzzFactor;
     private boolean mVertical;
     private boolean mLeftInLandscape;
-    private int mWidth, mHeight, mUnits;
+    private int mWidth, mHeight, mUnits, mGravity;
 
     private boolean mSmoothingEnabled;
+    private boolean mCenterMirrored;
     private boolean mRounded;
     private final CMRendererObserver mObserver;
 
@@ -108,13 +112,21 @@ public class SolidLineRenderer extends Renderer {
         float units = (float) mUnits;
         float barUnit = mWidth / units;
         float barWidth = barUnit * 8f / 9f;
+        float startPoint = mHeight;
+        if (mGravity == GRAVITY_BOTTOM) {
+            startPoint = (float) mHeight;
+        } else if (mGravity == GRAVITY_TOP) {
+            startPoint = 0f;
+        } else if (mGravity == GRAVITY_CENTER) {
+            startPoint = (float) mHeight / 2f;
+        }
         barUnit = barWidth + (barUnit - barWidth) * units / (units - 1);
         mPaint.setStrokeWidth(barWidth);
         mPaint.setStrokeCap(mRounded ? Paint.Cap.ROUND : Paint.Cap.BUTT);
         for (int i = 0; i < mUnits; i++) {
             mFFTPoints[i * 4] = mFFTPoints[i * 4 + 2] = i * barUnit + (barWidth / 2);
-            mFFTPoints[i * 4 + 1] = mHeight;
-            mFFTPoints[i * 4 + 3] = mHeight;
+            mFFTPoints[i * 4 + 1] = startPoint;
+            mFFTPoints[i * 4 + 3] = startPoint;
         }
     }
 
@@ -122,13 +134,21 @@ public class SolidLineRenderer extends Renderer {
         float units = (float) mUnits;
         float barUnit = mHeight / units;
         float barHeight = barUnit * 8f / 9f;
+        float startPoint = mWidth;
+        if (mGravity == GRAVITY_BOTTOM) {
+            startPoint = (float) mWidth;
+        } else if (mGravity == GRAVITY_TOP) {
+            startPoint = 0f;
+        } else if (mGravity == GRAVITY_CENTER) {
+            startPoint = (float) mWidth / 2f;
+        }
         barUnit = barHeight + (barUnit - barHeight) * units / (units - 1);
         mPaint.setStrokeWidth(barHeight);
         mPaint.setStrokeCap(mRounded ? Paint.Cap.ROUND : Paint.Cap.BUTT);
         for (int i = 0; i < mUnits; i++) {
             mFFTPoints[i * 4 + 1] = mFFTPoints[i * 4 + 3] = i * barUnit + (barHeight / 2);
-            mFFTPoints[i * 4] = mLeftInLandscape ? 0 : mWidth;
-            mFFTPoints[i * 4 + 2] = mLeftInLandscape ? 0 : mWidth;
+            mFFTPoints[i * 4] = mLeftInLandscape ? 0 : startPoint;
+            mFFTPoints[i * 4 + 2] = mLeftInLandscape ? 0 : startPoint;
         }
     }
 
@@ -159,7 +179,8 @@ public class SolidLineRenderer extends Renderer {
     @Override
     public void onFFTUpdate(byte[] fft) {
         int fudgeFactor = mKeyguardShowing ? mDbFuzzFactor * 2 : mDbFuzzFactor;
-        for (int i = 0; i < mUnits; i++) {
+        int i = 0;
+        for (; i < (mCenterMirrored ? (mUnits / 2) : mUnits); i++) {
             if (mValueAnimators[i] == null) continue;
             mValueAnimators[i].cancel();
             byte rfk = fft[i * 2 + 2];
@@ -173,18 +194,58 @@ public class SolidLineRenderer extends Renderer {
                 dbValue = mFFTAverage[i].average(dbValue);
             }
             if (mVertical) {
-                if (mLeftInLandscape) {
+                if (mLeftInLandscape || mGravity == GRAVITY_TOP) {
                     mValueAnimators[i].setFloatValues(mFFTPoints[i * 4],
                             dbValue * fudgeFactor);
-                } else {
+                } else if (mGravity == GRAVITY_BOTTOM || mGravity == GRAVITY_CENTER) {
                     mValueAnimators[i].setFloatValues(mFFTPoints[i * 4],
                             mFFTPoints[2] - (dbValue * fudgeFactor));
                 }
             } else {
-                mValueAnimators[i].setFloatValues(mFFTPoints[i * 4 + 1],
-                        mFFTPoints[3] - (dbValue * fudgeFactor));
+                if (mGravity == GRAVITY_BOTTOM || mGravity == GRAVITY_CENTER) {
+                    mValueAnimators[i].setFloatValues(mFFTPoints[i * 4 + 1],
+                            mFFTPoints[3] - (dbValue * fudgeFactor));
+                } else if (mGravity == GRAVITY_TOP) {
+                    mValueAnimators[i].setFloatValues(mFFTPoints[i * 4 + 1],
+                            mFFTPoints[3] + (dbValue * fudgeFactor));
+                }
             }
             mValueAnimators[i].start();
+        }
+        if (mCenterMirrored) {
+            for (; i < mUnits; i++) {
+                int j = mUnits - (i + 1);
+                if (mValueAnimators[i] == null) continue;
+                mValueAnimators[i].cancel();
+                byte rfk = fft[j * 2 + 2];
+                byte ifk = fft[j * 2 + 3];
+                float magnitude = rfk * rfk + ifk * ifk;
+                int dbValue = magnitude > 0 ? (int) (10 * Math.log10(magnitude)) : 0;
+                if (mSmoothingEnabled) {
+                    if (mFFTAverage == null) {
+                        setupFFTAverage();
+                    }
+                    dbValue = mFFTAverage[i].average(dbValue);
+                }
+                if (mVertical) {
+                    if (mLeftInLandscape || mGravity == GRAVITY_TOP) {
+                        mValueAnimators[i].setFloatValues(mFFTPoints[i * 4],
+                                dbValue * fudgeFactor);
+                    } else if (mGravity == GRAVITY_BOTTOM || mGravity == GRAVITY_CENTER) {
+                        mValueAnimators[i].setFloatValues(mFFTPoints[i * 4],
+                                mFFTPoints[2] - (dbValue * fudgeFactor));
+                    }
+                } else {
+                    if (mGravity == GRAVITY_BOTTOM || mGravity == GRAVITY_CENTER) {
+                        mValueAnimators[i].setFloatValues(mFFTPoints[i * 4 + 1],
+                                mFFTPoints[3] - (dbValue * fudgeFactor));
+                    } else if (mGravity == GRAVITY_TOP) {
+                        mValueAnimators[i].setFloatValues(mFFTPoints[i * 4 + 1],
+                                mFFTPoints[3] + (dbValue * fudgeFactor));
+                    }
+                }
+                mValueAnimators[i].start();
+            }
         }
     }
 
@@ -233,6 +294,14 @@ public class SolidLineRenderer extends Renderer {
                     Settings.Secure.getUriFor(Settings.Secure.PULSE_SMOOTHING_ENABLED), false, this,
                     UserHandle.USER_ALL);
             resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.VISUALIZER_CENTER_MIRRORED), false,
+                    this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(
+                    Settings.Secure.getUriFor(Settings.Secure.PULSE_CUSTOM_GRAVITY), false,
+                    this,
+                    UserHandle.USER_ALL);
+            resolver.registerContentObserver(
                     Settings.Secure.getUriFor(Settings.Secure.PULSE_SOLID_UNITS_ROUNDED), false, this,
                     UserHandle.USER_ALL);
         }
@@ -251,6 +320,11 @@ public class SolidLineRenderer extends Renderer {
                     UserHandle.USER_CURRENT);
             mSmoothingEnabled = Settings.Secure.getIntForUser(resolver,
                     Settings.Secure.PULSE_SMOOTHING_ENABLED, 0, UserHandle.USER_CURRENT) == 1;
+            mCenterMirrored = Settings.System.getIntForUser(resolver,
+                    Settings.System.VISUALIZER_CENTER_MIRRORED, 0, UserHandle.USER_CURRENT) == 1;
+            mGravity = Settings.Secure.getIntForUser(
+                    resolver, Settings.Secure.PULSE_CUSTOM_GRAVITY, 0,
+                    UserHandle.USER_CURRENT);
             mRounded = Settings.Secure.getIntForUser(resolver, 
                     Settings.Secure.PULSE_SOLID_UNITS_ROUNDED, 0, UserHandle.USER_CURRENT) == 1;
 
