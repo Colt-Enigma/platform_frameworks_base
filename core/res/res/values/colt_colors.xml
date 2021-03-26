@@ -16,6 +16,11 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
+<!-- Value of these colors are not used. They are replaced later -->
+    <color name="accent_background_device_default">#fefefe</color>
+    <color name="accent_overlay_device_default_light">#fefefe</color>
+    <color name="accent_overlay_device_default_dark">#fefefe</color>
+
 </resources>
 
 
