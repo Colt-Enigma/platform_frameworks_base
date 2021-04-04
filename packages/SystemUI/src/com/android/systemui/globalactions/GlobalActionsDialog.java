@@ -2866,7 +2866,10 @@ public class GlobalActionsDialog implements DialogInterface.OnDismissListener,
 
             if (mBackgroundDrawable instanceof ScrimDrawable) {
                 mColorExtractor.addOnColorsChangedListener(this);
-                GradientColors colors = mColorExtractor.getNeutralColors();
+                GradientColors colors = mColorExtractor.getScrimColors(
+                        mKeyguardShowing
+                                ? WallpaperManager.FLAG_LOCK
+                                : WallpaperManager.FLAG_SYSTEM);
                 updateColors(colors, false /* animate */);
             }
         }

@@ -28,6 +28,7 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.UserHandle;
@@ -41,6 +42,7 @@ import com.android.systemui.R;
 import com.android.systemui.SystemUI;
 import com.android.systemui.broadcast.BroadcastDispatcher;
 import com.android.systemui.dagger.qualifiers.Background;
+import com.android.systemui.statusbar.policy.ConfigurationController;
 
 import com.google.android.collect.Sets;
 
@@ -72,13 +74,15 @@ public class ThemeOverlayController extends SystemUI {
     private UserManager mUserManager;
     private BroadcastDispatcher mBroadcastDispatcher;
     private final Handler mBgHandler;
+    private final ConfigurationController mConfigurationController;
 
     @Inject
     public ThemeOverlayController(Context context, BroadcastDispatcher broadcastDispatcher,
-            @Background Handler bgHandler) {
+            @Background Handler bgHandler, ConfigurationController configurationController) {
         super(context);
         mBroadcastDispatcher = broadcastDispatcher;
         mBgHandler = bgHandler;
+        mConfigurationController = configurationController;
     }
 
     @Override
@@ -119,14 +123,20 @@ public class ThemeOverlayController extends SystemUI {
         ContentObserver observer = new ContentObserver(mBgHandler) {
             @Override
             public void onChange(boolean selfChange, Uri uri) {
-                if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_MODE))) {
+		if (uri.equals(Settings.System.getUriFor(Settings.System.SYSUI_COLORS_ACTIVE))) {
+                     Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+                     mainThreadHandler.post(
+                         () -> {
+                             mConfigurationController.reloadUiModeListeners();
+                         });
+                } else if (uri.equals(Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_MODE))) {
                     reloadAssets("com.android.launcher3");
                     String homeApp = getDefaultHomeApp(mContext);
                     if (!homeApp.equals("com.android.launcher3")) {
                         reloadAssets(homeApp);
                     }
-                }
-            }
+		}
+
             private void reloadAssets(String packageName) {
                 try {
                     IOverlayManager.Stub.asInterface(ServiceManager.getService("overlay"))
@@ -138,6 +148,9 @@ public class ThemeOverlayController extends SystemUI {
         };
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.DISPLAY_CUTOUT_MODE),
+                false, observer, UserHandle.USER_ALL);
+	mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.SYSUI_COLORS_ACTIVE),
                 false, observer, UserHandle.USER_ALL);
     }
 
