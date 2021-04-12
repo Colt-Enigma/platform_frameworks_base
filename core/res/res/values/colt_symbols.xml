@@ -255,4 +255,7 @@
 
   <!-- Whether device supports gestures on fingerprint sensor -->
   <java-symbol type="bool" name="config_supportsGesturesOnFingerprintSensor" />
+
+  <!-- Switch USB controller on Asus ROG devices-->
+  <java-symbol type="bool" name="config_switchUsbController" />
 </resources>
