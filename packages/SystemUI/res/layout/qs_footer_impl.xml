@@ -20,7 +20,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/qs_footer"
     android:layout_width="match_parent"
-    android:layout_height="20dp"
+    android:layout_height="@dimen/qs_footer_height"
     android:background="@android:color/transparent"
     android:baselineAligned="false"
     android:clickable="false"
@@ -32,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:layout_marginTop="-8dp"
         android:visibility="gone" />
 
     <LinearLayout
