@@ -6136,6 +6136,12 @@ public final class Settings {
         public static final String AICP_LOCKSCREEN_WEATHER_STYLE = "lockscreen_weather_style";
 
         /**
+         * Whether to change the transparency of the notifications
+         * @hide
+         */
+        public static final String NOTIFICATION_BG_ALPHA = "notification_bg_alpha";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
