@@ -1129,13 +1129,16 @@ public class UriGrantsManagerService extends IUriGrantsManager.Stub {
         if ((callingAppId == SYSTEM_UID) || (callingAppId == ROOT_UID)) {
             if ("com.android.settings.files".equals(grantUri.uri.getAuthority())
                     || "com.android.settings.module_licenses".equals(grantUri.uri.getAuthority())
-                    || StitchImageUtility.STITCHIMAGE_FILEPROVIDER_CLASS.equals(grantUri.uri.getAuthority())) {
+                    || StitchImageUtility.STITCHIMAGE_FILEPROVIDER_CLASS.equals(grantUri.uri.getAuthority())
+                    || "com.android.launcher3.overview.fileprovider".equals(grantUri.uri.getAuthority())
+                    || "com.asus.stitchimage.fileprovider".equals(grantUri.uri.getAuthority())) {
                 // Exempted authority for
                 // 1. cropping user photos and sharing a generated license html
                 //    file in Settings app
                 // 2. sharing a generated license html file in TvSettings app
                 // 3. Sharing module license files from Settings app
                 // 4. Asus Long Screenshot app
+                // 5. Sharing screenshot from Launcher and Screenshot apps
             } else {
                 Slog.w(TAG, "For security reasons, the system cannot issue a Uri permission"
                         + " grant to " + grantUri + "; use startActivityAsCaller() instead");
