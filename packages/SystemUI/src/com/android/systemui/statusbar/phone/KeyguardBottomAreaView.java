@@ -29,7 +29,6 @@ import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.ActivityTaskManager;
 import android.app.admin.DevicePolicyManager;
-import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -50,7 +49,6 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.os.UserHandle;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.service.media.CameraPrewarmService;
 import android.telecom.TelecomManager;
 import android.text.TextUtils;
@@ -118,7 +116,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                     .addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
     public static final Intent INSECURE_CAMERA_INTENT =
             new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-    protected static final Intent PHONE_INTENT = new Intent(Intent.ACTION_DIAL);
+    private static final Intent PHONE_INTENT = new Intent(Intent.ACTION_DIAL);
     private static final int DOZE_ANIMATION_STAGGER_DELAY = 48;
     private static final int DOZE_ANIMATION_ELEMENT_DURATION = 250;
 
@@ -267,7 +265,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mAccessibilityController = Dependency.get(AccessibilityController.class);
         mActivityIntentHelper = new ActivityIntentHelper(getContext());
         updateLeftAffordance();
-        updateRightAffordance();
         updateIndicationAreaPadding();
     }
 
@@ -344,15 +341,11 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     private void updateRightAffordanceIcon() {
         IconState state = mRightButton.getIcon();
         mRightAffordanceView.setVisibility(!mDozing && state.isVisible ? View.VISIBLE : View.GONE);
-        if (state.isVisible) {
-            if (state.drawable != mRightAffordanceView.getDrawable()
-                    || state.tint != mRightAffordanceView.shouldTint()
-		    || !state.isDefaultButton) {
-                mRightAffordanceView.setImageDrawable(state.drawable, state.tint,
-                    state.isDefaultButton ? false : true);
-            }
-            mRightAffordanceView.setContentDescription(state.contentDescription);
+        if (state.drawable != mRightAffordanceView.getDrawable()
+                || state.tint != mRightAffordanceView.shouldTint()) {
+            mRightAffordanceView.setImageDrawable(state.drawable, state.tint);
         }
+        mRightAffordanceView.setContentDescription(state.contentDescription);
     }
 
     public void setStatusBar(StatusBar statusBar) {
@@ -368,27 +361,19 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         mUserSetupComplete = userSetupComplete;
         updateCameraVisibility();
         updateLeftAffordanceIcon();
-        updateRightAffordanceIcon();
     }
 
     private Intent getCameraIntent() {
         return mRightButton.getIntent();
     }
 
-    protected Intent getLeftIntent() {
-        return mLeftButton.getIntent();
-    }
-
     /**
      * Resolves the intent to launch the camera application.
      */
     public ResolveInfo resolveCameraIntent() {
-        if (getCameraIntent() != null) {
-            return mContext.getPackageManager().resolveActivityAsUser(getCameraIntent(),
-                    PackageManager.MATCH_DEFAULT_ONLY,
-                    KeyguardUpdateMonitor.getCurrentUser());
-        }
-        return null;
+        return mContext.getPackageManager().resolveActivityAsUser(getCameraIntent(),
+                PackageManager.MATCH_DEFAULT_ONLY,
+                KeyguardUpdateMonitor.getCurrentUser());
     }
 
     private void updateCameraVisibility() {
@@ -432,15 +417,11 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         }
         IconState state = mLeftButton.getIcon();
         mLeftAffordanceView.setVisibility(state.isVisible ? View.VISIBLE : View.GONE);
-        if (state.isVisible) {
-            if (state.drawable != mLeftAffordanceView.getDrawable()
-                    || state.tint != mLeftAffordanceView.shouldTint()
-                    || !state.isDefaultButton) {
-                mLeftAffordanceView.setImageDrawable(state.drawable, state.tint,
-                    state.isDefaultButton ? false : true);
-            }
-            mLeftAffordanceView.setContentDescription(state.contentDescription);
-	}
+        if (state.drawable != mLeftAffordanceView.getDrawable()
+                || state.tint != mLeftAffordanceView.shouldTint()) {
+            mLeftAffordanceView.setImageDrawable(state.drawable, state.tint);
+        }
+        mLeftAffordanceView.setContentDescription(state.contentDescription);
     }
 
     private boolean hasInDisplayFingerprint() {
@@ -477,9 +458,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     public void bindCameraPrewarmService() {
         Intent intent = getCameraIntent();
-        if (intent == null) {
-            return;
-        }
         ActivityInfo targetInfo = mActivityIntentHelper.getTargetActivityInfo(intent,
                 KeyguardUpdateMonitor.getCurrentUser(), true /* onlyDirectBootAware */);
         if (targetInfo != null && targetInfo.metaData != null) {
@@ -520,9 +498,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
     public void launchCamera(String source) {
         final Intent intent = getCameraIntent();
-        if (intent == null) {
-            return;
-        }
         intent.putExtra(EXTRA_CAMERA_LAUNCH_SOURCE, source);
         boolean wouldLaunchResolverActivity = mActivityIntentHelper.wouldLaunchResolverActivity(
                 intent, KeyguardUpdateMonitor.getCurrentUser());
@@ -592,10 +567,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
     }
 
     public void launchLeftAffordance() {
-        Intent leftButtonIntent = mLeftButton.getIntent();
-        if (leftButtonIntent != null && leftButtonIntent != PHONE_INTENT) {
-            mActivityStarter.startActivity(mLeftButton.getIntent(), false /* dismissShade */);
-        } else if (mLeftIsVoiceAssist) {
+        if (mLeftIsVoiceAssist) {
             launchVoiceAssist();
         } else {
             launchPhone();
@@ -636,7 +608,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         } else {
             boolean dismissShade = !TextUtils.isEmpty(mLeftButtonStr)
                     && Dependency.get(TunerService.class).getValue(LOCKSCREEN_LEFT_UNLOCK, 1) != 0;
-            mActivityStarter.startActivity(PHONE_INTENT, dismissShade);
+            mActivityStarter.startActivity(mLeftButton.getIntent(), dismissShade);
         }
     }
 
@@ -686,9 +658,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             mPreviewContainer.removeView(previewBefore);
             visibleBefore = previewBefore.getVisibility() == View.VISIBLE;
         }
-        if (getCameraIntent() != null) {
-            mCameraPreview = mPreviewInflater.inflatePreview(getCameraIntent());
-        }
+        mCameraPreview = mPreviewInflater.inflatePreview(getCameraIntent());
         if (mCameraPreview != null) {
             mPreviewContainer.addView(mCameraPreview);
             mCameraPreview.setVisibility(visibleBefore ? View.VISIBLE : View.INVISIBLE);
@@ -710,9 +680,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                         Dependency.get(AssistManager.class).getVoiceInteractorComponentName());
             }
         } else {
-            if (mLeftButton.getIntent() != null) {
-                mLeftPreview = mPreviewInflater.inflatePreview(mLeftButton.getIntent());
-            }
+            mLeftPreview = mPreviewInflater.inflatePreview(mLeftButton.getIntent());
         }
         if (mLeftPreview != null) {
             mPreviewContainer.addView(mLeftPreview);
@@ -769,7 +737,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                     inflateCameraPreview();
                     updateCameraVisibility();
                     updateLeftAffordance();
-                    updateRightAffordance();
                 }
 
                 @Override
@@ -787,21 +754,16 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         updateLeftPreview();
     }
 
-    public void updateRightAffordance() {
-        updateRightAffordanceIcon();
-    }
-
     private void setRightButton(IntentButton button) {
         mRightButton = button;
+        updateRightAffordanceIcon();
         updateCameraVisibility();
         inflateCameraPreview();
-        updateRightAffordance();
     }
 
     private void setLeftButton(IntentButton button) {
         mLeftButton = button;
-        IconState state = mLeftButton.getIcon();
-        if (!(mLeftButton instanceof DefaultLeftButton) || !state.isVisible) {
+        if (!(mLeftButton instanceof DefaultLeftButton)) {
             mLeftIsVoiceAssist = false;
         }
         updateLeftAffordance();
@@ -812,7 +774,6 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
 
         updateCameraVisibility();
         updateLeftAffordanceIcon();
-        updateRightAffordanceIcon();
 
         if (dozing) {
             mOverlayContainer.setVisibility(INVISIBLE);
@@ -855,7 +816,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
         public IconState getIcon() {
             mLeftIsVoiceAssist = canLaunchVoiceAssist();
             if (mLeftIsVoiceAssist) {
-                mIconState.isVisible = mUserSetupComplete && mShowLeftAffordance && !hideShortcuts();
+                mIconState.isVisible = mUserSetupComplete && mShowLeftAffordance;
                 if (mLeftAssistIcon == null) {
                     mIconState.drawable = mContext.getDrawable(R.drawable.ic_mic_26dp);
                 } else {
@@ -865,7 +826,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
                         R.string.accessibility_voice_assist_button);
             } else {
                 mIconState.isVisible = mUserSetupComplete && mShowLeftAffordance
-                        && isPhoneVisible() && !hideShortcuts();
+                        && isPhoneVisible();
                 mIconState.drawable = mContext.getDrawable(
                         com.android.internal.R.drawable.ic_phone);
                 mIconState.contentDescription = mContext.getString(
@@ -890,8 +851,7 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             mIconState.isVisible = !isCameraDisabled
                     && mShowCameraAffordance
                     && mUserSetupComplete
-                    && resolveCameraIntent() != null
-                    && !hideShortcuts();
+                    && resolveCameraIntent() != null;
             mIconState.drawable = mContext.getDrawable(R.drawable.ic_camera_alt_24dp);
             mIconState.contentDescription =
                     mContext.getString(R.string.accessibility_camera_button);
@@ -916,12 +876,5 @@ public class KeyguardBottomAreaView extends FrameLayout implements View.OnClickL
             setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(), bottom);
         }
         return insets;
-    }
-
-     private boolean hideShortcuts() {
-        boolean secure = mKeyguardStateController.isMethodSecure();
-        return secure && Settings.Secure.getIntForUser(
-                mContext.getContentResolver(), Settings.Secure.HIDE_LOCK_SHORTCUTS, 0,
-                KeyguardUpdateMonitor.getCurrentUser()) != 0;
     }
 }
