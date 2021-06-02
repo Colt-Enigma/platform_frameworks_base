@@ -132,6 +132,8 @@ public class BatteryMeterView extends LinearLayout implements
     // Lazily-loaded since this is expected to be a rare-if-ever state
     private Drawable mUnknownStateDrawable;
 
+    private int mTextChargingSymbol;
+
     private DualToneHandler mDualToneHandler;
     private int mUser;
 
@@ -290,6 +292,7 @@ public class BatteryMeterView extends LinearLayout implements
         updateSbShowBatteryPercent();
         updateSbBarBatteryTextCharging();
 	leftBatteyText();
+        updateTextChargingSymbol();
     }
 
     private void updateSbBatteryStyle() {
@@ -432,21 +435,26 @@ public class BatteryMeterView extends LinearLayout implements
                 }
             });
         } else {
-            if (mBatteryPercentView != null) {
-                // Use the high voltage symbol ⚡ (u26A1 unicode) but prevent the system
-                // to load its emoji colored variant with the uFE0E flag
-                String bolt = "\u26A1\uFE0E";
-                CharSequence mChargeIndicator = mCharging && (mBatteryStyle == BATTERY_STYLE_TEXT)
-                    ? (bolt + " ") : "";
-                batteryPercentViewSetText(mChargeIndicator +
-                    NumberFormat.getPercentInstance().format(mLevel / 100f));
-                setContentDescription(
-                        getContext().getString(mCharging ? R.string.accessibility_battery_level_charging
-                                : R.string.accessibility_battery_level, mLevel));
+        if (mBatteryPercentView == null)
+ 	    return;
+
+        String pct = NumberFormat.getPercentInstance().format(mLevel / 100f);
+
+        if (mCharging && (mBatteryPercentView != null && mBatteryStyle == BATTERY_STYLE_TEXT)
+                && mTextChargingSymbol > 0) {
+            switch (mTextChargingSymbol) {
+                case 1:
+                default:
+                    pct = "⚡️ " + pct;
+                   break;
+                case 2:
+                    pct = "~ " + pct;
+                    break;
             }
         }
+        mBatteryPercentView.setText(pct);
     }
-
+}
     private void removeBatteryPercentView() {
         if (mBatteryPercentView != null) {
             removeView(mBatteryPercentView);
@@ -514,6 +522,12 @@ public class BatteryMeterView extends LinearLayout implements
             //setVisibility(View.VISIBLE);
             scaleBatteryMeterViews();
         }
+    }
+
+    private void updateTextChargingSymbol() {
+        mTextChargingSymbol = Settings.System.getIntForUser(
+	    mContext.getContentResolver(), Settings.System.
+   	    TEXT_CHARGING_SYMBOL, 1, mUser);
     }
 
     private void batteryPercentViewSetText(CharSequence text) {
@@ -704,6 +718,9 @@ public class BatteryMeterView extends LinearLayout implements
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.DO_LEFT_BATTERY_TEXT),
                     false, this, UserHandle.USER_ALL);
+	    resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.TEXT_CHARGING_SYMBOL),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -711,6 +728,7 @@ public class BatteryMeterView extends LinearLayout implements
             super.onChange(selfChange, uri);
             updateShowPercent();
             updateSettings();
+            updateTextChargingSymbol();
             /*if (TextUtils.equals(uri.getLastPathSegment(),
                     Settings.Global.BATTERY_ESTIMATES_LAST_UPDATE_TIME)) {
                 // update the text for sure if the estimate in the cache was updated

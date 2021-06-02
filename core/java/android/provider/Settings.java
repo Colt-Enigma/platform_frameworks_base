@@ -6676,6 +6676,12 @@ public final class Settings {
                 "status_bar_battery_text_color_dark_mode";
 
         /**
+         * Charging symbol near battery text percentage
+         * @hide
+         */
+        public static final String TEXT_CHARGING_SYMBOL = "text_charging_symbol";
+
+        /**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
