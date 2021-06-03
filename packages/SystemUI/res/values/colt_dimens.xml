@@ -128,4 +128,6 @@
     <dimen name="weather_icon_size">24dp</dimen>
     <dimen name="current_weather_image_size">30dp</dimen>
 
+    <!-- Custom size for clock on QS header -->
+    <dimen name="status_bar_header_clock_size">21sp</dimen>
 </resources>
