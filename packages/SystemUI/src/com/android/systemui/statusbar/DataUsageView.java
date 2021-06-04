@@ -65,6 +65,7 @@ public class DataUsageView extends TextView {
         DataUsageController dataController = new DataUsageController(mContext);
         DataUsageController.DataUsageInfo info;
         String prefix;
+        String suffix;
         if (isWifiConnected()) {
             final NetworkTemplate template;
             final WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
@@ -75,14 +76,16 @@ public class DataUsageView extends TextView {
             }
             info = dataController.getDataUsageInfo(template);
             prefix = mContext.getResources().getString(R.string.usage_wifi_prefix);
+            suffix = mContext.getResources().getString(R.string.usage_data);
         } else {
             dataController.setSubscriptionId(SubscriptionManager.getDefaultDataSubscriptionId());
             info = showDailyDataUsage ? dataController.getDailyDataUsageInfo()
                     : dataController.getDataUsageInfo();
             prefix = getSlotCarrierName();
         }
-        formattedInfo = prefix + ": " + formatDataUsage(info.usageLevel) + " "
-                + mContext.getResources().getString(R.string.usage_data);
+        suffix = showDailyDataUsage ? mContext.getResources().getString(R.string.usage_data_today) 
+                  : mContext.getResources().getString(R.string.usage_data);
+        formattedInfo = prefix + ": " + formatDataUsage(info.usageLevel) + " " + suffix;
         shouldUpdateDataTextView = true;
     }
 
