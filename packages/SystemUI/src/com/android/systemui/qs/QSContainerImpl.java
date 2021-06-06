@@ -51,7 +51,7 @@ public class QSContainerImpl extends FrameLayout implements
         StatusBarHeaderMachine.IStatusBarHeaderMachineObserver, TunerService.Tunable {
 
     private static final String STATUS_BAR_CUSTOM_HEADER_SHADOW =
-                                Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW;
+            "system:" + Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW;
 
     private final Point mSizePoint = new Point();
     private static final FloatPropertyCompat<QSContainerImpl> BACKGROUND_BOTTOM =
