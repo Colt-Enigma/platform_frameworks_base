@@ -5,9 +5,6 @@ import android.graphics.Canvas;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
-import android.net.NetworkTemplate;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.telephony.SubscriptionInfo;
@@ -31,7 +28,6 @@ public class DataUsageView extends TextView {
     private static boolean shouldUpdateDataTextView;
     private ConnectivityManager mConnectivityManager;
     private NetworkController mNetworkController;
-    private WifiManager mWifiManager;
     private Context mContext;
     private String formattedInfo;
 
@@ -39,7 +35,6 @@ public class DataUsageView extends TextView {
         super(context, attrs);
         mContext = context;
         mNetworkController = Dependency.get(NetworkController.class);
-        mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
@@ -67,16 +62,9 @@ public class DataUsageView extends TextView {
         String prefix;
         String suffix;
         if (isWifiConnected()) {
-            final NetworkTemplate template;
-            final WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
-            if (wifiInfo.getHiddenSSID() || wifiInfo.getSSID() == WifiManager.UNKNOWN_SSID) {
-                template = NetworkTemplate.buildTemplateWifiWildcard();
-            } else {
-                template = NetworkTemplate.buildTemplateWifi(wifiInfo.getSSID());
-            }
-            info = dataController.getDataUsageInfo(template);
+            info = showDailyDataUsage ? dataController.getDailyDataUsageInfo()
+                    : dataController.getWifiDataUsageInfo();
             prefix = mContext.getResources().getString(R.string.usage_wifi_prefix);
-            suffix = mContext.getResources().getString(R.string.usage_data);
         } else {
             dataController.setSubscriptionId(SubscriptionManager.getDefaultDataSubscriptionId());
             info = showDailyDataUsage ? dataController.getDailyDataUsageInfo()
