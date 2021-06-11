@@ -59,6 +59,7 @@
     <!-- Whether to dim FOD icon -->
     <bool name="config_fodIconNeedsDim">false</bool>
 
+<<<<<<< HEAD:packages/SystemUI/res/values/colt_config.xml
     <!-- Asus stitch editor component name -->
     <string name="config_stitchEditor">com.asus.stitchimage/com.asus.stitchimage.editor.ScreenshotEditorActivity</string>
 
@@ -78,5 +79,8 @@
 
     <!-- System icon area layout weight -->
     <item name="system_icon_area_weight" format="float" type="integer">1</item>
+
+    <!-- Whether to invert the sim slots for VoLTE/VoWiFi icon -->
+    <bool name="config_invertImsSlots">true</bool>
 
 </resources>
