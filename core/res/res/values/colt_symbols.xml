@@ -277,4 +277,8 @@
     <!-- Light / Regular style fonts -->
     <java-symbol type="string" name="config_lightFontFamily" />
     <java-symbol type="string" name="config_regularFontFamily" />
+
+  <!-- App Lock -->
+  <java-symbol type="string" name="lockscreen_pattern_instructions" />
+
 </resources>
