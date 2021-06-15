@@ -134,9 +134,13 @@ public class ThemeOverlayController extends SystemUI {
                     String homeApp = getDefaultHomeApp(mContext);
                     if (!homeApp.equals("com.android.launcher3")) {
                         reloadAssets(homeApp);
-                    }
-		}
-
+		    }
+                } else if (uri.equals(Settings.Secure.getUriFor("accent_dark")) ||
+                         uri.equals(Settings.Secure.getUriFor("accent_light"))) {
+                     reloadAssets("android");
+                     reloadAssets("com.android.systemui");
+                 }
+            }
             private void reloadAssets(String packageName) {
                 try {
                     IOverlayManager.Stub.asInterface(ServiceManager.getService("overlay"))
@@ -151,6 +155,12 @@ public class ThemeOverlayController extends SystemUI {
                 false, observer, UserHandle.USER_ALL);
 	mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.SYSUI_COLORS_ACTIVE),
+                false, observer, UserHandle.USER_ALL);
+        mContext.getContentResolver().registerContentObserver(
+                Settings.Secure.getUriFor("accent_dark"),
+                false, observer, UserHandle.USER_ALL);
+        mContext.getContentResolver().registerContentObserver(
+                Settings.Secure.getUriFor("accent_light"),
                 false, observer, UserHandle.USER_ALL);
     }
 
