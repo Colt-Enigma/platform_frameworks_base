@@ -153,4 +153,11 @@
 
     <!-- Height-Width of the big battery circle icon in the status bar. -->
     <dimen name="big_battery_height">19.5dp</dimen>
+
+    <dimen name="keyguard_eca_top_margin">18.0dip</dimen>
+    <dimen name="keyguard_password_height">80.0dip</dimen>
+    <dimen name="num_pad_key_margin_end">20.0dip</dimen>
+    <dimen name="num_pad_key_width">84.0dip</dimen>
+    <dimen name="num_pad_row_margin_bottom">16.0dip</dimen>
+
 </resources>

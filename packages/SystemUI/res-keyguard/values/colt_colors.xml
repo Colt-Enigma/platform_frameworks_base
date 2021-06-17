@@ -26,4 +26,7 @@
     <color name="binary_clock_empty_dot_color">#ffffff</color>
     <color name="binary_clock_ambient_dot_color">#ffffff</color>
     <color name="binary_clock_ambient_empty_dot_color">#ffffff</color>
+
+    <color name="num_pad_key_color">?android:attr/colorBackground</color>
+    <color name="num_pad_key_color_special">?android:attr/colorAccent</color>
 </resources>
