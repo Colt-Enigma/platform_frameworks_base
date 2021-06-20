@@ -97,7 +97,7 @@ public class DataUsageView extends TextView {
     }
 
     private String getSlotCarrierName() {
-        CharSequence result = "";
+        CharSequence result = mContext.getResources().getString(R.string.usage_data_prefix);
         SubscriptionManager subManager = mContext.getSystemService(SubscriptionManager.class);
         int subId = subManager.getDefaultDataSubscriptionId();
         List<SubscriptionInfo> subInfoList =
