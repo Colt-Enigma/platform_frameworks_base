@@ -71,7 +71,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.om.IOverlayManager;
-import android.content.om.OverlayInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -155,7 +154,6 @@ import com.android.internal.util.hwkeys.PackageMonitor;
 import com.android.internal.util.hwkeys.PackageMonitor.PackageChangedListener;
 import com.android.internal.util.hwkeys.PackageMonitor.PackageState;
 import com.android.internal.util.colt.ColtUtils;
-import com.android.internal.util.colt.ThemesUtils;
 import com.android.internal.view.AppearanceRegion;
 import com.android.keyguard.KeyguardUpdateMonitor;
 import com.android.keyguard.KeyguardUpdateMonitorCallback;
@@ -2341,9 +2339,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.FORCE_SHOW_NAVBAR),
                     false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.SWITCH_STYLE),
-                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -2387,10 +2382,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             } else if (uri.equals(Settings.System.getUriFor(
                     Settings.System.FORCE_SHOW_NAVBAR))) {
                 updateNavigationBar(false);
-            } else if (uri.equals(Settings.System.getUriFor(
-                    Settings.System.SWITCH_STYLE))) {
-                stockSwitchStyle();
-                updateSwitchStyle();
             }
         }
 
@@ -2408,8 +2399,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             updateCorners();
             handleCutout(null);
             updateNavigationBar(false);
-            stockSwitchStyle();
-            updateSwitchStyle();
         }
     }
 
@@ -4160,16 +4149,6 @@ public class StatusBar extends SystemUI implements DemoMode,
             mConfigurationController.notifyThemeChanged();
         }
         updateCorners();
-    }
-
-    public void updateSwitchStyle() {
-        int switchStyle = Settings.System.getIntForUser(mContext.getContentResolver(),
-                Settings.System.SWITCH_STYLE, 0, mLockscreenUserManager.getCurrentUserId());
-        ThemesUtils.updateSwitchStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId(), switchStyle);
-    }
-
-    public void stockSwitchStyle() {
-        ThemesUtils.stockSwitchStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
     }
 
     private void updateDozingState() {
