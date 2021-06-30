@@ -5628,7 +5628,7 @@ public final class Settings {
         public static final String FOD_ANIM = "fod_anim";
 
         /**
-         * FOD icon picker
+	 * FOD icon picker
          * @hide
          */
         public static final String FOD_ICON = "fod_icon";
@@ -5638,12 +5638,17 @@ public final class Settings {
          * @hide
          */
         public static final String FOD_COLOR = "fod_color";
-        
+
         /**
          * FOD night light
          * @hide
          */
         public static final String FOD_NIGHT_LIGHT = "fod_night_light";
+
+        /**
+         * @hide
+         */
+        public static final String DASHBOARD_ICONS = "dashboard_icons";
 
         /**
          * Display style of the battery percentage in the quick status bar header.
@@ -6435,6 +6440,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_STYLE);
             PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_FORMAT);
 	    PRIVATE_SETTINGS.add(STATUSBAR_CLOCK_DATE_POSITION);
+            PRIVATE_SETTINGS.add(DASHBOARD_ICONS);
             PRIVATE_SETTINGS.add(SCREEN_OFF_ANIMATION);
             PRIVATE_SETTINGS.add(TORCH_LONG_PRESS_POWER_GESTURE);
             PRIVATE_SETTINGS.add(TORCH_LONG_PRESS_POWER_TIMEOUT);

@@ -92,5 +92,6 @@ public class SystemSettings {
 	Settings.System.ACCENT_COLOR,
         Settings.System.RINGTONE_VIBRATION_PATTERN,
         Settings.System.CUSTOM_RINGTONE_VIBRATION_PATTERN,
+	Settings.System.DASHBOARD_ICONS,
     };
 }
