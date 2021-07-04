@@ -59,7 +59,6 @@
     <!-- Whether to dim FOD icon -->
     <bool name="config_fodIconNeedsDim">false</bool>
 
-<<<<<<< HEAD:packages/SystemUI/res/values/colt_config.xml
     <!-- Asus stitch editor component name -->
     <string name="config_stitchEditor">com.asus.stitchimage/com.asus.stitchimage.editor.ScreenshotEditorActivity</string>
 
