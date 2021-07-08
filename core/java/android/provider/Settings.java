@@ -5803,13 +5803,6 @@ public final class Settings {
         public static final String AMBIENT_LIGHT_LAYOUT = "ambient_light_layout";
 
         /**
-         * Whether StatusBar icons should use app icon
-         * @hide
-         */
-
-        public static final String STATUSBAR_ICONS_STYLE = "statusbar_icons_style";
-
-        /**
          * Wheter to play notification sound and vibration if screen is ON
          * 0 - never
          * 1 - always
@@ -6348,7 +6341,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(BUTTON_BACKLIGHT_TIMEOUT);
             PRIVATE_SETTINGS.add(BUTTON_BRIGHTNESS);
             PRIVATE_SETTINGS.add(BUTTON_BACKLIGHT_ONLY_WHEN_PRESSED);
-            PRIVATE_SETTINGS.add(STATUSBAR_ICONS_STYLE);
             PRIVATE_SETTINGS.add(NOTIFICATION_HEADERS);
             PRIVATE_SETTINGS.add(BACK_GESTURE_HAPTIC);
             PRIVATE_SETTINGS.add(FOOTER_TEXT_SHOW);
