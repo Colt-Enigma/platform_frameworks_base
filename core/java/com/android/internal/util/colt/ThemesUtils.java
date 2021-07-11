@@ -106,6 +106,9 @@ public class ThemesUtils {
     public static final String[] BRIGHTNESS_SLIDER_MEMESTROKE = {
             "com.android.systemui.brightness.slider.memestroke",
     };
+    public static final String[] BRIGHTNESS_SLIDER_A12 = {
+            "com.android.systemui.brightness.slider.a12",
+    };
 
     // System-Wide Slider Styles, DU-Way
     public static final String[] SYSTEM_SLIDER_DANIEL = {
