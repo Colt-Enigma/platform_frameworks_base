@@ -37,6 +37,7 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -146,6 +147,14 @@ public class OPQSFooter extends LinearLayout {
         if (mSettingsButton != null) {
             int visibility = isSettingsEnabled() ? View.VISIBLE : View.GONE;
             mSettingsButton.setVisibility(visibility);
+            if (isSettingsEnabled()) {
+                mSettingsButton.setOnLongClickListener(new View.OnLongClickListener() {
+                    public boolean onLongClick(View v) {
+                    startColtEnigmaActivity();
+                    return true;
+                    }
+                });
+            }
         }
         if (mSettingsContainer != null) {
             int visibility = isSettingsEnabled() ? View.VISIBLE : View.GONE;
@@ -246,6 +255,13 @@ public class OPQSFooter extends LinearLayout {
         Intent intent = new Intent();
         intent.setClassName("com.android.settings",
                 "com.android.settings.Settings$DataUsageSummaryActivity");
+        Dependency.get(ActivityStarter.class).startActivity(intent, true /* dismissShade */);
+    }
+
+    private void startColtEnigmaActivity() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setClassName("com.android.settings",
+            "com.android.settings.Settings$ColtEnigmaActivity");
         Dependency.get(ActivityStarter.class).startActivity(intent, true /* dismissShade */);
     }
 }
