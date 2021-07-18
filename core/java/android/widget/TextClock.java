@@ -147,8 +147,6 @@ public class TextClock extends TextView {
     // Used by tests to stop time change events from triggering the text update
     private boolean mStopTicking;
 
-    private Handler mHandler;
-
     private class FormatChangeObserver extends ContentObserver {
 
         public FormatChangeObserver(Handler handler) {
@@ -195,8 +193,9 @@ public class TextClock extends TextView {
             long now = SystemClock.uptimeMillis();
             long next = now + (1000 - now % 1000);
 
-            if (mHandler != null) {
-                mHandler.postAtTime(mTicker, next);
+            Handler handler = getHandler();
+            if (handler != null) {
+                handler.postAtTime(mTicker, next);
             }
         }
     };
@@ -525,7 +524,7 @@ public class TextClock extends TextView {
         mHasSeconds = DateFormat.hasSeconds(mFormat);
 
         if (mShouldRunTicker && hadSeconds != mHasSeconds) {
-            if (hadSeconds && mHandler != null) mHandler.removeCallbacks(mTicker);
+            if (hadSeconds) getHandler().removeCallbacks(mTicker);
             else mTicker.run();
         }
     }
@@ -540,9 +539,6 @@ public class TextClock extends TextView {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
-        if (mHandler == null)
-            mHandler = new Handler();
 
         if (!mRegistered) {
             mRegistered = true;
@@ -567,7 +563,7 @@ public class TextClock extends TextView {
             }
         } else if (mShouldRunTicker && !isVisible) {
             mShouldRunTicker = false;
-            if (mHandler != null) mHandler.removeCallbacks(mTicker);
+            getHandler().removeCallbacks(mTicker);
         }
     }
 
@@ -607,13 +603,13 @@ public class TextClock extends TextView {
         // home screen. Therefore, we register the receiver as the user
         // the app is running as not the one the context is for.
         getContext().registerReceiverAsUser(mIntentReceiver, android.os.Process.myUserHandle(),
-                filter, null, mHandler);
+                filter, null, getHandler());
     }
 
     private void registerObserver() {
         if (mRegistered) {
             if (mFormatChangeObserver == null) {
-                mFormatChangeObserver = new FormatChangeObserver(mHandler);
+                mFormatChangeObserver = new FormatChangeObserver(getHandler());
             }
             final ContentResolver resolver = getContext().getContentResolver();
             Uri uri = Settings.System.getUriFor(Settings.System.TIME_12_24);

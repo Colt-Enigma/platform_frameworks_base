@@ -153,31 +153,9 @@ public final class ClockManager {
         addBuiltinClock(() -> new DefaultBoldClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new SamsungClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new SamsungBoldClockController(res, layoutInflater, colorExtractor));
+        addBuiltinClock(() -> new BubbleClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new AnalogClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new SpideyClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new SpectrumClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new DotClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new SneekyClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new CustomNumClockController(res, layoutInflater, colorExtractor));
         addBuiltinClock(() -> new TypeClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new BinaryClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new DividedLinesClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new SfunyClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new MNMLBoxClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new MNMLMinimalClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new OPMinimalClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new OPAnalogClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new OPNumbersClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new OPMinimalismClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new OPRomanClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new IDEClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new FluidClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new OronosClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new OronosReshapedClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new IDEJavaClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new ClockertinoClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new TypeAltClockController(res, layoutInflater, colorExtractor));
-        addBuiltinClock(() -> new StickerTagClockController(res, layoutInflater, colorExtractor));
 
         // Store the size of the display for generation of clock preview.
         DisplayMetrics dm = res.getDisplayMetrics();
@@ -355,8 +333,7 @@ public final class ClockManager {
                     .setTitle(plugin::getTitle)
                     .setId(id)
                     .setThumbnail(plugin::getThumbnail)
-                     // to make the preview bigger in ThemePicker
-                    .setPreview(() -> plugin.getPreview(mWidth * 2 / 5, mHeight * 2 / 5))
+                    .setPreview(() -> plugin.getPreview(mWidth, mHeight))
                     .build());
         }
 

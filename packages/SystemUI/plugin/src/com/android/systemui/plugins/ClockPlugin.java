@@ -92,7 +92,7 @@ public interface ClockPlugin extends Plugin {
      * Set clock paint style.
      * @param style The new style to set in the paint.
      */
-     default void setStyle(Style style) {}
+    void setStyle(Style style);
 
     /**
      * Set clock text color.
@@ -133,10 +133,6 @@ public interface ClockPlugin extends Plugin {
      */
     default boolean shouldShowStatusArea() {
         return true;
-    }
-
-    default boolean shouldShowInBigContainer() {
-        return false;
     }
 
     /**

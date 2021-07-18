@@ -88,7 +88,6 @@ public class SamsungClockController implements ClockPlugin {
         mView = (ClockLayout) mLayoutInflater
                 .inflate(R.layout.digital_clock_custom, null);
         mClock = mView.findViewById(R.id.clock);
-        mClock.setLineSpacing(0, 0.8f);
         mClock.setFormat12Hour("hh\nmm");
         mClock.setFormat24Hour("kk\nmm");
     }
@@ -119,7 +118,6 @@ public class SamsungClockController implements ClockPlugin {
 
         View previewView = mLayoutInflater.inflate(R.layout.default_clock_preview, null);
         TextClock previewTime = previewView.findViewById(R.id.time);
-        previewTime.setLineSpacing(0, 0.8f);
         previewTime.setFormat12Hour("hh\nmm");
         previewTime.setFormat24Hour("kk\nmm");
         TextClock previewDate = previewView.findViewById(R.id.date);
@@ -166,8 +164,6 @@ public class SamsungClockController implements ClockPlugin {
 
     @Override
     public void onTimeTick() {
-        mView.onTimeChanged();
-        mClock.refreshTime();
     }
 
     @Override
@@ -180,11 +176,6 @@ public class SamsungClockController implements ClockPlugin {
 
     @Override
     public boolean shouldShowStatusArea() {
-        return true;
-    }
-
-    @Override
-    public boolean shouldShowInBigContainer() {
         return true;
     }
 }

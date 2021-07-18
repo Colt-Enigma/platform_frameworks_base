@@ -165,8 +165,6 @@ public class DefaultBoldClockController implements ClockPlugin {
 
     @Override
     public void onTimeTick() {
-        mView.onTimeChanged();
-        mClock.refreshTime();
     }
 
     @Override
@@ -179,11 +177,6 @@ public class DefaultBoldClockController implements ClockPlugin {
 
     @Override
     public boolean shouldShowStatusArea() {
-        return true;
-    }
-
-    @Override
-    public boolean shouldShowInBigContainer() {
         return true;
     }
 }

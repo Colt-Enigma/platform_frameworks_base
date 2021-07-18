@@ -226,36 +226,6 @@
     <!-- Name of the ims status bar icon. -->
     <string name="status_bar_ims">VoLTE/VoWiFi</string>
 
-    <!-- Spidey Analog clock -->
-    <string name="clock_title_spidey" translatable="false">Spidey</string>
-
-    <!-- Spectrum Analog clock -->
-    <string name="clock_title_spectrum" translatable="false">Spectrum</string>
-
-    <!-- Dot Analog clock -->
-    <string name="clock_title_dot" translatable="false">Dot</string>
-
-    <!-- Sneeky Analog clock -->
-    <string name="clock_title_sneeky" translatable="false">Sneeky</string>
-
-    <!-- Custom num Analog clock -->
-    <string name="clock_title_custom_num" translatable="false">Custom-Num</string>
-
-    <!-- Oneplus Numbers clock -->
-    <string name="clock_title_oneplus_numbers" translatable="false">OnePlus Numbers</string>
-
-    <!-- Oneplus Analog clock -->
-    <string name="clock_title_oneplus_minimal" translatable="false">OnePlus Minimal</string>
-
-    <!-- Oneplus Analog clock -->
-    <string name="clock_title_oneplus_roman" translatable="false">OnePlus Roman</string>
-
-    <!-- Oneplus Analog clock -->
-    <string name="clock_title_oneplus_analog" translatable="false">OnePlus Analog</string>
-
-    <!-- Oneplus Analog clock -->
-    <string name="clock_title_minimalism" translatable="false">Minimalism</string>
-
     <!-- Daily data usage -->
     <string name="daily_data_usage_title">Today\'s usage</string>
 
@@ -314,9 +284,6 @@
      <!-- Notify use that they are in Lock-to-app (for devices without navbar and with gestures on fingerprint sensor)-->
     <string name="screen_pinning_toast_no_navbar_fpsensor">To unpin this screen, touch &amp; hold fingerprint sensor</string>
 
-    <!-- Change clockface -->
-    <string name="change_clock_face">Swipe to change the clock face</string>
-
     <!-- Screenshot Delete Toast -->
     <string name="delete_screenshot_toast">Screenshot deleted</string>
 
@@ -340,5 +307,12 @@
     <!-- Partial screenshot -->
     <string name="global_screenshot_selector_capture_description">Capture partial screenshot</string>
     <string name="global_screenshot_selector_cancel_description">Cancel partial screenshot</string>
+
+    <!-- Lockscreen tuner -->
+    <string name="lockscreen_default">Default</string>
+    <string name="lockscreen_hidden">None</string>
+
+    <!-- Shows when people have clicked on the custom lockscreen shortcut [CHAR LIMIT=60] -->
+    <string name="custom_hint">Swipe from icon to launch</string>
 
 </resources>
