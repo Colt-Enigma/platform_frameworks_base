@@ -1209,7 +1209,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         final StreamState ss = mState.states.get(row.stream);
         if (ss == null) return;
         row.ss = ss;
-        if (ss.level > ss.levelMin) {
+        if (ss.level > 0) {
             row.lastAudibleLevel = ss.level;
         }
         if (ss.level == row.requestedLevel) {
@@ -1223,7 +1223,6 @@ public class VolumeDialogImpl implements VolumeDialog,
         final boolean isNotificationStream = row.stream == AudioManager.STREAM_NOTIFICATION;
         final boolean isVibrate = mState.ringerModeInternal == AudioManager.RINGER_MODE_VIBRATE;
         final boolean isRingVibrate = isRingStream && isVibrate;
-        final boolean isMuted = row.ss.level == row.ss.levelMin;
         final boolean isRingSilent = isRingStream
                 && mState.ringerModeInternal == AudioManager.RINGER_MODE_SILENT;
         final boolean isZenPriorityOnly = mState.zenMode == Global.ZEN_MODE_IMPORTANT_INTERRUPTIONS;
@@ -1264,9 +1263,9 @@ public class VolumeDialogImpl implements VolumeDialog,
                 isRingVibrate ? R.drawable.ic_volume_ringer_vibrate
                         : isRingSilent || zenMuted ? row.iconMuteRes
                                 : ss.routedToBluetooth
-                                        ? isMuted ? R.drawable.ic_volume_media_bt_mute
+                                        ? isStreamMuted(ss) ? R.drawable.ic_volume_media_bt_mute
                                                 : R.drawable.ic_volume_media_bt
-                                        : isMuted ? row.iconMuteRes : row.iconRes;
+                                        : isStreamMuted(ss) ? row.iconMuteRes : row.iconRes;
         row.icon.setImageResource(iconRes);
         row.iconState =
                 iconRes == R.drawable.ic_volume_ringer_vibrate ? Events.ICON_STATE_VIBRATE
@@ -1672,7 +1671,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         private int iconState;  // from Events
         private ObjectAnimator anim;  // slider progress animation for non-touch-related updates
         private int animTargetProgress;
-        private int lastAudibleLevel = 2;
+        private int lastAudibleLevel = 1;
         private FrameLayout dndIcon;
     }
 }
