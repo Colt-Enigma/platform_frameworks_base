@@ -406,9 +406,9 @@ public class VolumeDialogImpl implements VolumeDialog,
         internalInsetsInfo.setTouchableInsets(InternalInsetsInfo.TOUCHABLE_INSETS_REGION);
         View main = mDialog.findViewById(R.id.main);
         int[] mainLocation = new int[2];
-        main.getLocationInWindow(mainLocation);
+        main.getLocationOnScreen(mainLocation);
         int[] dialogLocation = new int[2];
-        mDialogView.getLocationInWindow(dialogLocation);
+        mDialogView.getLocationOnScreen(dialogLocation);
         internalInsetsInfo.touchableRegion.set(new Region(
                 mainLocation[0],
                 dialogLocation[1],
