@@ -4896,6 +4896,12 @@ public final class Settings {
          */
         public static final String MULTI_AUDIO_FOCUS_ENABLED = "multi_audio_focus_enabled";
 
+	/**
+         * Accent Color
+         * @hide
+         */
+        public static final String ACCENT_COLOR = "accent_color";
+
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
@@ -6399,6 +6405,7 @@ public final class Settings {
             PRIVATE_SETTINGS.add(SYSTEMUI_PLUGIN_VOLUME);
             PRIVATE_SETTINGS.add(USE_WALL_ACCENT);
             PRIVATE_SETTINGS.add(AUTO_ACCENT_TYPE);
+	    PRIVATE_SETTINGS.add(ACCENT_COLOR);
         }
 
         /**
