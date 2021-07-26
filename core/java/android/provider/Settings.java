@@ -10807,7 +10807,19 @@ public final class Settings {
         public static final String POWER_MENU_HIDE_ON_SECURE = "power_menu_hide_on_secure";
 
         /**
-         * Select from different navigation bar layouts
+         * Dark Accent Color
+         * @hide
+         */
+        public static final String ACCENT_DARK = "accent_dark";
+
+        /**
+         * Light Accent Color
+         * @hide
+         */
+        public static final String ACCENT_LIGHT = "accent_light";
+
+        /**
+	 * Select from different navigation bar layouts
          * @hide
          */
         public static final String NAVBAR_LAYOUT_VIEWS = "navbar_layout_views";
