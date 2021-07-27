@@ -125,6 +125,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     public static final String STATUS_BAR_CUSTOM_HEADER =
             "system:" + Settings.System.STATUS_BAR_CUSTOM_HEADER;
+    public static final String OOS_QSCLOCK = 
+	    "system:" + Settings.System.OOS_QSCLOCK;
 
     private final NextAlarmController mAlarmController;
     private final ZenModeController mZenController;
@@ -180,6 +182,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
     private boolean mLandscape;
     private boolean mHeaderImageEnabled;
+    private boolean mQsClockOOS;
 
     private PrivacyItemController mPrivacyItemController;
     private final UiEventLogger mUiEventLogger;
@@ -348,7 +351,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
 
 	Dependency.get(TunerService.class).addTunable(this,
                 StatusBarIconController.ICON_BLACKLIST,
-                STATUS_BAR_CUSTOM_HEADER);
+                STATUS_BAR_CUSTOM_HEADER, OOS_QSCLOCK);
 
     }
 
@@ -478,9 +481,6 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     }
 
     private void updateResources() {
-        boolean oos_qsclock = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.OOS_QSCLOCK, 1, UserHandle.USER_CURRENT) == 1;
-
         Resources resources = mContext.getResources();
         updateMinimumHeight();
 
@@ -489,7 +489,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mStatusBarPaddingTop = resources.getDimensionPixelSize(R.dimen.status_bar_padding_top);
 
         // Update height for a few views, especially due to landscape mode restricting space.
-        if (oos_qsclock) {
+        if (mQsClockOOS) {
         mHeaderTextContainerView.getLayoutParams().height =
                 resources.getDimensionPixelSize(R.dimen.qs_header_tooltip_height);
         } else {
@@ -531,10 +531,8 @@ public class QuickStatusBarHeader extends RelativeLayout implements
     }
 
     private void updateQsClock() {
-        boolean oos_qsclock = Settings.System.getIntForUser(getContext().getContentResolver(),
-                Settings.System.OOS_QSCLOCK, 1, UserHandle.USER_CURRENT) == 1;
         Resources resources = mContext.getResources();
-        if (oos_qsclock) {
+        if (mQsClockOOS) {
         mHeaderTextContainerView.getLayoutParams().height =
                 resources.getDimensionPixelSize(R.dimen.qs_header_tooltip_height);
         mHeaderTextContainerView.setLayoutParams(mHeaderTextContainerView.getLayoutParams());
@@ -969,9 +967,9 @@ public class QuickStatusBarHeader extends RelativeLayout implements
                 updateResources();
                 break;
 	   case OOS_QSCLOCK:
-                mQsClockOos =
+                mQsClockOOS =
                         TunerService.parseIntegerSwitch(newValue, false);
-                updateResources();
+                updateQsClock();
                 break;
             default:
                 break;
