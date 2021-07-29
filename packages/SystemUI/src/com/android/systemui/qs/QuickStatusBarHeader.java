@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (C) 2017 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
@@ -500,7 +500,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mSystemIconsView.getLayoutParams().height = topMargin;
         mSystemIconsView.setLayoutParams(mSystemIconsView.getLayoutParams());
 
-        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) getLayoutParams();
+        ViewGroup.LayoutParams lp = getLayoutParams();
         if (mQsDisabled) {
             lp.height = topMargin;
         } else {
@@ -510,7 +510,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             if (mHeaderImageEnabled) {
                 qsHeight += mHeaderImageHeight;
             }
-            lp.height = Math.max(getMinimumHeight(), qsHeight);
+            lp.height = WRAP_CONTENT;
         }
         setLayoutParams(lp);
 
