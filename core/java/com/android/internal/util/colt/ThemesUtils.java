@@ -109,6 +109,12 @@ public class ThemesUtils {
     public static final String[] BRIGHTNESS_SLIDER_A12 = {
             "com.android.systemui.brightness.slider.a12",
     };
+    public static final String[] BRIGHTNESS_SLIDER_MINIHALF = {
+            "com.android.systemui.brightness.slider.minihalf",
+    };
+    public static final String[] BRIGHTNESS_SLIDER_HALF = {
+            "com.android.systemui.brightness.slider.half",
+    };
 
     // System-Wide Slider Styles, DU-Way
     public static final String[] SYSTEM_SLIDER_DANIEL = {
