@@ -38,7 +38,6 @@ import android.app.WallpaperManager;
 import android.content.res.ColorUtils;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.MonetWannabe;
 import android.graphics.drawable.Drawable;
 import android.metrics.LogMaker;
 import android.os.Handler;
@@ -572,9 +571,6 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                     return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorSecondary);
                 }
             case Tile.STATE_ACTIVE:
-                if (MonetWannabe.isMonetEnabled(context)) {
-                    return MonetWannabe.manipulateColor(Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent), 0.6f);
-            } else {
                 if (qsTileStyle == 7 || qsTileStyle == 9 || qsTileStyle == 10 || qsTileStyle == 12 ||
                         qsTileStyle == 13 || qsTileStyle == 14) {
                     return Utils.getColorAttrDefaultColor(context, android.R.attr.colorAccent);
@@ -596,7 +592,6 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                     } else {
                         return qsBackGroundColor;
                     }
-                  }
                 }
             default:
                 Log.e("QSTile", "Invalid state " + state);
