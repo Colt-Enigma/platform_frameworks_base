@@ -23,6 +23,9 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.database.ContentObserver;
 import android.graphics.Point;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.UserHandle;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.graphics.Color;
@@ -105,6 +108,8 @@ public class QSContainerImpl extends FrameLayout implements
 
     private boolean mQsSBBackgroundGradient = true;
     private int mQsSBBackgroundAlpha = 255;
+    private Drawable mQsBackGround;
+    private int mQsBackGroundAlpha;
 
     public QSContainerImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -140,6 +145,7 @@ public class QSContainerImpl extends FrameLayout implements
             }
         });
 
+        mQsBackGround = getContext().getDrawable(R.drawable.qs_background_primary);
 
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         updateSettings();
@@ -149,20 +155,34 @@ public class QSContainerImpl extends FrameLayout implements
         SettingsObserver(Handler handler) {
             super(handler);
         }
+
         void observe() {
             getContext().getContentResolver().registerContentObserver(Settings.System
                     .getUriFor(Settings.System.DISPLAY_CUTOUT_MODE), false,
                     this, UserHandle.USER_ALL);
+	    getContext().getContentResolver().registerContentObserver(Settings.System
+                            .getUriFor(Settings.System.QS_PANEL_BG_ALPHA), false,
+                    this, UserHandle.USER_ALL);
         }
+
         @Override
-        public void onChange(boolean selfChange) {
+	public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(Settings.System.getUriFor(Settings.System.QS_PANEL_BG_ALPHA))) {
+                mQsBackGroundAlpha = Settings.System.getIntForUser(getContext().getContentResolver(),
+                        Settings.System.QS_PANEL_BG_ALPHA, 255, UserHandle.USER_CURRENT);
+                setQsBackground();
             updateSettings();
         }
     }
+}
 
     private void updateSettings() {
         mImmerseMode = Settings.System.getIntForUser(mContext.getContentResolver(),
                 Settings.System.DISPLAY_CUTOUT_MODE, 0, UserHandle.USER_CURRENT) == 1;
+        mQsBackGroundAlpha = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.QS_PANEL_BG_ALPHA, 255, UserHandle.USER_CURRENT);
+
+        setQsBackground();
     }
 
     private void setBackgroundBottom(int value) {
@@ -233,6 +253,13 @@ public class QSContainerImpl extends FrameLayout implements
     private void updateAlpha() {
         mStatusBarBackground.getBackground().setAlpha(mQsSBBackgroundAlpha);
         mBackgroundGradient.getBackground().setAlpha(mQsSBBackgroundAlpha);
+    }
+
+    private void setQsBackground() {
+        if (mQsBackGround != null) {
+            mQsBackGround.setAlpha(mQsBackGroundAlpha);
+            mBackground.setBackground(mQsBackGround);
+        }
     }
 
     @Override
