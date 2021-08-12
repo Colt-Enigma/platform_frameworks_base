@@ -4896,12 +4896,6 @@ public final class Settings {
          */
         public static final String MULTI_AUDIO_FOCUS_ENABLED = "multi_audio_focus_enabled";
 
-	/**
-         * Accent Color
-         * @hide
-         */
-        public static final String ACCENT_COLOR = "accent_color";
-
         /**
          * IMPORTANT: If you add a new public settings you also have to add it to
          * PUBLIC_SETTINGS below. If the new setting is hidden you have to add
@@ -5270,22 +5264,6 @@ public final class Settings {
         public static final String POWER_MENU_ANIMATIONS = "power_menu_animations";
 
         /**
-         * Whether to use new QS panel bg tint or not
-         * @hide
-         */
-        public static final String QS_PANEL_BG_USE_NEW_TINT = "qs_panel_bg_use_new_tint";
-
-        /**
-         * @hide
-         */
-        public static final String QS_LABEL_USE_NEW_TINT = "qs_label_use_new_tint";
-
-        /**
-         * @hide
-         */
-        public static final String QS_TILE_ICON_PRIMARY = "qs_tile_icon_primary";
-
-        /**
          * @hide
          */
         public static final String SMART_CHARGING = "smart_charging";
@@ -5488,12 +5466,6 @@ public final class Settings {
          */
         public static final String SENSOR_BLOCKED_APP = "sensor_blocked_app";
         public static final String SENSOR_BLOCKED_APP_DUMMY = "sensor_blocked_app_dummy";
-
-        /**
-         * Whether to display qs tile titles in the qs panel
-         * @hide
-         */
-        public static final String QS_TILE_TITLE_VISIBILITY = "qs_tile_title_visibility";
 
         /**
          * Show data usage in QS header
@@ -6319,13 +6291,6 @@ public final class Settings {
         };
 
         /**
-         * Wallpaper based accents
-         * @hide
-         */
-        public static final String USE_WALL_ACCENT = "use_wall_accent";
-        public static final String AUTO_ACCENT_TYPE = "auto_accent_type";
-
-        /**
          * These are all public system settings
          *
          * @hide
@@ -6446,7 +6411,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(TORCH_LONG_PRESS_POWER_TIMEOUT);
             PRIVATE_SETTINGS.add(VOLUME_ROCKER_WAKE);
             PRIVATE_SETTINGS.add(VOLUME_BUTTON_MUSIC_CONTROL);
-            PRIVATE_SETTINGS.add(QS_PANEL_BG_USE_NEW_TINT);
             PRIVATE_SETTINGS.add(ANBI_ENABLED_OPTION);
             PRIVATE_SETTINGS.add(ALLOW_INCALL_HOME);
             PRIVATE_SETTINGS.add(SCREENSHOT_SOUND);
@@ -6489,9 +6453,6 @@ public final class Settings {
             PRIVATE_SETTINGS.add(DOZE_BRIGHTNESS);
             PRIVATE_SETTINGS.add(DOZE_BRIGHTNESS_FORCE);
             PRIVATE_SETTINGS.add(SYSTEMUI_PLUGIN_VOLUME);
-            PRIVATE_SETTINGS.add(USE_WALL_ACCENT);
-            PRIVATE_SETTINGS.add(AUTO_ACCENT_TYPE);
-	    PRIVATE_SETTINGS.add(ACCENT_COLOR);
 	    PRIVATE_SETTINGS.add(FLASHLIGHT_ON_CALL);
         }
 

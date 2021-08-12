@@ -89,7 +89,6 @@ public class SystemSettings {
         Settings.System.COLOR_BUCKET_OVERLAY,
         Settings.System.LOCKSCREEN_MEDIA_METADATA,
         Settings.System.NOTIFICATION_HEADERS,
-	Settings.System.ACCENT_COLOR,
         Settings.System.RINGTONE_VIBRATION_PATTERN,
         Settings.System.CUSTOM_RINGTONE_VIBRATION_PATTERN,
 	Settings.System.DASHBOARD_ICONS,
