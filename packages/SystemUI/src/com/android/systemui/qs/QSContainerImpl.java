@@ -53,8 +53,7 @@ public class QSContainerImpl extends FrameLayout implements
 
     private static final String STATUS_BAR_CUSTOM_HEADER_SHADOW =
             "system:" + Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW;
-    private static final String QS_PANEL_BG_ALPHA =
-            "system:" + Settings.System.QS_PANEL_BG_ALPHA;
+
     private static final String QS_SB_BG_GRADIENT =
             "system:" + Settings.System.QS_SB_BG_GRADIENT;
     private static final String QS_SB_BG_ALPHA =
@@ -104,7 +103,6 @@ public class QSContainerImpl extends FrameLayout implements
     private int mHeaderShadow = 0;
     private boolean mImmerseMode;
 
-    private int mQsBackgroundAlpha = 255;
     private boolean mQsSBBackgroundGradient = true;
     private int mQsSBBackgroundAlpha = 255;
 
@@ -186,7 +184,6 @@ public class QSContainerImpl extends FrameLayout implements
         super.onAttachedToWindow();
         final TunerService tunerService = Dependency.get(TunerService.class);
         tunerService.addTunable(this, STATUS_BAR_CUSTOM_HEADER_SHADOW);
-        tunerService.addTunable(this, QS_PANEL_BG_ALPHA);
         tunerService.addTunable(this, QS_SB_BG_GRADIENT);
         tunerService.addTunable(this, QS_SB_BG_ALPHA);
 
@@ -218,11 +215,6 @@ public class QSContainerImpl extends FrameLayout implements
                         TunerService.parseInteger(newValue, 0);
                 applyHeaderBackgroundShadow();
                 break;
-            case QS_PANEL_BG_ALPHA:
-                mQsBackgroundAlpha =
-                        TunerService.parseInteger(newValue, 255);
-                updateAlpha();
-                break;
             case QS_SB_BG_GRADIENT:
                 mQsSBBackgroundGradient =
                         TunerService.parseIntegerSwitch(newValue, false);
@@ -239,7 +231,6 @@ public class QSContainerImpl extends FrameLayout implements
     }
 
     private void updateAlpha() {
-        mBackground.getBackground().setAlpha(mQsBackgroundAlpha);
         mStatusBarBackground.getBackground().setAlpha(mQsSBBackgroundAlpha);
         mBackgroundGradient.getBackground().setAlpha(mQsSBBackgroundAlpha);
     }
@@ -505,7 +496,6 @@ public class QSContainerImpl extends FrameLayout implements
         mStatusBarBackground.setBackgroundColor(hideGradient ? Color.TRANSPARENT : Color.BLACK);
         mStatusBarBackground.setVisibility(hideStatusbar ? View.INVISIBLE : View.VISIBLE);
 
-        updateAlpha();
         applyHeaderBackgroundShadow();
     }
 }
