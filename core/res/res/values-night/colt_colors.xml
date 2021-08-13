@@ -18,5 +18,9 @@
   -->
 <resources>
 
+<!-- Gradient Shit -->
+    <color name="gradient_start">#ff8ab4f8</color>
+    <color name="gradient_end">#ff8ab4f8</color>
+
 </resources>
 
