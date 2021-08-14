@@ -52,6 +52,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.LinearLayout;
 
 import com.android.internal.logging.MetricsLogger;
@@ -843,6 +844,15 @@ public class QSPanel extends LinearLayout implements Tunable, Callback, Brightne
         } else {
             mUiEventLogger.log(openPanelEvent());
             logTiles();
+        }
+        if (mOPFooterView.isBuildTextEnabled()) {
+            String text = mOPFooterView.isBuildTextString();
+            mOPFooterView.getBuildText().setText(text == null || text == "" ? "#ColtEnigma" : text);
+            mOPFooterView.getCarrierText().setVisibility(View.GONE);
+            mOPFooterView.getBuildText().setVisibility(View.VISIBLE);
+        } else {
+            mOPFooterView.getCarrierText().setVisibility(View.VISIBLE);
+            mOPFooterView.getBuildText().setVisibility(View.GONE);
         }
         if (mOPFooterView.getSettingsButton() != null) {
             int visibility = mOPFooterView.isSettingsEnabled() ? View.VISIBLE : View.GONE;

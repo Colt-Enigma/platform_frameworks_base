@@ -79,6 +79,7 @@ public class OPQSFooter extends LinearLayout {
     private SettingsButton mSettingsButton;
     private View mRunningServicesButton;
     protected View mEdit;
+    private TextView mBuildText;
     protected TouchAnimator mFooterAnimator;
     protected TouchAnimator mCarrierTextAnimator;
     private ActivityStarter mActivityStarter;
@@ -104,17 +105,20 @@ public class OPQSFooter extends LinearLayout {
         mSettingsContainer = findViewById(R.id.settings_button_container);
         mFooterActions = findViewById(R.id.op_qs_footer_actions);
         mCarrierText = findViewById(R.id.qs_carrier_text);
+        mBuildText = findViewById(R.id.build);
         mDataUsageView = findViewById(R.id.data_usage_view);
         mDataUsageView.setVisibility(View.GONE);
         mIsLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         mFooterAnimator = createFooterAnimator();
         mCarrierTextAnimator = createCarrierTextAnimator();
+        setBuildText();
     }
-
+    
     @Override
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         setOrientation(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE);
+        setBuildText();
     }
 
     public void setExpansion(float headerExpansionFraction) {
@@ -129,6 +133,7 @@ public class OPQSFooter extends LinearLayout {
     public void setIsQQSPanel(boolean isQQS) {
         mIsQQSPanel = isQQS;
         setOrientation(mIsLandscape);
+        setBuildText();
     }
 
     public void setExpanded(boolean expanded) {
@@ -168,6 +173,23 @@ public class OPQSFooter extends LinearLayout {
             int visibility = (mExpanded && isServicesEnabled()) ? View.VISIBLE : View.GONE;
             mRunningServicesButton.setVisibility(visibility);
         }
+        setBuildText();
+    }
+
+    private void setBuildText() {
+        String text = isBuildTextString();
+            // Set as selected for marquee before its made visible, then it won't be announced when
+            // it's made visible.
+        if (isBuildTextEnabled()) {
+            mBuildText.setText(text == null || text == "" ? "#ColtEnigma" : text);
+            mBuildText.setSelected(true);
+            mBuildText.setVisibility(View.VISIBLE);
+            mCarrierText.setVisibility(View.GONE);
+        } else {
+            mBuildText.setSelected(false);
+            mBuildText.setVisibility(View.GONE);
+            mCarrierText.setVisibility(View.VISIBLE);
+        }
     }
 
     @Nullable
@@ -189,12 +211,22 @@ public class OPQSFooter extends LinearLayout {
         if (mIsLandscape) {
             builder = builder.addFloat(mDataUsageView, "alpha", 0, 0, 1)
                     .addFloat(mCarrierText, "alpha", 0, 0, 0)
+                    .addFloat(mBuildText, "alpha", 0, 0, 0)
                     .setStartDelay(0.5f);
         } else {
             builder = builder.addFloat(mDataUsageView, "alpha", 0, 0, 1)
+                    .addFloat(mBuildText, "alpha", 1, 0, 0)
                     .addFloat(mCarrierText, "alpha", 1, 0, 0);
         }
         return builder.build();
+    }
+
+    public TextView getBuildText() {
+        return mBuildText;
+    }
+
+    public CarrierText getCarrierText() {
+        return mCarrierText;
     }
 
     public View getSettingsContainer() {
@@ -215,6 +247,16 @@ public class OPQSFooter extends LinearLayout {
 
     public View getDataUsageView() {
         return mDataUsageView;
+    }
+
+    public String isBuildTextString() {
+        return Settings.System.getStringForUser(mContext.getContentResolver(),
+                Settings.System.FOOTER_TEXT_STRING, UserHandle.USER_CURRENT) ;
+    }
+
+    public boolean isBuildTextEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.FOOTER_TEXT_SHOW, 1) == 1;
     }
 
     public boolean isSettingsEnabled() {
