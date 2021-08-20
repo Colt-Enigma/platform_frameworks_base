@@ -6520,6 +6520,12 @@ public final class Settings {
         public static final String CLIPBOARD_TOAST_INFO = "clipboard_toast_info";
 
         /**
+         * Select which System charging animation style to display
+         * @hide
+         */
+        public static final String CHARGING_ANIMATION_STYLE = "charging_animation_style";
+
+	/**
          * Keys we no longer back up under the current schema, but want to continue to
          * process when restoring historical backup datasets.
          *
