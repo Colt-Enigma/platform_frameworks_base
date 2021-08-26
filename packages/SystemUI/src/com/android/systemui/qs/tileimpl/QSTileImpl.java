@@ -558,8 +558,11 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                 System.QS_PANEL_BG_COLOR, defaultColor, UserHandle.USER_CURRENT));
         int qsBackGroundColorWall = ColorUtils.getValidQsColor(getWallpaperColor(defaultColor));
 
-        boolean qsIconPrimary = Settings.System.getIntForUser(context.getContentResolver(),
-                    Settings.System.QS_TILE_ICON_PRIMARY, 0, UserHandle.USER_CURRENT) == 1;
+        boolean qsIconPrimaryActive = Settings.System.getIntForUser(context.getContentResolver(),
+                    Settings.System.QS_TILE_ICON_PRIMARY_ACTIVE, 0, UserHandle.USER_CURRENT) == 1;
+
+        boolean qsIconPrimaryInactive = Settings.System.getIntForUser(context.getContentResolver(),
+                    Settings.System.QS_TILE_ICON_PRIMARY_INACTIVE, 0, UserHandle.USER_CURRENT) == 1;
 
         switch (state) {
             case Tile.STATE_UNAVAILABLE:
@@ -570,6 +573,8 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                     return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary);
                 } else if (setQsUseNewTint == 2) {
                     return context.getResources().getColor(R.color.qs_tile_icon_oos);
+		} else if (qsIconPrimaryInactive) {
+                         return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse);
                 } else {
                     return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorSecondary);
                 }
@@ -586,7 +591,7 @@ public abstract class QSTileImpl<TState extends State> implements QSTile, Lifecy
                     return context.getResources().getColor(R.color.qs_tile_oos);
                 } else if (setQsUseNewTint == 3){
                     return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimaryInverse);
-		} else if (qsIconPrimary) {
+		} else if (qsIconPrimaryActive) {
                          return Utils.getColorAttrDefaultColor(context, android.R.attr.textColorPrimary);
                      } else {
                         return Utils.getColorAttrDefaultColor(context, android.R.attr.colorPrimary);

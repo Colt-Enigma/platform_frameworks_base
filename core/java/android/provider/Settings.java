@@ -6559,7 +6559,12 @@ public final class Settings {
 	/**
          * @hide
          */
-        public static final String QS_TILE_ICON_PRIMARY = "qs_tile_icon_primary";
+        public static final String QS_TILE_ICON_PRIMARY_ACTIVE = "qs_tile_icon_primary_active";
+
+        /**
+         * @hide
+         */
+        public static final String QS_TILE_ICON_PRIMARY_INACTIVE = "qs_tile_icon_primary_inactive";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to
