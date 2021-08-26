@@ -43,7 +43,6 @@ import com.android.systemui.qs.tiles.DataSwitchTile;
 import com.android.systemui.qs.tiles.DndTile;
 import com.android.systemui.qs.tiles.FlashlightTile;
 import com.android.systemui.qs.tiles.FPSInfoTile;
-import com.android.systemui.qs.tiles.GamingModeTile;
 import com.android.systemui.qs.tiles.HeadsUpTile;
 import com.android.systemui.qs.tiles.HotspotTile;
 import com.android.systemui.qs.tiles.HWKeysTile;
@@ -110,7 +109,6 @@ public class QSFactoryImpl implements QSFactory {
     private final Provider<CPUInfoTile> mCPUInfoTileProvider;
     private final Provider<DataSwitchTile> mDataSwitchTileProvider;
     private final Provider<FPSInfoTile> mFPSInfoTileProvider;
-    private final Provider<GamingModeTile> mGamingModeTileProvider;
     private final Provider<HeadsUpTile> mHeadsUpTileProvider;
     private final Provider<KillappTile> mKillappTileProvider;
     private final Provider<MonoToggleTile> mMonoToggleTileProvider;
@@ -159,7 +157,6 @@ public class QSFactoryImpl implements QSFactory {
             Provider<CPUInfoTile> cpuInfoTileProvider,
             Provider<DataSwitchTile> dataSwitchTileProvider,
             Provider<FPSInfoTile> fpsInfoTileProvider,
-            Provider<GamingModeTile> gamingModeTileProvider,
             Provider<HeadsUpTile> headsUpTileProvider,
             Provider<KillappTile> killappTileProvider,
             Provider<MonoToggleTile> monoToggleTileProvider,
@@ -204,7 +201,6 @@ public class QSFactoryImpl implements QSFactory {
         mCPUInfoTileProvider = cpuInfoTileProvider;
         mDataSwitchTileProvider = dataSwitchTileProvider;
         mFPSInfoTileProvider = fpsInfoTileProvider;
-        mGamingModeTileProvider = gamingModeTileProvider;
         mHeadsUpTileProvider = headsUpTileProvider;
         mKillappTileProvider = killappTileProvider;
         mMonoToggleTileProvider = monoToggleTileProvider;
@@ -287,8 +283,6 @@ public class QSFactoryImpl implements QSFactory {
                 return mDataSwitchTileProvider.get();
             case "fpsinfo":
                 return mFPSInfoTileProvider.get();
-            case "gaming":
-                return mGamingModeTileProvider.get();
             case "heads_up":
                 return mHeadsUpTileProvider.get();
             case "killapp":

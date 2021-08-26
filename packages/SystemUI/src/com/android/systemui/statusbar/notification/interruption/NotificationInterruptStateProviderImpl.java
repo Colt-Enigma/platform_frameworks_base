@@ -68,6 +68,7 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     private final StatusBarStateController mStatusBarStateController;
     private final NotificationFilter mNotificationFilter;
     private final ContentResolver mContentResolver;
+    private final Context mContext;
     private final PowerManager mPowerManager;
     private final IDreamManager mDreamManager;
     private final AmbientDisplayConfiguration mAmbientDisplayConfiguration;
@@ -82,11 +83,8 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
     @VisibleForTesting
     protected boolean mUseHeadsUp = false;
 
-    private boolean mGamingMode;
-    private int mSkipHeadsUp;
     private boolean mLessBoringHeadsUp = false;
     private TelecomManager mTm;
-    private Context mContext;
 
     @Inject
     public NotificationInterruptStateProviderImpl(
@@ -101,7 +99,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
             HeadsUpManager headsUpManager,
             @Main Handler mainHandler) {
         mContext = context;
-        mTm = (TelecomManager) context.getSystemService(Context.TELECOM_SERVICE);
         mContentResolver = contentResolver;
         mPowerManager = powerManager;
         mDreamManager = dreamManager;
@@ -209,8 +206,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
      */
     @Override
     public boolean shouldLaunchFullScreenIntentWhenAdded(NotificationEntry entry) {
-        if (mGamingMode)
-            return false; // Don't allow fullscreen intent if gaming mode is active
         return entry.getSbn().getNotification().fullScreenIntent != null
                 && (!shouldHeadsUp(entry)
                 || mStatusBarStateController.getState() == StatusBarState.KEYGUARD);
@@ -235,13 +230,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
         }
 
         if (isPackageBlacklisted(sbn.getPackageName())) {
-            return false;
-        }
-
-        if (shouldSkipHeadsUp(sbn)) {
-            if (DEBUG_HEADS_UP) {
-                Log.d(TAG, "No alerting: gaming mode or boring apps");
-            }
             return false;
         }
 
@@ -401,54 +389,6 @@ public class NotificationInterruptStateProviderImpl implements NotificationInter
             return false;
         }
         return true;
-    }
-
-    @Override
-    public void setGamingPeekMode(boolean gamingMode, int skipHeadsUp) {
-        mGamingMode = gamingMode;
-        mSkipHeadsUp = skipHeadsUp;
-    }
-
-    @Override
-    public void setUseLessBoringHeadsUp(boolean lessBoring) {
-        mLessBoringHeadsUp = lessBoring;
-    }
-
-    public boolean shouldSkipHeadsUp(StatusBarNotification sbn) {
-        String notificationPackageName = sbn.getPackageName();
-
-        // Gaming mode takes precedence since messaging headsup is intrusive
-        if (mGamingMode) {
-            boolean isNonInstrusive;
-            if (mSkipHeadsUp == 1) {
-                isNonInstrusive = notificationPackageName.contains("dialer") ||
-                    notificationPackageName.contains("clock");
-                return !isNonInstrusive;
-            } else if (mSkipHeadsUp == 2) {
-                isNonInstrusive = notificationPackageName.contains("clock");
-                return !isNonInstrusive;
-            } else if (mSkipHeadsUp == 3) {
-                isNonInstrusive = notificationPackageName.contains("dialer");
-                return !isNonInstrusive;
-            } else if (mSkipHeadsUp == 4) {
-                return true;
-            }
-        }
-
-        boolean isLessBoring = notificationPackageName.equals(getDefaultDialerPackage(mTm))
-                || notificationPackageName.equals(getDefaultSmsPackage(mContext))
-                || notificationPackageName.toLowerCase().contains("clock");
-
-        return !mStatusBarStateController.isDozing() && mLessBoringHeadsUp && !isLessBoring;
-    }
-
-    private static String getDefaultSmsPackage(Context ctx) {
-        // for reference, there's also a new RoleManager api with getDefaultSmsPackage(context, userid)
-        return Sms.getDefaultSmsPackage(ctx);
-    }
-
-    private static String getDefaultDialerPackage(TelecomManager tm) {
-        return tm != null ? tm.getDefaultDialerPackage() : "";
     }
 
     /**
