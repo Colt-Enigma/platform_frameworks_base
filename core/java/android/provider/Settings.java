@@ -5000,6 +5000,12 @@ public final class Settings {
          */
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
+		/**
+         * Whether to use new QS accent or primaryinverse label color or not
+         * @hide
+         */
+        public static final String QS_PRIMARY_LABEL = "qs_primary_label";
+
         /**
          * Style of clock
          * 0 - Left Clock (default)

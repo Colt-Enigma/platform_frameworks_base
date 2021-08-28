@@ -49,7 +49,8 @@ public class QSTileView extends QSTileBaseView {
     private View mExpandIndicator;
     private View mExpandSpace;
     private ColorStateList mColorLabelDefault;
-    private ColorStateList mColorLabelActive;
+    private ColorStateList mColorLabelTintActive;
+    private ColorStateList mColorLabelPrimary;
     private ColorStateList mColorLabelUnavailable;
 
     public QSTileView(Context context, QSIconView icon) {
@@ -68,7 +69,8 @@ public class QSTileView extends QSTileBaseView {
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         mColorLabelDefault = Utils.getColorAttr(getContext(), android.R.attr.textColorPrimary);
-        mColorLabelActive = Utils.getColorAttr(getContext(), android.R.attr.colorAccent);
+        mColorLabelTintActive = Utils.getColorAttr(getContext(), android.R.attr.colorAccent);
+        mColorLabelPrimary = Utils.getColorAttr(getContext(), android.R.attr.textColorPrimaryInverse);
         // The text color for unavailable tiles is textColorSecondary, same as secondaryLabel for
         // contrast purposes
         mColorLabelUnavailable = Utils.getColorAttr(getContext(),
@@ -136,6 +138,9 @@ public class QSTileView extends QSTileBaseView {
                 Settings.System.QS_PANEL_BG_USE_NEW_TINT, 1, UserHandle.USER_CURRENT);
         boolean shouldDisco = Settings.System.getIntForUser(getContext().getContentResolver(),
                 Settings.System.QS_TILES_BG_DISCO, 0, UserHandle.USER_CURRENT) == 1;
+        boolean QsPrimaryLabel = Settings.System.getIntForUser(getContext().getContentResolver(),
+                Settings.System.QS_PRIMARY_LABEL, 0, UserHandle.USER_CURRENT) == 1;
+
         if (setQsUseNewTint == 1 && shouldDisco) {
             if (state.state == Tile.STATE_ACTIVE) {
                 mLabel.setTextColor(mColorLabelDefault);
@@ -144,11 +149,18 @@ public class QSTileView extends QSTileBaseView {
             }
         } else if (setQsUseNewTint == 1 && !shouldDisco) {
             if (state.state == Tile.STATE_ACTIVE) {
-                mLabel.setTextColor(mColorLabelActive);
+                mLabel.setTextColor(mColorLabelTintActive);
             } else if (state.state == Tile.STATE_INACTIVE) {
                 mLabel.setTextColor(mColorLabelDefault);
             }
-        }
+        } else if (QsPrimaryLabel) {
+            if (state.state == Tile.STATE_ACTIVE) {
+                mLabel.setTextColor(mColorLabelTintActive);
+            } else if (state.state == Tile.STATE_INACTIVE) {
+                mLabel.setTextColor(mColorLabelPrimary);
+            }
+	}
+
         boolean dualTarget = DUAL_TARGET_ALLOWED && state.dualTarget;
         mExpandIndicator.setVisibility(dualTarget ? View.VISIBLE : View.GONE);
         mExpandSpace.setVisibility(dualTarget ? View.VISIBLE : View.GONE);
