@@ -69,7 +69,7 @@ public class QSTileView extends QSTileBaseView {
         setOrientation(VERTICAL);
         setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
         mColorLabelDefault = Utils.getColorAttr(getContext(), android.R.attr.textColorPrimary);
-        mColorLabelTintActive = Utils.getColorAttr(getContext(), android.R.attr.colorAccent);
+	mColorLabelTintActive = Utils.getColorAttr(getContext(), android.R.attr.colorAccent);
         mColorLabelPrimary = Utils.getColorAttr(getContext(), android.R.attr.textColorPrimaryInverse);
         // The text color for unavailable tiles is textColorSecondary, same as secondaryLabel for
         // contrast purposes
@@ -155,7 +155,7 @@ public class QSTileView extends QSTileBaseView {
             }
         } else if (QsPrimaryLabel) {
             if (state.state == Tile.STATE_ACTIVE) {
-                mLabel.setTextColor(mColorLabelTintActive);
+                mLabel.setTextColor(mColorLabelPrimary);
             } else if (state.state == Tile.STATE_INACTIVE) {
                 mLabel.setTextColor(mColorLabelPrimary);
             }
