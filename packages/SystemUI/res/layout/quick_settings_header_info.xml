@@ -29,7 +29,7 @@
         android:layout_gravity="center"
         android:id="@+id/oos_qsclock"
         android:orientation="horizontal"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="20dp">
