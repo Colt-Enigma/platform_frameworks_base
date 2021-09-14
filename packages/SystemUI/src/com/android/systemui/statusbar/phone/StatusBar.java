@@ -447,6 +447,7 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     // settings
     private QSPanel mQSPanel;
+    private KeyguardStatusBarView mKeyguardStatusBar;
 
     KeyguardIndicationController mKeyguardIndicationController;
 
@@ -2345,6 +2346,24 @@ public class StatusBar extends SystemUI implements DemoMode,
 	    resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.QS_PRIMARY_LABEL),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_TEXT_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_ICON_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_TEXT_COLOR_DARK_MODE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_ICON_COLOR_DARK_MODE),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BATTERY_TEXT_COLOR),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_BATTERY_TEXT_COLOR_DARK_MODE),
+                    false, this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -2390,6 +2409,13 @@ public class StatusBar extends SystemUI implements DemoMode,
                     uri.equals(Settings.System.getUriFor(Settings.System.QS_PANEL_BG_COLOR)) ||
                     uri.equals(Settings.System.getUriFor(Settings.System.SYSUI_COLORS_ACTIVE))) {
                 mQSPanel.getHost().reloadAllTiles();
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_TEXT_COLOR)) ||
+                uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_ICON_COLOR)) ||
+                uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_TEXT_COLOR_DARK_MODE)) ||
+                uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_ICON_COLOR_DARK_MODE)) ||
+                uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_BATTERY_TEXT_COLOR)) ||
+                uri.equals(Settings.System.getUriFor(Settings.System.STATUS_BAR_BATTERY_TEXT_COLOR_DARK_MODE))) {
+                updateStatusbarColors();
             }
         }
 
@@ -2406,6 +2432,7 @@ public class StatusBar extends SystemUI implements DemoMode,
             updateCorners();
             handleCutout(null);
             updateNavigationBar(false);
+            updateStatusbarColors();
         }
     }
 
@@ -4161,6 +4188,13 @@ public class StatusBar extends SystemUI implements DemoMode,
 
     public void stockSwitchStyle() {
         ThemesUtils.stockSwitchStyle(mOverlayManager, mLockscreenUserManager.getCurrentUserId());
+    }
+
+    private void updateStatusbarColors() {
+        Dependency.get(DarkIconDispatcher.class).updateColors();
+        if (mKeyguardStatusBar != null) {
+            mKeyguardStatusBar.updateIconsAndTextColors();
+        }
     }
 
     private void updateDozingState() {

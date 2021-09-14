@@ -53,6 +53,7 @@ import android.widget.TextView;
 
 import androidx.annotation.StyleRes;
 
+import com.android.internal.util.colt.StatusBarColorHelper;
 import com.android.settingslib.Utils;
 import com.android.settingslib.graph.CircleBatteryDrawable;
 import com.android.settingslib.graph.FullCircleBatteryDrawable;
@@ -248,7 +249,7 @@ public class BatteryMeterView extends LinearLayout implements
      *
      * @param shouldUseWallpaperTextColor whether we should use wallpaperTextColor for all
      *                                    components
-     */
+     
     public void useWallpaperTextColor(boolean shouldUseWallpaperTextColor) {
         if (shouldUseWallpaperTextColor == mUseWallpaperTextColors) {
             return;
@@ -266,6 +267,7 @@ public class BatteryMeterView extends LinearLayout implements
                     mNonAdaptedSingleToneColor);
         }
     }
+*/
 
     public void setColorsFromContext(Context context) {
         if (context == null) {
@@ -634,18 +636,28 @@ public class BatteryMeterView extends LinearLayout implements
 
     @Override
     public void onDarkChanged(Rect area, float darkIntensity, int tint) {
-        float intensity = DarkIconDispatcher.isInArea(area, this) ? darkIntensity : 0;
-        mNonAdaptedSingleToneColor = mDualToneHandler.getSingleColor(intensity);
-        mNonAdaptedForegroundColor = mDualToneHandler.getFillColor(intensity);
-        mNonAdaptedBackgroundColor = mDualToneHandler.getBackgroundColor(intensity);
+        mNonAdaptedSingleToneColor = StatusBarColorHelper.getTextSingleToneTint(getContext(), area, this,
+                    darkIntensity);
+        mNonAdaptedForegroundColor = StatusBarColorHelper.getIconDualToneFillTint(getContext(), area, this,
+                    darkIntensity);
+        mNonAdaptedBackgroundColor = StatusBarColorHelper.getIconDualToneBackgroundTint(getContext(), area, this,
+                    darkIntensity);
 
-        if (!mUseWallpaperTextColors) {
-            updateColors(mNonAdaptedForegroundColor, mNonAdaptedBackgroundColor,
-                    mNonAdaptedSingleToneColor);
+        mThemedDrawable.setColors(mNonAdaptedForegroundColor, mNonAdaptedBackgroundColor, mNonAdaptedSingleToneColor);
+        mCircleDrawable.setColors(mNonAdaptedForegroundColor, mNonAdaptedBackgroundColor, mNonAdaptedSingleToneColor);
+        mFullCircleDrawable.setColors(mNonAdaptedForegroundColor, mNonAdaptedBackgroundColor, mNonAdaptedSingleToneColor);
+        mTextColor = mNonAdaptedSingleToneColor;
+        if (mBatteryPercentView != null) {
+            mBatteryPercentView.setTextColor(mNonAdaptedSingleToneColor);
+        }
+
+        if (mUnknownStateDrawable != null) {
+            mUnknownStateDrawable.setTint(mNonAdaptedSingleToneColor);
         }
     }
 
-    public void updateColors(int foregroundColor, int backgroundColor, int singleToneColor) {
+/**
+    private void updateColors(int foregroundColor, int backgroundColor, int singleToneColor) {
         mThemedDrawable.setColors(foregroundColor, backgroundColor, singleToneColor);
         mRLandscapeDrawable.setColors(foregroundColor, backgroundColor, singleToneColor);
         mLandscapeDrawable.setColors(foregroundColor, backgroundColor, singleToneColor);
@@ -660,6 +672,7 @@ public class BatteryMeterView extends LinearLayout implements
             mUnknownStateDrawable.setTint(singleToneColor);
         }
     }
+*/
 
     public void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         String powerSave = mThemedDrawable == null ? null : mThemedDrawable.getPowerSaveEnabled() + "";
