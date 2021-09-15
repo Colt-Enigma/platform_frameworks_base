@@ -5482,12 +5482,6 @@ public final class Settings {
         public static final String SENSOR_BLOCKED_APP_DUMMY = "sensor_blocked_app_dummy";
 
         /**
-         * Show data usage in QS header
-         * @hide
-         */
-        public static final String QS_DATAUSAGE = "qs_datausage";
-
-        /**
          * Whether the phone vibrates on call connect
          * @hide
          */
