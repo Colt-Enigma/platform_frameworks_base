@@ -150,4 +150,7 @@
 	
     <!-- Starting padding for custom status bar elements -->
     <dimen name="status_bar_start_padding">2dp</dimen>
+
+    <!-- Height-Width of the big battery circle icon in the status bar. -->
+    <dimen name="big_battery_height">19.5dp</dimen>
 </resources>
