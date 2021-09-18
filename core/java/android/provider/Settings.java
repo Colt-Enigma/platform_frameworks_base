@@ -6512,6 +6512,12 @@ public final class Settings {
          * @hide
          */
         public static final String ARTWORK_MEDIA_FADE_LEVEL = "artwork_media_fade_level";
+        
+        /**
+         * DismissAll Button
+         * @hide
+         */
+        public static final String DISMISS_ALL_BUTTON = "dismiss_all_button";
 
         /**
          * Enable and disable QS Panel visualizer
