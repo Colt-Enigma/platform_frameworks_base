@@ -606,6 +606,7 @@ public class QuickStatusBarHeader extends RelativeLayout implements
         mHeaderQsPanel.setExpanded(expanded);
 	mDateView.setVisibility(mClockView.isClockDateEnabled() ? View.INVISIBLE : View.VISIBLE);
         updateEverything();
+	updateHeaderImage();
         updateClockLocation();
     }
 
@@ -957,32 +958,15 @@ public class QuickStatusBarHeader extends RelativeLayout implements
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CUSTOM_HEADER), false,
                     this, UserHandle.USER_ALL);
+	    resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT), false,
+                    this, UserHandle.USER_ALL);
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.QS_CLOCK_LOCATION), false,
                     this, UserHandle.USER_ALL);
         }
 
 	@Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
-        }
-    }
-    private class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            ContentResolver resolver = getContext().getContentResolver();
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_CUSTOM_HEADER), false,
-                    this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT), false,
-                    this, UserHandle.USER_ALL);
-        }
-
-        @Override
         public void onChange(boolean selfChange) {
             updateSettings();
         }

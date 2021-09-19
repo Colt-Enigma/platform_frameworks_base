@@ -139,9 +139,6 @@ public class QSContainerImpl extends FrameLayout implements
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
         mStatusBarHeaderMachine = new StatusBarHeaderMachine(context);
-        Handler handler = new Handler();
-        SettingsObserver settingsObserver = new SettingsObserver(handler);
-        settingsObserver.observe();
 	mColorExtractor = Dependency.get(SysuiColorExtractor.class);
         mColorExtractor.addOnColorsChangedListener(this);
     }
@@ -209,6 +206,9 @@ public class QSContainerImpl extends FrameLayout implements
             getContext().getContentResolver().registerContentObserver(Settings.System
                     .getUriFor(Settings.System.QS_PANEL_BG_USE_FW), false,
                     this, UserHandle.USER_ALL);
+	    getContext().getContentResolver().registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT), false,
+                    this, UserHandle.USER_ALL);
         }
 
         @Override
@@ -230,6 +230,7 @@ public class QSContainerImpl extends FrameLayout implements
                         Settings.System.QS_PANEL_BG_USE_FW, 1, UserHandle.USER_CURRENT) == 1;
                 setQsBackground();
             }
+		updateSettings();
         }
     }
 
@@ -246,6 +247,8 @@ public class QSContainerImpl extends FrameLayout implements
                 Settings.System.QS_PANEL_BG_USE_FW, 1, UserHandle.USER_CURRENT) == 1;
 
         setQsBackground();
+	updateHeaderImageHeight();
+        updateResources();
     }
 
     private void setBackgroundBottom(int value) {
@@ -606,28 +609,6 @@ public class QSContainerImpl extends FrameLayout implements
         mStatusBarBackground.setVisibility(hideStatusbar ? View.INVISIBLE : View.VISIBLE);
 
         applyHeaderBackgroundShadow();
-    }
-
-    private class SettingsObserver extends ContentObserver {
-        SettingsObserver(Handler handler) {
-            super(handler);
-        }
-
-        void observe() {
-            getContext().getContentResolver().registerContentObserver(Settings.System
-                            .getUriFor(Settings.System.STATUS_BAR_CUSTOM_HEADER_HEIGHT), false,
-                    this, UserHandle.USER_ALL);
-        }
-
-        @Override
-        public void onChange(boolean selfChange) {
-            updateSettings();
-        }
-    }
-
-    private void updateSettings() {
-        updateHeaderImageHeight();
-        updateResources();
     }
 
     private void updateHeaderImageHeight() {
