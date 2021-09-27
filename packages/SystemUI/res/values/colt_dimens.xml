@@ -160,4 +160,6 @@
     <dimen name="num_pad_key_width">84.0dip</dimen>
     <dimen name="num_pad_row_margin_bottom">16.0dip</dimen>
 
+    <!-- StatusBar & QS Header Weather image -->
+    <dimen name="qs_sb_weather_icon_size">32dp</dimen>
 </resources>
