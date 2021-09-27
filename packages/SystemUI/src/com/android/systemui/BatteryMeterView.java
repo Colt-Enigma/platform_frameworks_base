@@ -676,6 +676,8 @@ public class BatteryMeterView extends LinearLayout implements
                     darkIntensity);
 
         mThemedDrawable.setColors(mNonAdaptedForegroundColor, mNonAdaptedBackgroundColor, mNonAdaptedSingleToneColor);
+	mRLandscapeDrawable.setColors(mNonAdaptedForegroundColor, mNonAdaptedBackgroundColor, mNonAdaptedSingleToneColor);
+        mLandscapeDrawable.setColors(mNonAdaptedForegroundColor, mNonAdaptedBackgroundColor, mNonAdaptedSingleToneColor);
         mCircleDrawable.setColors(mNonAdaptedForegroundColor, mNonAdaptedBackgroundColor, mNonAdaptedSingleToneColor);
         mFullCircleDrawable.setColors(mNonAdaptedForegroundColor, mNonAdaptedBackgroundColor, mNonAdaptedSingleToneColor);
         mTextColor = mNonAdaptedSingleToneColor;
