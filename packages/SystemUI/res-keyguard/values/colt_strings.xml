@@ -18,7 +18,7 @@
     <string name="clock_title_default_bold" translatable="false">Default (bold)</string>
     <string name="clock_title_samsung" translatable="false">Samsung</string>
     <string name="clock_title_samsung_bold" translatable="false">Samsung (bold)</string>
-    <string name="clock_title_samsung_accent" translatable="false">Samsung (Colored)</string>
+    <string name="clock_title_samsung_accent" translatable="false">Samsung (Col)</string>
 
     <!-- Spidey Analog clock -->
     <string name="clock_title_spidey" translatable="false">Spidey</string>
@@ -39,7 +39,7 @@
     <string name="clock_title_tux" translatable="false">Tux</string>
     <string name="clock_title_lineage" translatable="false">LineageOS</string>
     <string name="clock_title_swing" translatable="false">Swing animation</string>
-    <string name="clock_title_loading" translatable="false">Loading animation</string>
+    <string name="clock_title_loading" translatable="false">Loading anim.</string>
     <string name="clock_title_bubble_animation" translatable="false">Bubble animation</string>
     <string name="clock_title_fire_circle_animation" translatable="false">Fire circle</string>
     <string name="clock_title_rainbow_circle_animation" translatable="false">Rainbow circle</string>
