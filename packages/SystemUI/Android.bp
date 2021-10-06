@@ -97,6 +97,8 @@ android_library {
         "lottie",
         "vendor.lineage.biometrics.fingerprint.inscreen-V1.0-java",
         "tensorflowlite_java",
+        "colorkt",
+        "themelib",
     ],
     manifest: "AndroidManifest.xml",
 
