@@ -29,7 +29,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Canvas;
 import android.graphics.PixelFormat;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.hardware.display.DisplayManager;
@@ -53,6 +55,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.VelocityTracker;
+import android.widget.ImageView;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
@@ -76,6 +79,11 @@ import com.android.systemui.statusbar.policy.ConfigurationController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.util.concurrency.DelayableExecutor;
 import com.android.systemui.util.concurrency.Execution;
+
+import vendor.lineage.biometrics.fingerprint.inscreen.V1_0.IFingerprintInscreen;
+import vendor.lineage.biometrics.fingerprint.inscreen.V1_0.IFingerprintInscreenCallback;
+
+import java.util.NoSuchElementException;
 
 import java.util.Optional;
 
@@ -158,6 +166,13 @@ public class UdfpsController implements DozeReceiver {
     private boolean mOnFingerDown;
     private boolean mAttemptedToDismissKeyguard;
 
+    private IFingerprintInscreen mFingerprintInscreenDaemon;
+
+    private final ImageView mPressedView;
+    private final WindowManager.LayoutParams mPressedParams = new WindowManager.LayoutParams();
+
+    private final Paint mPaintFingerprintBackground = new Paint();
+
     @VisibleForTesting
     public static final AudioAttributes VIBRATION_SONIFICATION_ATTRIBUTES =
             new AudioAttributes.Builder()
@@ -230,6 +245,81 @@ public class UdfpsController implements DozeReceiver {
         }
     }
 
+    private IFingerprintInscreenCallback mFingerprintInscreenCallback =
+            new IFingerprintInscreenCallback.Stub() {
+        @Override
+        public void onFingerDown() {
+            onFingerDown();
+        }
+
+        @Override
+        public void onFingerUp() {
+            onFingerUp();
+        }
+    };
+
+    public IFingerprintInscreen getFingerprintInScreenDaemon() {
+        if (mFingerprintInscreenDaemon == null) {
+            try {
+                mFingerprintInscreenDaemon = IFingerprintInscreen.getService();
+                if (mFingerprintInscreenDaemon != null) {
+                    mFingerprintInscreenDaemon.setCallback(mFingerprintInscreenCallback);
+                    mFingerprintInscreenDaemon.asBinder().linkToDeath((cookie) -> {
+                        mFingerprintInscreenDaemon = null;
+                    }, 0);
+                }
+            } catch (NoSuchElementException | RemoteException e) {
+                // do nothing
+            }
+        }
+        return mFingerprintInscreenDaemon;
+    }
+
+    public void dispatchPress() {
+        IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
+        try {
+            daemon.onPress();
+        } catch (RemoteException e) {
+            // do nothing
+        }
+    }
+
+    public void dispatchRelease() {
+        IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
+        try {
+            daemon.onRelease();
+        } catch (RemoteException e) {
+            // do nothing
+        }
+    }
+
+    public void dispatchShow() {
+        IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
+        try {
+            daemon.onShowFODView();
+        } catch (RemoteException e) {
+            // do nothing
+        }
+    }
+
+    public void dispatchHide() {
+        IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
+        try {
+            daemon.onHideFODView();
+        } catch (RemoteException e) {
+            // do nothing
+        }
+    }
+
+    public void dispatchLongPressEnabled(boolean enable) {
+        IFingerprintInscreen daemon = getFingerprintInScreenDaemon();
+        try {
+            daemon.setLongPressEnabled(enable);
+        } catch (RemoteException e) {
+            // do nothing
+        }
+    }
+
     public class UdfpsOverlayController extends IUdfpsOverlayController.Stub {
         @Override
         public void showUdfpsOverlay(int sensorId, int reason,
@@ -278,6 +368,15 @@ public class UdfpsController implements DozeReceiver {
                 if (mServerRequest == null) {
                     Log.e(TAG, "onEnrollProgress received but serverRequest is null");
                     return;
+                }
+                if (remaining == 0) {
+                    IFingerprintInscreen fodDaemon = getFingerprintInScreenDaemon();
+                    if (fodDaemon != null) {
+                        try {
+                            fodDaemon.onFinishEnroll();
+                        } catch (RemoteException e) {
+                        }
+                    }
                 }
                 mServerRequest.onEnrollmentProgress(remaining);
             });
@@ -570,12 +669,19 @@ public class UdfpsController implements DozeReceiver {
                 WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG,
                 getCoreLayoutParamFlags(),
                 PixelFormat.TRANSLUCENT);
-        mCoreLayoutParams.setTitle(TAG);
         mCoreLayoutParams.setFitInsetsTypes(0);
         mCoreLayoutParams.gravity = Gravity.TOP | Gravity.LEFT;
         mCoreLayoutParams.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
         mCoreLayoutParams.privateFlags = WindowManager.LayoutParams.PRIVATE_FLAG_TRUSTED_OVERLAY;
+
+        mPressedParams.copyFrom(mCoreLayoutParams);
+        mPressedParams.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+
+        mCoreLayoutParams.setTitle("Fingerprint on display");
+        mPressedParams.setTitle("Fingerprint on display.touched");
+
+        mPressedParams.dimAmount = 0.0f;
 
         mFingerprintManager.setUdfpsOverlayController(new UdfpsOverlayController());
 
@@ -584,6 +690,22 @@ public class UdfpsController implements DozeReceiver {
         context.registerReceiver(mBroadcastReceiver, filter);
 
         udfpsHapticsSimulator.setUdfpsController(this);
+
+        mPaintFingerprintBackground.setColor(context.getResources()
+                .getColor(R.color.config_fodColorBackground));
+        mPaintFingerprintBackground.setAntiAlias(true);
+
+        mPressedView = new ImageView(context)  {
+            @Override
+            protected void onDraw(Canvas canvas) {
+                if (mOnFingerDown) {
+                    canvas.drawCircle(mSensorProps.sensorRadius, mSensorProps.sensorRadius,
+                            mSensorProps.sensorRadius / 1.0f, mPaintFingerprintBackground);
+                }
+                super.onDraw(canvas);
+            }
+        };
+        mPressedView.setImageResource(R.drawable.fod_icon_pressed);
     }
 
     /**
@@ -670,6 +792,9 @@ public class UdfpsController implements DozeReceiver {
         // Gets the size based on the current rotation of the display.
         mContext.getDisplay().getRealSize(p);
 
+        int X = mSensorProps.sensorLocationX - mSensorProps.sensorRadius;
+        int Y = mSensorProps.sensorLocationY - mSensorProps.sensorRadius;
+
         // Transform dimensions if the device is in landscape mode
         switch (mContext.getDisplay().getRotation()) {
             case Surface.ROTATION_90:
@@ -681,6 +806,9 @@ public class UdfpsController implements DozeReceiver {
                         - paddingX;
                 mCoreLayoutParams.y = p.y - mSensorProps.sensorLocationX - mSensorProps.sensorRadius
                         - paddingY;
+
+                X = mSensorProps.sensorLocationY - mSensorProps.sensorRadius;
+                Y = mSensorProps.sensorLocationX - mSensorProps.sensorRadius;
                 break;
 
             case Surface.ROTATION_270:
@@ -692,12 +820,21 @@ public class UdfpsController implements DozeReceiver {
                         - paddingX;
                 mCoreLayoutParams.y = mSensorProps.sensorLocationX - mSensorProps.sensorRadius
                         - paddingY;
+
+                X = p.x - mSensorProps.sensorLocationY - mSensorProps.sensorRadius;
+                Y = mSensorProps.sensorLocationX - mSensorProps.sensorRadius;
                 break;
 
             default:
                 // Do nothing to stay in portrait mode.
                 // Keyguard is always in portrait mode.
         }
+
+        mPressedParams.x = X;
+        mPressedParams.y = Y;
+        mPressedParams.width = 2 * mSensorProps.sensorRadius;
+        mPressedParams.height = 2 * mSensorProps.sensorRadius;
+
         // avoid announcing window title
         mCoreLayoutParams.accessibilityTitle = " ";
         return mCoreLayoutParams;
@@ -716,8 +853,11 @@ public class UdfpsController implements DozeReceiver {
 
     private void showUdfpsOverlay(@NonNull ServerRequest request) {
         mExecution.assertIsMainThread();
-
         final int reason = request.mRequestReason;
+
+        dispatchLongPressEnabled(reason == IUdfpsOverlayController.REASON_AUTH_FPM_KEYGUARD);
+        dispatchShow();
+
         if (mView == null) {
             try {
                 Log.v(TAG, "showUdfpsOverlay | adding window reason=" + reason);
@@ -827,6 +967,8 @@ public class UdfpsController implements DozeReceiver {
             Log.v(TAG, "hideUdfpsOverlay | the overlay is already hidden");
         }
 
+        dispatchHide();
+
         mOrientationListener.disable();
     }
 
@@ -900,11 +1042,12 @@ public class UdfpsController implements DozeReceiver {
 
         if (!mOnFingerDown) {
             playStartHaptic();
-
+            mWindowManager.addView(mPressedView, mPressedParams);
             if (!mKeyguardUpdateMonitor.isFaceDetectionRunning()) {
                 mKeyguardUpdateMonitor.requestFaceAuth(/* userInitiatedRequest */ false);
             }
         }
+        dispatchPress();
         mOnFingerDown = true;
         mFingerprintManager.onPointerDown(mSensorProps.sensorId, x, y, minor, major);
         Trace.endAsyncSection("UdfpsController.e2e.onPointerDown", 0);
@@ -924,8 +1067,10 @@ public class UdfpsController implements DozeReceiver {
             return;
         }
         if (mOnFingerDown) {
+            mWindowManager.removeView(mPressedView);
             mFingerprintManager.onPointerUp(mSensorProps.sensorId);
         }
+        dispatchRelease();
         mOnFingerDown = false;
         if (mView.isIlluminationRequested()) {
             mView.stopIllumination();
