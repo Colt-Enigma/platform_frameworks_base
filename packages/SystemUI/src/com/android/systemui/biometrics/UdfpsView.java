@@ -239,6 +239,9 @@ public class UdfpsView extends FrameLayout implements DozeReceiver, UdfpsIllumin
         if (mGhbmView != null && surface == null) {
             Log.e(TAG, "doIlluminate | surface must be non-null for GHBM");
         }
+
+        if (mHbmProvider == null) return;
+
         mHbmProvider.enableHbm(mHbmType, surface, () -> {
             if (mGhbmView != null) {
                 mGhbmView.drawIlluminationDot(mSensorRect);
@@ -263,6 +266,7 @@ public class UdfpsView extends FrameLayout implements DozeReceiver, UdfpsIllumin
             mGhbmView.setGhbmIlluminationListener(null);
             mGhbmView.setVisibility(View.INVISIBLE);
         }
-        mHbmProvider.disableHbm(null /* onHbmDisabled */);
+        if (mHbmProvider != null)
+            mHbmProvider.disableHbm(null /* onHbmDisabled */);
     }
 }

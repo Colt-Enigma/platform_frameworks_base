@@ -86,6 +86,8 @@ public class UdfpsHelper {
             return;
         }
 
+        FODHelper.onStartEnroll();
+
         final IUdfpsOverlayControllerCallback callback =
                 new IUdfpsOverlayControllerCallback.Stub() {
                     @Override
@@ -106,6 +108,9 @@ public class UdfpsHelper {
         if (udfpsOverlayController == null) {
             return;
         }
+
+        FODHelper.onFinishEnroll();
+
         try {
             udfpsOverlayController.hideUdfpsOverlay(sensorId);
         } catch (RemoteException e) {
