@@ -33,14 +33,17 @@ public class PixelPropsUtils {
     private static final String[] packagesToChange = {
             "com.android.vending",
             "com.breel.wallpapers20",
-            "com.google.android.configupdater",
             "com.google.android.apps.customization.pixel",
             "com.google.android.apps.fitness",
             "com.google.android.apps.gcs",
             "com.google.android.apps.maps",
             "com.google.android.apps.messaging",
+            "com.google.android.apps.messaging",
+            "com.google.android.apps.nbu.files",
             "com.google.android.apps.nexuslauncher",
+            "com.google.android.apps.photos",
             "com.google.android.apps.pixelmigrate",
+            "com.google.android.apps.podcasts",
             "com.google.android.apps.recorder",
             "com.google.android.apps.safetyhub",
             "com.google.android.apps.subscriptions.red",
@@ -50,7 +53,11 @@ public class PixelPropsUtils {
             "com.google.android.apps.wallpaper",
             "com.google.android.apps.wallpaper.pixel",
             "com.google.android.apps.wellbeing",
+            "com.google.android.apps.youtube.music",
             "com.google.android.as",
+            "com.google.android.configupdater",
+            "com.google.android.contacts",
+            "com.google.android.deskclock",
             "com.google.android.dialer",
             "com.google.android.ext.services",
             "com.google.android.gms",
@@ -62,14 +69,13 @@ public class PixelPropsUtils {
             "com.google.android.android.contacts",
             "com.google.android.android.apps.messaging",
             "com.google.android.gms.location.history",
+            "com.google.android.googlequicksearchbox",
             "com.google.android.gsf",
             "com.google.android.inputmethod.latin",
             "com.google.android.soundpicker",
             "com.google.intelligence.sense",
             "com.google.pixel.dynamicwallpapers",
-            "com.google.pixel.livewallpaper",
-            "com.google.android.apps.photos",
-            "com.google.android.googlequicksearchbox"
+            "com.google.pixel.livewallpaper"
     };
 
     static {
