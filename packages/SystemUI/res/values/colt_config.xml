@@ -42,4 +42,7 @@
 
     <!-- The number of rows in the QuickSettings -->
     <integer name="quick_settings_max_rows_custom">4</integer>
+
+    <!-- Whether to show VoLTE icon in the status bar -->
+    <bool name="config_display_volte">true</bool>
 </resources>
