@@ -31,6 +31,7 @@ public class PixelPropsUtils {
     private static final Map<String, Object> propsToChange;
 
     private static final String[] packagesToChange = {
+            "com.android.chrome",
             "com.android.vending",
             "com.breel.wallpapers20",
             "com.google.android.apps.customization.pixel",
@@ -61,6 +62,7 @@ public class PixelPropsUtils {
             "com.google.android.deskclock",
             "com.google.android.dialer",
             "com.google.android.ext.services",
+            "com.google.android.gm",
             "com.google.android.gms",
             "com.google.android.deskclock",
             "com.google.android.apps.youtube.music",
