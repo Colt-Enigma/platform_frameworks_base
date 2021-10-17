@@ -57,6 +57,7 @@ public class PixelPropsUtils {
             "com.google.android.apps.wellbeing",
             "com.google.android.apps.youtube.music",
             "com.google.android.as",
+            "com.google.android.calculator",
             "com.google.android.configupdater",
             "com.google.android.contacts",
             "com.google.android.deskclock",
