@@ -247,6 +247,12 @@
         <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
+    <style name="TextAppearance.QS.OneUI">
+        <item name="android:fontFamily">@*android:string/config_bodyFontFamily</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textSize">21sp</item>
+    </style>
+
     <style name="TextAppearance.DeviceManagementDialog">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
