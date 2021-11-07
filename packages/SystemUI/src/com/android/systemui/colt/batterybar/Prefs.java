@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.systemui.colt6.batterybar;
+package com.android.systemui.colt.batterybar;
 
 import android.content.Context;
 import android.content.SharedPreferences;
