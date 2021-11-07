@@ -168,7 +168,7 @@ import com.android.systemui.util.settings.SecureSettings;
 import com.android.systemui.wallet.controller.QuickAccessWalletController;
 import com.android.wm.shell.animation.FlingAnimationUtils;
 
-import com.android.internal.util.aospextended.AEXUtils;
+import com.android.internal.util.colt.ColtUtils;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -860,7 +860,7 @@ public class NotificationPanelViewController extends PanelViewController {
                 new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                AEXUtils.switchScreenOff(mView.getContext());
+                ColtUtils.switchScreenOff(mView.getContext());
                 return true;
             }
         });
