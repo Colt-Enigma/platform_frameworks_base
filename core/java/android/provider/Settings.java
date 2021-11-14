@@ -12594,7 +12594,6 @@ public final class Settings {
         public static final String LOCKSCREEN_MEDIA_METADATA = "lockscreen_media_metadata";
 
         /**
-        /**
          * @hide
          */
         public static final String KG_BIG_CLOCK_TEXT_SIZE = "kg_big_clock_text_size";
@@ -12614,6 +12613,13 @@ public final class Settings {
          * @hide
          */
         public static final String SYSTEM_BLACK_THEME = "system_black_theme";
+
+        /**
+         * Enable udfps detection even when screen is off
+         * Default value is 0
+         * @hide
+         */
+        public static final String SCREEN_OFF_UDFPS_ENABLED = "screen_off_udfps_enabled";
 
         /**
          * Keys we no longer back up under the current schema, but want to continue to

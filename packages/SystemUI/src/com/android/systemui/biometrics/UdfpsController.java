@@ -36,6 +36,7 @@ import android.graphics.Point;
 import android.graphics.RectF;
 import android.hardware.biometrics.BiometricFingerprintConstants;
 import android.hardware.biometrics.SensorProperties;
+import android.hardware.display.AmbientDisplayConfiguration;
 import android.hardware.display.ColorDisplayManager;
 import android.hardware.display.DisplayManager;
 import android.hardware.fingerprint.FingerprintManager;
@@ -43,12 +44,14 @@ import android.hardware.fingerprint.FingerprintSensorProperties;
 import android.hardware.fingerprint.FingerprintSensorPropertiesInternal;
 import android.hardware.fingerprint.IUdfpsOverlayController;
 import android.hardware.fingerprint.IUdfpsOverlayControllerCallback;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.Process;
 import android.os.RemoteException;
 import android.os.SystemProperties;
 import android.os.Trace;
+import android.os.UserHandle;
 import android.os.VibrationAttributes;
 import android.os.VibrationEffect;
 import android.provider.Settings;
@@ -99,6 +102,7 @@ import com.android.systemui.statusbar.policy.KeyguardStateController;
 import com.android.systemui.util.concurrency.DelayableExecutor;
 import com.android.systemui.util.concurrency.Execution;
 import com.android.systemui.util.time.SystemClock;
+import com.android.systemui.util.settings.SecureSettings;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -201,8 +205,12 @@ public class UdfpsController implements DozeReceiver, Dumpable {
     private int mAutoModeState;
     private final int mUdfpsVendorCode;
 
+    private final AmbientDisplayConfiguration mAmbientDisplayConfiguration;
+    private final SecureSettings mSecureSettings;
+    private boolean mScreenOffFod;
     private boolean mFrameworkDimming;
     private int[][] mBrightnessAlphaArray;
+
 
     @VisibleForTesting
     public static final VibrationAttributes UDFPS_VIBRATION_ATTRIBUTES =
@@ -304,13 +312,15 @@ public class UdfpsController implements DozeReceiver, Dumpable {
                 });
             } else {
                 boolean acquiredVendor = acquiredInfo == FINGERPRINT_ACQUIRED_VENDOR;
-                if (!acquiredVendor || (!mStatusBarStateController.isDozing() && mScreenOn)) {
-                    return;
-                }
-                if (vendorCode == mUdfpsVendorCode) {
-                    mPowerManager.wakeUp(mSystemClock.uptimeMillis(),
-                            PowerManager.WAKE_REASON_GESTURE, TAG);
-                    onAodInterrupt(0, 0, 0, 0);
+                final boolean isAodEnabled = mAmbientDisplayConfiguration.alwaysOnEnabled(UserHandle.USER_CURRENT);
+                final boolean isShowingAmbientDisplay = mStatusBarStateController.isDozing() && mScreenOn;
+
+                if (acquiredVendor && ((mScreenOffFod && !mScreenOn) || (isAodEnabled && isShowingAmbientDisplay))) {
+                    if (vendorCode == mUdfpsVendorCode) {
+                        mPowerManager.wakeUp(mSystemClock.uptimeMillis(),
+                                PowerManager.WAKE_REASON_GESTURE, TAG);
+                        onAodInterrupt(0, 0, 0, 0);
+                    }
                 }
             }
         }
@@ -759,7 +769,8 @@ public class UdfpsController implements DozeReceiver, Dumpable {
             @NonNull Optional<Provider<AlternateUdfpsTouchProvider>> alternateTouchProvider,
             @NonNull @BiometricsBackground Executor biometricsExecutor,
             @NonNull PrimaryBouncerInteractor primaryBouncerInteractor,
-            @NonNull SinglePointerTouchProcessor singlePointerTouchProcessor) {
+            @NonNull SinglePointerTouchProcessor singlePointerTouchProcessor,
+            @NonNull SecureSettings secureSettings) {
         mContext = context;
         mExecution = execution;
         mVibrator = vibrator;
@@ -828,6 +839,25 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         udfpsHapticsSimulator.setUdfpsController(this);
         udfpsShell.setUdfpsOverlayController(mUdfpsOverlayController);
         mUdfpsVendorCode = mContext.getResources().getInteger(R.integer.config_udfps_vendor_code);
+        mAmbientDisplayConfiguration = new AmbientDisplayConfiguration(mContext);
+        mSecureSettings = secureSettings;
+        updateScreenOffFodState();
+        mSecureSettings.registerContentObserver(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED,
+            new ContentObserver(mainHandler) {
+                @Override
+                public void onChange(boolean selfChange, Uri uri) {
+                    if (uri.getLastPathSegment().equals(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED)) {
+                        updateScreenOffFodState();
+                    }
+                }
+            }
+        );
+    }
+
+    private void updateScreenOffFodState() {
+        boolean isSupported = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_supportScreenOffUdfps);
+        mScreenOffFod = isSupported && mSecureSettings.getInt(Settings.Secure.SCREEN_OFF_UDFPS_ENABLED, 0) == 1;
         mDisableNightMode = mContext.getResources().getBoolean(com.android.internal.R.bool.disable_fod_night_light);
     }
 
@@ -846,6 +876,7 @@ public class UdfpsController implements DozeReceiver, Dumpable {
         } else if (autoMode == 1 || autoMode == 2) {
             colorDisplayManager.setNightDisplayAutoMode(autoMode);
         }
+
     }
 
     /**
