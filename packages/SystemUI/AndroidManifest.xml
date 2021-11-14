@@ -414,7 +414,7 @@
                   android:label="@string/statusbar_items_title"
                   android:process=":tuner"
 		  android:theme="@style/Theme.SubSettingsBase"
-                  android:parentActivityName="com.colt.enigma.ColtEnigma"
+                  android:parentActivityName="com.colt.enigma.fragments.StatusBarSettings"
                   android:exported="true">
         </activity>
 
@@ -422,7 +422,7 @@
                   android:label="@string/tuner_lock_screen"
                   android:theme="@style/Theme.SubSettingsBase"
                   android:process=":tuner"
-                  android:parentActivityName="com.colt.enigma.ColtEnigma"
+                  android:parentActivityName="com.colt.enigma.fragments.LockScreenSettings"
                   android:exported="true">
         </activity>
 
