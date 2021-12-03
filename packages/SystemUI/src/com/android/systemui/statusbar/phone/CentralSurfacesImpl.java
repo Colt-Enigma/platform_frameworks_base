@@ -713,6 +713,7 @@ public class CentralSurfacesImpl extends CoreStartable implements
     }
 
     private CustomSettingsObserver mCustomSettingsObserver;
+    private final SysUiState mSysUiState;
 
     /**
      * Public constructor for CentralSurfaces.
@@ -810,7 +811,8 @@ public class CentralSurfacesImpl extends CoreStartable implements
             InteractionJankMonitor jankMonitor,
             DeviceStateManager deviceStateManager,
             WiredChargingRippleController wiredChargingRippleController,
-            IDreamManager dreamManager) {
+            IDreamManager dreamManager,
+            SysUiState sysUiState) {
         super(context);
         mNotificationsController = notificationsController;
         mFragmentService = fragmentService;
@@ -891,6 +893,7 @@ public class CentralSurfacesImpl extends CoreStartable implements
         mMessageRouter = messageRouter;
         mWallpaperManager = wallpaperManager;
         mJankMonitor = jankMonitor;
+        mSysUiState = sysUiState;
 
         mLockscreenShadeTransitionController = lockscreenShadeTransitionController;
         mStartingSurfaceOptional = startingSurfaceOptional;
@@ -4116,6 +4119,17 @@ public class CentralSurfacesImpl extends CoreStartable implements
 
     protected void dismissKeyboardShortcuts() {
         KeyboardShortcuts.dismiss();
+    }
+
+    @Override
+    public void setBlockedGesturalNavigation(boolean blocked) {
+        if (getNotificationPanelViewController() != null) {
+            getNotificationPanelViewController().setBlockedGesturalNavigation(blocked);
+            getNotificationPanelViewController().updateSystemUiStateFlags();
+        }
+        if (getNavigationBarView() != null) {
+            getNavigationBarView().setBlockedGesturalNavigation(blocked, mSysUiState);
+        }
     }
 
     /**
