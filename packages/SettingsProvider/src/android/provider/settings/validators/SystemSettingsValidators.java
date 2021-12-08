@@ -259,7 +259,6 @@ public class SystemSettingsValidators {
                         return true;
                     }
                 });
-        VALIDATORS.put(System.FULLSCREEN_GESTURES, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.NAVIGATION_BAR_INVERSE, BOOLEAN_VALIDATOR);
     }
 }
