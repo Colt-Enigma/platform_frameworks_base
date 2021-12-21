@@ -5684,6 +5684,22 @@ public final class Settings {
         /**
          * @hide
          */
+        public static final String UDFPS_ANIM = "udfps_anim";
+
+        /**
+         * @hide
+         */
+        public static final String UDFPS_ANIM_STYLE = "udfps_anim_style";
+
+        /**
+         * @hide
+         */
+        public static final String UDFPS_ICON = "udfps_icon";
+
+        /**
+         * Gestures nav: left long back swipe action
+         * @hide
+         */
         @Readable
         public static final String VOLUME_BUTTON_MUSIC_CONTROL = "volume_button_music_control";
 
