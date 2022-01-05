@@ -758,8 +758,12 @@ public class AuthController implements CoreStartable,  CommandQueue.Callbacks,
 
         mDisplay = mContext.getDisplay();
         mDisplay.getDisplayInfo(mCachedDisplayInfo);
+
+        boolean isPowerbuttonFps =
+                mFingerprintManager != null && mFingerprintManager.isPowerbuttonFps();
+
         int xFpLocation;
-        if (mFingerprintManager != null && mFingerprintManager.isPowerbuttonFps()) {
+        if (isPowerbuttonFps) {
             xFpLocation = mCachedDisplayInfo.getNaturalWidth();
         } else {
             xFpLocation = mCachedDisplayInfo.getNaturalWidth() / 2;
