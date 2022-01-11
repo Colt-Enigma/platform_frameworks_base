@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 ArcaneOS
+ * Copyright (C) 2019 Descendant
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public class ArcaneIdleManager {
     static Context imContext;
     static ContentResolver mContentResolver;
     static List<String> killablePackages;
-    static final long IDLE_TIME_NEEDED = 10000000;
+    static final long IDLE_TIME_NEEDED = 4000000;
     static int ultraSaverStatus;
     static final String[] LOG_MSGS = { "just ran ",
                                        "rStateTwo Immediate!",
@@ -126,13 +126,16 @@ public class ArcaneIdleManager {
         localActivityManager = (ActivityManager) imContext.getSystemService(Context.ACTIVITY_SERVICE);
         RunningServices = localActivityManager.getRunningAppProcesses();
         for (int i=0; i < RunningServices.size(); i++) {
-            if (!RunningServices.get(i).pkgList[0].toString().contains("com.android.") &&
+          if (!RunningServices.get(i).pkgList[0].toString().contains("com.android.") &&
                 !RunningServices.get(i).pkgList[0].toString().equals("android") &&
-                !RunningServices.get(i).pkgList[0].toString().contains("launcher") &&
                 !RunningServices.get(i).pkgList[0].toString().contains("google") &&
-                !RunningServices.get(i).pkgList[0].toString().contains("youtube") &&
+                !RunningServices.get(i).pkgList[0].toString().equals("google") &&
                 !RunningServices.get(i).pkgList[0].toString().contains("instagram") &&
                 !RunningServices.get(i).pkgList[0].toString().contains("facebook") &&
+                !RunningServices.get(i).pkgList[0].toString().contains("zhihu") &&
+                !RunningServices.get(i).pkgList[0].toString().contains("ugc") &&
+                !RunningServices.get(i).pkgList[0].toString().contains("GoogleCamera") &&
+                !RunningServices.get(i).pkgList[0].toString().contains("settings") &&
                 !RunningServices.get(i).pkgList[0].toString().contains("ims")) {
                     localActivityManager.killBackgroundProcesses(RunningServices.get(i).pkgList[0].toString());
             }
