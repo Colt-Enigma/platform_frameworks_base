@@ -352,7 +352,7 @@ public class QSPanel extends LinearLayout implements Tunable {
 
     protected void updatePadding() {
         final Resources res = mContext.getResources();
-        int padding = res.getDimensionPixelSize(R.dimen.qs_panel_padding_top);
+        int padding = res.getDimensionPixelSize(com.android.internal.R.dimen.qs_panel_padding_top);
         setPaddingRelative(getPaddingStart(),
                 padding,
                 getPaddingEnd(),
