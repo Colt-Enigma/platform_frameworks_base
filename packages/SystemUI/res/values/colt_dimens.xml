@@ -53,4 +53,10 @@
     <dimen name="navigation_home_handle_width_medium">110dp</dimen>
     <dimen name="navigation_home_handle_width_long">140dp</dimen>
 
+    <!-- Media output -->
+    <dimen name="dialog_button_vertical_inset">6dp</dimen>
+    <dimen name="dialog_button_horizontal_padding">16dp</dimen>
+    <dimen name="dialog_button_vertical_padding">8dp</dimen>
+    <dimen name="dialog_side_padding">24dp</dimen>
+    <dimen name="dialog_bottom_padding">18dp</dimen>
 </resources>
