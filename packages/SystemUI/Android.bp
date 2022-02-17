@@ -62,6 +62,7 @@ android_library {
         "res-keyguard",
         "res",
         "res-hwkeys",
+        "res-blur",
     ],
     static_libs: [
         "WindowManager-Shell",
@@ -101,6 +102,7 @@ android_library {
         "colorkt",
         "themelib",
         "faceunlock_framework",
+        "AndroidSystemBlur",
     ],
     manifest: "AndroidManifest.xml",
 
