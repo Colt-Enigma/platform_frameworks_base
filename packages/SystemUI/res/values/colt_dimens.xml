@@ -60,4 +60,7 @@
     <dimen name="dialog_button_vertical_padding">8dp</dimen>
     <dimen name="dialog_side_padding">24dp</dimen>
     <dimen name="dialog_bottom_padding">18dp</dimen>
+
+    <!-- Dialog margin -->
+    <dimen name="rdnt_margin_dialog">12dp</dimen>
 </resources>
