@@ -61,7 +61,7 @@ public class DataSaverTile extends SecureQSTile<BooleanState> implements
             ActivityStarter activityStarter,
             QSLogger qsLogger,
             DataSaverController dataSaverController,
-            DialogLaunchAnimator dialogLaunchAnimator
+            DialogLaunchAnimator dialogLaunchAnimator,
             KeyguardStateController keyguardStateController
     ) {
         super(host, backgroundLooper, mainHandler, falsingManager, metricsLogger,

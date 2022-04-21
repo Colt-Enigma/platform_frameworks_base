@@ -58,7 +58,6 @@ import com.android.systemui.plugins.qs.DetailAdapter;
 import com.android.systemui.plugins.qs.QSTile;
 import com.android.systemui.settings.brightness.BrightnessSliderController;
 import com.android.systemui.plugins.qs.QSTileView;
-import com.android.systemui.settings.brightness.BrightnessSlider;
 import com.android.systemui.statusbar.policy.BrightnessMirrorController;
 import com.android.systemui.tuner.TunerService;
 import com.android.systemui.tuner.TunerService.Tunable;

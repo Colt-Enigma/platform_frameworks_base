@@ -59,7 +59,6 @@ import com.android.systemui.statusbar.connectivity.SignalCallback;
 import com.android.systemui.statusbar.connectivity.WifiIcons;
 import com.android.systemui.statusbar.connectivity.WifiIndicators;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
-import com.android.systemui.statusbar.policy.WifiIcons;
 import com.android.wifitrackerlib.WifiEntry;
 
 import java.util.List;
