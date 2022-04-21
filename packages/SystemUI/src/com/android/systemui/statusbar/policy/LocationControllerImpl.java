@@ -20,9 +20,7 @@ import static android.app.AppOpsManager.OP_MONITOR_HIGH_POWER_LOCATION;
 
 import static com.android.settingslib.Utils.updateLocationEnabled;
 
-import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -115,29 +113,18 @@ public class LocationControllerImpl extends BroadcastReceiver implements Locatio
      *
      * @return true if attempt to change setting was successful.
      */
-    public boolean setLocationEnabled(int mode) {
+    public boolean setLocationEnabled(boolean enabled) {
         // QuickSettings always runs as the owner, so specifically set the settings
         // for the current foreground user.
         int currentUserId = mUserTracker.getUserId();
         if (isUserLocationRestricted(currentUserId)) {
             return false;
         }
-        final ContentResolver cr = mContext.getContentResolver();
         // When enabling location, a user consent dialog will pop up, and the
         // setting won't be fully enabled until the user accepts the agreement.
-        Settings.Secure.putIntForUser(cr, Settings.Secure.LOCATION_MODE, mode,
-                currentUserId);
+        updateLocationEnabled(mContext, enabled, currentUserId,
+                Settings.Secure.LOCATION_CHANGER_QUICK_SETTINGS);
         return true;
-    }
-
-    /**
-     * Returns the current location mode.
-     */
-    public int getCurrentMode() {
-        int currentUserId = ActivityManager.getCurrentUser();
-        final ContentResolver cr = mContext.getContentResolver();
-         return Settings.Secure.getIntForUser(cr, Settings.Secure.LOCATION_MODE,
-                Settings.Secure.LOCATION_MODE_OFF, currentUserId);
     }
 
     /**
