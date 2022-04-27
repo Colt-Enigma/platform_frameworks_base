@@ -95,5 +95,7 @@ public class SystemSettings {
         Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD,
         Settings.System.ENABLE_RIPPLE_EFFECT,
         Settings.System.COLOR_BUCKET_OVERLAY,
+        Settings.System.QS_TILE_LABEL_HIDE,
+        Settings.System.QS_TILE_VERTICAL_LAYOUT,
     };
 }
