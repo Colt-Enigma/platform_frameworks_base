@@ -14,10 +14,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/qs_ripple_color">
-    <item android:id="@android:id/mask"
-        android:drawable="@drawable/qs_tile_background_shape" />
-    <item android:id="@id/background"
-        android:drawable="@drawable/qs_tile_background_shape"/>
-</ripple>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="@dimen/rounded_slider_corner_radius" />
+    <solid android:color="?android:attr/colorAccent" />
+    <size android:width="@dimen/rounded_slider_height" android:height="@dimen/rounded_slider_height" />
+</shape>
