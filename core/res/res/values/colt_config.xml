@@ -79,4 +79,7 @@
     <!-- Whether device has dash charging support -->
     <bool name="config_hasDashCharger">false</bool>
 
+     <!-- Parallel space max count. Should overlay according to device
+         performance. -->
+    <integer name="config_parallelSpaceMaxCount">9</integer>
 </resources>
