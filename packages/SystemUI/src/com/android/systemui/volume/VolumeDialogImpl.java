@@ -260,6 +260,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     private ImageButton mExpandRows;
     private View mAppVolumeView;
     private ImageButton mAppVolumeIcon;
+    private String mAppVolumeActivePackageName;
     private View mExpandRowsView;
     private FrameLayout mZenIcon;
     private final List<VolumeRow> mRows = new ArrayList<>();
@@ -1298,17 +1299,30 @@ public class VolumeDialogImpl implements VolumeDialog,
         ContentResolver cr = mContext.getContentResolver();
         int showAppVolume = Settings.System.getInt(cr, Settings.System.SHOW_APP_VOLUME, 0);
         boolean ret = showAppVolume == 1;
+        mAppVolumeActivePackageName = null;
         if (ret) {
             ret = false;
             AudioManager audioManager = mController.getAudioManager();
             for (AppVolume av : audioManager.listAppVolumes()) {
                 if (av.isActive()) {
                     ret = true;
-            break;
+                    mAppVolumeActivePackageName = av.getPackageName();
+                    break;
                 }
             }
         }
         return ret;
+    }
+
+    private Drawable getApplicationIcon(String packageName) {
+        PackageManager pm = mContext.getPackageManager();
+        Drawable icon = null;
+        try {
+            icon = pm.getApplicationIcon(packageName);
+        } catch (Exception e) {
+            // nothing to do
+        }
+        return icon;
     }
 
     public void initAppVolumeH() {
@@ -1324,6 +1338,13 @@ public class VolumeDialogImpl implements VolumeDialog,
                 Dependency.get(ActivityStarter.class).startActivity(intent,
                         true /* dismissShade */);
             });
+            Drawable icon = mAppVolumeActivePackageName != null ?
+                    getApplicationIcon(mAppVolumeActivePackageName) : null;
+            if (icon != null) {
+                mAppVolumeIcon.setImageTintList(null);
+                mAppVolumeIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                mAppVolumeIcon.setImageDrawable(icon);
+            }
         }
     }
 
