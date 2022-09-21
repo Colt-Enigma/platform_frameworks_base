@@ -13,5 +13,6 @@
 -->
 <resources>
     <color name="footer_actions_bg">@android:color/system_neutral1_900</color>
+    <color name="qs_translucent_bg">#0FFFFFFF</color>
     <color name="volume_row_bg">@android:color/system_accent2_600</color>
 </resources>
