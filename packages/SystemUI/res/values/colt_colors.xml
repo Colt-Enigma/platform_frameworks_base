@@ -15,5 +15,10 @@
     <color name="footer_actions_bg">@android:color/system_neutral1_50</color>
     <color name="accent_device_default_light">@*android:color/system_accent1_600</color>
     <color name="qs_ripple_color">@android:color/system_accent1_400</color>
+<<<<<<< HEAD:packages/SystemUI/res/values/colt_colors.xml
+=======
+    <color name="qs_translucent_bg">#59FFFFFF</color>
+    <color name="reticker_background_color">@android:color/system_neutral1_0</color>
+>>>>>>> 1896e493f5c9 (QS Styles: two tone: QS improvements):packages/SystemUI/res/values/rice_colors.xml
     <color name="volume_row_bg">@android:color/system_accent2_200</color>
 </resources>
