@@ -691,13 +691,21 @@ public class CentralSurfacesImpl extends CoreStartable implements
         }
 
         void observe() {
+	    ContentResolver resolver = mContext.getContentResolver();
             mContext.getContentResolver().registerContentObserver(Settings.System.getUriFor(
                     Settings.System.DOUBLE_TAP_SLEEP_GESTURE),
                     false, this, UserHandle.USER_ALL);
+	   resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QS_TRANSPARENCY),
+                    false, this, UserHandle.USER_ALL);
         }
 
-        @Override
-        public void onChange(boolean selfChange) {
+	public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+	if (uri.equals(Settings.System.getUriFor(
+                    Settings.System.QS_TRANSPARENCY))) {
+                setCustomQsAlpha();
+            }
             update();
         }
 
@@ -705,7 +713,14 @@ public class CentralSurfacesImpl extends CoreStartable implements
             if (mNotificationShadeWindowViewController != null) {
                 mNotificationShadeWindowViewController.updateSettings();
             }
+		setCustomQsAlpha();
         }
+    }
+
+     private void setCustomQsAlpha() {
+        mScrimController.setCustomScrimAlpha(Settings.System.getIntForUser(
+	mContext.getContentResolver(), Settings.System.QS_TRANSPARENCY, 100,
+        UserHandle.USER_CURRENT));
     }
 
     private CustomSettingsObserver mCustomSettingsObserver;
