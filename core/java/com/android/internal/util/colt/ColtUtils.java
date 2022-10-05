@@ -47,6 +47,7 @@ import android.util.DisplayMetrics;
 import android.view.InputDevice;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
+import java.lang.InterruptedException;
 
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.R;
@@ -198,6 +199,23 @@ public class ColtUtils {
                     // do nothing.
                 }
             }
+        }
+    }
+
+
+    // Google now has a change screen reolution option but it fails to update dpi properly
+    // This function takes screen diagonal and updates dpi
+    public static void changeScreenDPI(int resolutionWidth, int resolutionHeight, float diagonalLength) {
+	int dpi = (int) (Math.sqrt((resolutionHeight*resolutionHeight) + (resolutionWidth*resolutionWidth)) / diagonalLength);
+	String command = String.format("wm density %s", Integer.toString(dpi));
+	try {
+	    Runtime.getRuntime().exec(command).waitFor();
+	} catch (IOException e) {
+            System.err.println("ColtUtils: Error changing dpi");
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            System.err.println("ColtUtils: Error changing dpi");
+            e.printStackTrace();
         }
     }
 
