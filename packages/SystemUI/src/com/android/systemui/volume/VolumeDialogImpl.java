@@ -139,8 +139,6 @@ import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.AlphaTintDrawableWrapper;
 import com.android.systemui.util.RoundedCornerProgressDrawable;
 
-import lineageos.providers.LineageSettings;
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -159,7 +157,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     private static final String TAG = Util.logTag(VolumeDialogImpl.class);
 
     private static final String VOLUME_PANEL_ON_LEFT =
-            "lineagesecure:" + LineageSettings.Secure.VOLUME_PANEL_ON_LEFT;
+            Settings.Secure.VOLUME_PANEL_ON_LEFT;
 
     private static final long USER_ATTEMPT_GRACE_PERIOD = 1000;
     private static final int UPDATE_ANIMATION_DURATION = 80;
