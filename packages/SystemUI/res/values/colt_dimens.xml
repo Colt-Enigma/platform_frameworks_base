@@ -15,5 +15,6 @@
      limitations under the License.
 -->
 <resources>
-
+<!-- Bluetooth dialog -->
+    <dimen name="bluetooth_dialog_active_device_bottom_margin">4dp</dimen>
 </resources>
