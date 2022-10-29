@@ -128,6 +128,7 @@ android_library {
         "faceunlock_framework",
         "colorkt",
         "themelib",
+        "AndroidSystemBlur-platform",
     ],
     manifest: "AndroidManifest.xml",
 
