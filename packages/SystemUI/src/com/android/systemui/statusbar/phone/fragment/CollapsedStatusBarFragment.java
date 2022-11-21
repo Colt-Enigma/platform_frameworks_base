@@ -896,9 +896,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         mShowLogo = Settings.System.getIntForUser(
                 getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO, 0,
                 UserHandle.USER_CURRENT);
-        mLogoColor = Settings.System.getIntForUser(
-                getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO_COLOR, 0xffff8800,
-                UserHandle.USER_CURRENT);
         mLogoStyle = Settings.System.getIntForUser(
                 getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO_STYLE, 0,
                 UserHandle.USER_CURRENT);
@@ -906,11 +903,15 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                 getContext().getContentResolver(), Settings.System.CUSTOM_SB_LOGO_ENABLED, 0,
                 UserHandle.USER_CURRENT) == 1;
 
-	final String customSbLogoURI = Settings.System.getStringForUser(
+        final String customSbLogoURI = Settings.System.getStringForUser(
                 getContext().getContentResolver(), Settings.System.CUSTOM_SB_LOGO_IMAGE,
                 UserHandle.USER_CURRENT);
 
         if (!TextUtils.isEmpty(customSbLogoURI) && mCustomSbLogoEnabled) {
+            mLogoColor = Settings.System.getIntForUser(
+                    getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO_COLOR, 0x00000000,
+                    UserHandle.USER_CURRENT);
+
             try {
                 ParcelFileDescriptor parcelFileDescriptor =
                     getContext().getContentResolver().openFileDescriptor(Uri.parse(customSbLogoURI), "r");
@@ -922,20 +923,22 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                     mColtLogoRight.setVisibility(View.GONE);
                     mColtLogo.setImageDrawable(null);
                     mColtLogo.setImageBitmap(imageSbLogo);
-                    mLogoColor = 0x00000000;
                     mColtLogo.setVisibility(View.VISIBLE);
                 } else if (mShowLogo == 2) {
                     mColtLogo.setImageDrawable(null);
                     mColtLogo.setVisibility(View.GONE);
                     mColtLogoRight.setImageDrawable(null);
                     mColtLogoRight.setImageBitmap(imageSbLogo);
-                    mLogoColor = 0x00000000;
                     mColtLogoRight.setVisibility(View.VISIBLE);
                 }
             }
             catch (Exception e) {
             }
         } else {
+            mLogoColor = Settings.System.getIntForUser(
+                    getContext().getContentResolver(), Settings.System.STATUS_BAR_LOGO_COLOR, 0xffff8800,
+                    UserHandle.USER_CURRENT);
+
             switch(mLogoStyle) {
                     // Colt Old
                 case 1:
@@ -1079,7 +1082,10 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
                     logo = getContext().getResources().getDrawable(R.drawable.status_bar_logo);
                     break;
             }
-            if (mShowLogo == 1) {
+            if (mShowLogo == 0) {
+                mColtLogoRight.setVisibility(View.GONE);
+                mColtLogo.setVisibility(View.GONE);
+            } else if (mShowLogo == 1) {
                 mColtLogoRight.setImageDrawable(null);
                 mColtLogoRight.setVisibility(View.GONE);
                 mColtLogo.setVisibility(View.VISIBLE);
