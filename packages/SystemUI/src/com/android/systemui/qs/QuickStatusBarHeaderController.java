@@ -48,17 +48,18 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
     private final QSCarrierGroupController mQSCarrierGroupController;
     private final QuickQSPanelController mQuickQSPanelController;
     private final Clock mClockView;
+    private final Clock mClockCustomView;
     private final StatusBarIconController mStatusBarIconController;
     private final DemoModeController mDemoModeController;
     private final StatusIconContainer mIconContainer;
     private final StatusBarIconController.TintedIconManager mIconManager;
     private final DemoMode mDemoModeReceiver;
+    private final DemoMode mCustomDemoModeReceiver;
     private final QSExpansionPathInterpolator mQSExpansionPathInterpolator;
     private final FeatureFlags mFeatureFlags;
     private final BatteryMeterViewController mBatteryMeterViewController;
     private final StatusBarContentInsetsProvider mInsetsProvider;
 
-    private final VariableDateViewController mVariableDateViewControllerDateView;
     private final VariableDateViewController mVariableDateViewControllerClockDateView;
     private final HeaderPrivacyIconsController mPrivacyIconsController;
 
@@ -91,16 +92,19 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
                 .setQSCarrierGroup(mView.findViewById(R.id.carrier_group))
                 .build();
         mClockView = mView.findViewById(R.id.clock);
+        mClockCustomView = mView.findViewById(R.id.custom_clock);
         mIconContainer = mView.findViewById(R.id.statusIcons);
-        mVariableDateViewControllerDateView = variableDateViewControllerFactory.create(
-                mView.requireViewById(R.id.date)
-        );
         mVariableDateViewControllerClockDateView = variableDateViewControllerFactory.create(
                 mView.requireViewById(R.id.date_clock)
         );
 
         mIconManager = tintedIconManagerFactory.create(mIconContainer, StatusBarLocation.QS);
         mDemoModeReceiver = new ClockDemoModeReceiver(mClockView);
+<<<<<<< HEAD
+=======
+        mCustomDemoModeReceiver = new ClockDemoModeReceiver(mClockCustomView);
+
+>>>>>>> 81ee6ae4a5b0 (SystemUI: Apply QPR2 beta QS panel UI changes)
         // Don't need to worry about tuner settings for this icon
         mBatteryMeterViewController.ignoreTunerUpdates();
     }
@@ -142,8 +146,8 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
                 mInsetsProvider, mFeatureFlags.isEnabled(Flags.COMBINED_QS_HEADERS));
 
         mDemoModeController.addCallback(mDemoModeReceiver);
+        mDemoModeController.addCallback(mCustomDemoModeReceiver);
 
-        mVariableDateViewControllerDateView.init();
         mVariableDateViewControllerClockDateView.init();
     }
 
@@ -153,6 +157,7 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
         mStatusBarIconController.removeIconGroup(mIconManager);
         mQSCarrierGroupController.setOnSingleCarrierChangedListener(null);
         mDemoModeController.removeCallback(mDemoModeReceiver);
+        mDemoModeController.removeCallback(mCustomDemoModeReceiver);
         setListening(false);
     }
 
@@ -188,6 +193,7 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
 
     private static class ClockDemoModeReceiver implements DemoMode {
         private Clock mClockView;
+        private Clock mClockCustomView;
 
         @Override
         public List<String> demoCommands() {
@@ -196,21 +202,25 @@ class QuickStatusBarHeaderController extends ViewController<QuickStatusBarHeader
 
         ClockDemoModeReceiver(Clock clockView) {
             mClockView = clockView;
+            mClockCustomView = clockView;
         }
 
         @Override
         public void dispatchDemoCommand(String command, Bundle args) {
             mClockView.dispatchDemoCommand(command, args);
+            mClockCustomView.dispatchDemoCommand(command, args);
         }
 
         @Override
         public void onDemoModeStarted() {
             mClockView.onDemoModeStarted();
+            mClockCustomView.onDemoModeStarted();
         }
 
         @Override
         public void onDemoModeFinished() {
             mClockView.onDemoModeFinished();
+            mClockCustomView.onDemoModeFinished();
         }
     }
 }
