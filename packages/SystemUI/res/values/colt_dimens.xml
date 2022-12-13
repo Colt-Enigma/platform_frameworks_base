@@ -59,4 +59,7 @@
     <!-- Udfps fingerprint animation -->
     <dimen name="udfps_animation_size">180dp</dimen>
     <dimen name="udfps_animation_offset">0dp</dimen>
+
+    <!-- Expanded QS clock/date paddings -->
+    <dimen name="qs_expanded_clock_date_padding_start">8dp</dimen>
 </resources>

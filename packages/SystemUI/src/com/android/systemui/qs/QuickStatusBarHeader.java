@@ -46,6 +46,7 @@ import android.view.WindowInsets;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Space;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -118,6 +119,7 @@ public class QuickStatusBarHeader extends FrameLayout
 
     private View mQsWeatherView;
     private View mQsWeatherHeaderView; 
+    private TextView mQSWeatherTemp;
 
     private View mQSCarriers;
     private ViewGroup mClockContainer;

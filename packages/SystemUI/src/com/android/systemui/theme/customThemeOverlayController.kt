@@ -51,6 +51,7 @@ import com.android.systemui.statusbar.policy.DeviceProvisionedController
 import com.android.systemui.theme.ThemeOverlayApplier
 import com.android.systemui.theme.ThemeOverlayController
 import com.android.systemui.util.settings.SecureSettings
+import com.android.systemui.util.settings.SystemSettings
 
 import dev.kdrag0n.colorkt.Color
 import dev.kdrag0n.colorkt.cam.Zcam
@@ -87,6 +88,7 @@ class customThemeOverlayController @Inject constructor(
     featureFlags: FeatureFlags,
     @Main resources: Resources,
     wakefulnessLifecycle: WakefulnessLifecycle,
+    systemSettings: SystemSettings,
     private val configurationController: ConfigurationController,
 ) : ThemeOverlayController(
     context,
@@ -104,6 +106,7 @@ class customThemeOverlayController @Inject constructor(
     featureFlags,
     resources,
     wakefulnessLifecycle,
+    systemSettings,
     configurationController,
 ) {
 
