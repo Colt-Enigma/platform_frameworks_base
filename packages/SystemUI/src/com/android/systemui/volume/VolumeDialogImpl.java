@@ -163,6 +163,8 @@ public class VolumeDialogImpl implements VolumeDialog,
             Settings.Secure.VOLUME_PANEL_ON_LEFT;
     public static final String VOLUME_DIALOG_TIMEOUT =
             "system:" + Settings.System.VOLUME_DIALOG_TIMEOUT;
+    public static final String VOLUME_MEDIA_OUTPUT_TOGGLE =
+            "system:" + Settings.System.VOLUME_MEDIA_OUTPUT_TOGGLE;
 
     private static final long USER_ATTEMPT_GRACE_PERIOD = 1000;
     private static final int UPDATE_ANIMATION_DURATION = 80;
@@ -263,7 +265,9 @@ public class VolumeDialogImpl implements VolumeDialog,
     private View mAppVolumeView;
     private ImageButton mAppVolumeIcon;
     private String mAppVolumeActivePackageName;
+    private ImageButton mExpandRows;
     private View mExpandRowsView;
+    private View mAppVolumeSpacer;
     private FrameLayout mZenIcon;
     private final List<VolumeRow> mRows = new ArrayList<>();
     private ConfigurableTexts mConfigurableTexts;
@@ -313,6 +317,8 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     // Number of animating rows
     private int mAnimatingRows = 0;
+    
+    private boolean mShowMediaController = true;
 
     private int mTimeOutDesired, mTimeOut;
 
@@ -370,6 +376,7 @@ public class VolumeDialogImpl implements VolumeDialog,
             mTunerService.addTunable(mTunable, VOLUME_PANEL_ON_LEFT);
         }
         mTunerService.addTunable(mTunable, VOLUME_DIALOG_TIMEOUT);
+        mTunerService.addTunable(mTunable, VOLUME_MEDIA_OUTPUT_TOGGLE);
 
         initDimens();
     }
@@ -647,6 +654,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         mSettingsView = mDialog.findViewById(R.id.settings_container);
         mSettingsViewSpacer = mDialog.findViewById(R.id.settings_container_spacer);
         mSettingsIcon = mDialog.findViewById(R.id.settings);
+        mSettingsIcon.setOnLongClickListener(this);
 
         mExpandRowsView = mDialog.findViewById(R.id.expandable_indicator_container);
         mExpandRows = mDialog.findViewById(R.id.expandable_indicator);
@@ -682,6 +690,7 @@ public class VolumeDialogImpl implements VolumeDialog,
 
         mAppVolumeView = mDialog.findViewById(R.id.app_volume_container);
         mAppVolumeIcon = mDialog.findViewById(R.id.app_volume);
+        mAppVolumeSpacer = mDialog.findViewById(R.id.app_volume_container_spacer);
 
         if (mRows.isEmpty()) {
             if (!AudioSystem.isSingleVolume(mContext)) {
@@ -767,6 +776,9 @@ public class VolumeDialogImpl implements VolumeDialog,
             } else if (VOLUME_DIALOG_TIMEOUT.equals(key)) {
                 mTimeOutDesired = TunerService.parseInteger(newValue, 3);
                 mTimeOut = mTimeOutDesired * 1000;
+            } else if (VOLUME_MEDIA_OUTPUT_TOGGLE.equals(key)) {
+                mShowMediaController =  TunerService.parseIntegerSwitch(newValue, true);
+                initSettingsH(mActivityManager.getLockTaskModeState());
             }
         }
     };
@@ -1245,29 +1257,26 @@ public class VolumeDialogImpl implements VolumeDialog,
         return localController;
     }
 
-    private boolean isMediaControllerAvailable(MediaController mediaController) {
-        return mediaController != null && !TextUtils.isEmpty(mediaController.getPackageName());
-    }
-
-    private boolean isBluetoothA2dpConnected() {
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        return mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()
-                && mBluetoothAdapter.getProfileConnectionState(BluetoothProfile.A2DP)
-                == BluetoothProfile.STATE_CONNECTED;
+    private boolean isMediaControllerAvailable() {
+        final MediaController mediaController = getActiveLocalMediaController();
+        if (mShowMediaController) {
+          return mediaController != null &&
+                !TextUtils.isEmpty(mediaController.getPackageName());
+	} else {
+	  return false;
+	}
     }
 
     private void initSettingsH(int lockTaskModeState) {
         if (mSettingsView != null) {
-            mSettingsView.setVisibility(mDeviceProvisionedController.isCurrentUserSetup()
-                    && lockTaskModeState == LOCK_TASK_MODE_NONE
-                    && (isMediaControllerAvailable(getActiveLocalMediaController())
-                            || isBluetoothA2dpConnected())
-                    ? VISIBLE : GONE);
-            mSettingsViewSpacer.setVisibility(mDeviceProvisionedController.isCurrentUserSetup()
-                    && lockTaskModeState == LOCK_TASK_MODE_NONE
-                    && (isMediaControllerAvailable(getActiveLocalMediaController())
-                            || isBluetoothA2dpConnected())
-                    ? VISIBLE : GONE);
+            mSettingsView.setVisibility(
+                    mDeviceProvisionedController.isCurrentUserSetup() &&
+                            isMediaControllerAvailable() &&
+                            lockTaskModeState == LOCK_TASK_MODE_NONE ? VISIBLE : GONE);
+            mSettingsViewSpacer.setVisibility(
+                    mDeviceProvisionedController.isCurrentUserSetup() &&
+                            isMediaControllerAvailable() &&
+                            lockTaskModeState == LOCK_TASK_MODE_NONE ? VISIBLE : GONE);
         }
         if (mSettingsIcon != null) {
             mSettingsIcon.setOnClickListener(v -> {
@@ -1336,6 +1345,7 @@ public class VolumeDialogImpl implements VolumeDialog,
     public void initAppVolumeH() {
         if (mAppVolumeView != null) {
             mAppVolumeView.setVisibility(shouldShowAppVolume() ? VISIBLE : GONE);
+            mAppVolumeSpacer.setVisibility(shouldShowAppVolume() ? VISIBLE : GONE);
         }
         if (mAppVolumeIcon != null) {
             mAppVolumeIcon.setOnClickListener(v -> {
@@ -2349,7 +2359,7 @@ public class VolumeDialogImpl implements VolumeDialog,
             }
         }
         final int newProgress = vlevel * 100;
-        if (progress != newProgress && !row.ss.muted || maxChanged) {
+        if (progress != newProgress || maxChanged && !row.ss.muted) {
             if (mShowing && rowVisible) {
                 // animate!
                 if (row.anim != null && row.anim.isRunning()
