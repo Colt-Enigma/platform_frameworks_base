@@ -13,4 +13,6 @@
 -->
 <resources>
     <color name="volume_row_bg">@android:color/system_accent2_600</color>
+
+    <color name="qs_translucent_bg">#0FFFFFFF</color>
 </resources>
