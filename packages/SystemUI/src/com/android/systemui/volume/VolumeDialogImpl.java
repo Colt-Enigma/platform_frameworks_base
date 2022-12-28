@@ -80,6 +80,7 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.os.Trace;
 import android.os.VibrationEffect;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.provider.Settings.Global;
 import android.text.InputFilter;
@@ -165,6 +166,8 @@ public class VolumeDialogImpl implements VolumeDialog,
             "system:" + Settings.System.VOLUME_DIALOG_TIMEOUT;
     public static final String VOLUME_MEDIA_OUTPUT_TOGGLE =
             "system:" + Settings.System.VOLUME_MEDIA_OUTPUT_TOGGLE;
+    public static final String CUSTOM_VOLUME_STYLES =
+            "system:" + Settings.System.CUSTOM_VOLUME_STYLES;
 
     private static final long USER_ATTEMPT_GRACE_PERIOD = 1000;
     private static final int UPDATE_ANIMATION_DURATION = 80;
@@ -261,7 +264,6 @@ public class VolumeDialogImpl implements VolumeDialog,
     private View mSettingsViewSpacer;
     private RotateAnimation rotateAnimation;
     private ImageButton mSettingsIcon;
-    private ImageButton mExpandRows;
     private View mAppVolumeView;
     private ImageButton mAppVolumeIcon;
     private String mAppVolumeActivePackageName;
@@ -317,6 +319,8 @@ public class VolumeDialogImpl implements VolumeDialog,
 
     // Number of animating rows
     private int mAnimatingRows = 0;
+    
+    private int customVolumeStyles = 0;
     
     private boolean mShowMediaController = true;
 
@@ -377,6 +381,7 @@ public class VolumeDialogImpl implements VolumeDialog,
         }
         mTunerService.addTunable(mTunable, VOLUME_DIALOG_TIMEOUT);
         mTunerService.addTunable(mTunable, VOLUME_MEDIA_OUTPUT_TOGGLE);
+        mTunerService.addTunable(mTunable, CUSTOM_VOLUME_STYLES);
 
         initDimens();
     }
@@ -779,7 +784,15 @@ public class VolumeDialogImpl implements VolumeDialog,
             } else if (VOLUME_MEDIA_OUTPUT_TOGGLE.equals(key)) {
                 mShowMediaController =  TunerService.parseIntegerSwitch(newValue, true);
                 initSettingsH(mActivityManager.getLockTaskModeState());
-            }
+            } else if (CUSTOM_VOLUME_STYLES.equals(key)) {
+                final int selectedVolStyle = TunerService.parseInteger(newValue, 0);
+                if (customVolumeStyles != selectedVolStyle) {
+                    customVolumeStyles = selectedVolStyle;
+                    mHandler.post(() -> {
+                        mControllerCallbackH.onConfigurationChanged();
+                    });
+                }
+            } 
         }
     };
 
@@ -889,7 +902,13 @@ public class VolumeDialogImpl implements VolumeDialog,
         row.iconMuteRes = iconMuteRes;
         row.important = important;
         row.defaultStream = defaultStream;
-        row.view = mDialog.getLayoutInflater().inflate(R.layout.volume_dialog_row, null);
+	if (customVolumeStyles == 0) {
+           row.view = mDialog.getLayoutInflater().inflate(R.layout.volume_dialog_row_aosp, null);
+        } else if (customVolumeStyles == 1) {
+           row.view = mDialog.getLayoutInflater().inflate(R.layout.volume_dialog_row_rui, null);
+        } else {
+           row.view = mDialog.getLayoutInflater().inflate(R.layout.volume_dialog_row_rice, null);
+        }
         row.view.setId(row.stream);
         row.view.setTag(row);
         row.header = row.view.findViewById(R.id.volume_row_header);
@@ -904,8 +923,18 @@ public class VolumeDialogImpl implements VolumeDialog,
 
         row.anim = null;
 
-        final LayerDrawable seekbarDrawable =
-                (LayerDrawable) mContext.getDrawable(R.drawable.volume_row_seekbar);
+	final LayerDrawable seekbarDrawable;
+	
+	if (customVolumeStyles == 0) {
+          seekbarDrawable =
+                  (LayerDrawable) mContext.getDrawable(R.drawable.volume_row_seekbar_aosp);
+	} else if (customVolumeStyles == 1) {
+          seekbarDrawable =
+                  (LayerDrawable) mContext.getDrawable(R.drawable.volume_row_seekbar_rui);
+	} else {
+          seekbarDrawable =
+                  (LayerDrawable) mContext.getDrawable(R.drawable.volume_row_seekbar_rice);
+	}
 
         final LayerDrawable seekbarProgressDrawable = (LayerDrawable)
                 ((RoundedCornerProgressDrawable) seekbarDrawable.findDrawableByLayerId(
@@ -1282,7 +1311,7 @@ public class VolumeDialogImpl implements VolumeDialog,
             mSettingsIcon.setOnClickListener(v -> {
                 Events.writeEvent(Events.EVENT_SETTINGS_CLICK);
                 final MediaController mediaController = getActiveLocalMediaController();
-                String packageName = isMediaControllerAvailable(mediaController)
+                String packageName = isMediaControllerAvailable()
                         ? mediaController.getPackageName()
                         : "";
                 mMediaOutputDialogFactory.create(packageName, true, mDialogView);

@@ -6175,7 +6175,12 @@ public final class Settings {
         public static final String AUTO_BRIGHTNESS_ONE_SHOT = "auto_brightness_one_shot";
 
         /**
-         * Show app volume rows in volume panel
+         * Volume styles
+         * @hide
+         */
+        public static final String CUSTOM_VOLUME_STYLES = "custom_volume_styles";
+
+	/**
          * @hide
          */
         public static final String SHOW_APP_VOLUME = "show_app_volume";
