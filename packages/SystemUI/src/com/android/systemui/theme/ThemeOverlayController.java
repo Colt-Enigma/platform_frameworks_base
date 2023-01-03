@@ -432,15 +432,27 @@ public class ThemeOverlayController extends CoreStartable implements Dumpable {
             return;
         }
 
-        mUserTracker.addCallback(mUserTrackerCallback, mMainExecutor);
-
-        mConfigurationController.addCallback(mConfigurationListener);
-        mDeviceProvisionedController.addCallback(mDeviceProvisionedListener);
-
         // All wallpaper color and keyguard logic only applies when Monet is enabled.
         if (!mIsMonetEnabled) {
             return;
         }
+
+        mSecureSettings.registerContentObserverForUser(
+              Settings.Secure.getUriFor(Settings.Secure.KG_CUSTOM_CLOCK_TOP_MARGIN),
+                false,
+                new ContentObserver(mBgHandler) {
+                    @Override
+                    public void onChange(boolean selfChange, Collection<Uri> collection, int flags,
+                            int userId) {
+                        reevaluateSystemTheme(true /* forceReload */);
+                    }
+                },
+                UserHandle.USER_ALL);
+
+        mUserTracker.addCallback(mUserTrackerCallback, mMainExecutor);
+
+        mConfigurationController.addCallback(mConfigurationListener);
+        mDeviceProvisionedController.addCallback(mDeviceProvisionedListener);
 
         // Upon boot, make sure we have the most up to date colors
         Runnable updateColors = () -> {
