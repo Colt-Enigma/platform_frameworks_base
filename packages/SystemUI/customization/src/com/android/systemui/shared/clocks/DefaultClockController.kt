@@ -18,12 +18,13 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Rect
 import android.icu.text.NumberFormat
+import android.os.UserHandle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
-import com.android.internal.util.xtended.XtendedUtils
+import com.android.internal.util.colt.ColtUtils
 import com.android.systemui.customization.R
 import com.android.systemui.plugins.ClockAnimations
 import com.android.systemui.plugins.ClockController
@@ -35,6 +36,8 @@ import java.io.PrintWriter
 import java.util.Locale
 import java.util.TimeZone
 
+import android.provider.Settings.Secure
+
 private val TAG = DefaultClockController::class.simpleName
 
 /**
@@ -44,7 +47,7 @@ private val TAG = DefaultClockController::class.simpleName
  * existing lockscreen clock.
  */
 class DefaultClockController(
-    ctx: Context,
+    val ctx: Context,
     private val layoutInflater: LayoutInflater,
     private val resources: Resources,
 ) : ClockController {
@@ -89,6 +92,7 @@ class DefaultClockController(
         events.onColorPaletteChanged(resources)
         events.onTimeZoneChanged(TimeZone.getDefault())
         events.onTimeTick()
+        smallClock.updateColor()
     }
 
     override fun setLogBuffer(logBuffer: LogBuffer) {
@@ -132,11 +136,21 @@ class DefaultClockController(
         open fun recomputePadding(targetRegion: Rect?) {}
 
         fun updateColor() {
+            val customClockColorEnabled = Secure.getIntForUser(ctx.getContentResolver(),
+                    Secure.KG_CUSTOM_CLOCK_COLOR_ENABLED, 0, UserHandle.USER_CURRENT) != 0
+            val customClockColor = Secure.getIntForUser(ctx.getContentResolver(),
+                    Secure.KG_CUSTOM_CLOCK_COLOR, 0xFFFFFFFF.toInt(), UserHandle.USER_CURRENT)
             val color =
                 if (isRegionDark) {
-                    resources.getColor(android.R.color.system_accent1_100)
+                    if (customClockColorEnabled)
+                        customClockColor.toInt()
+                    else
+                        resources.getColor(android.R.color.system_accent1_100)
                 } else {
-                    resources.getColor(android.R.color.system_accent2_600)
+                    if (customClockColorEnabled)
+                        customClockColor.toInt()
+                    else
+                        resources.getColor(android.R.color.system_accent2_600)
                 }
 
             if (currentColor == color) {
@@ -267,7 +281,7 @@ class DefaultClockController(
         // elegant way, working with an attribute that is transported within the overlay.
         var lockClockThemes = arrayOf("aclonica", "bariol", "comfortaa", "coolstory", "linotte", "nokiapure", "AlmonteSnow", "AlphaClouds", "AlphaFlowers", "AlphaWood", "Ampad3D2", "BetsyFlanagan", "Brandayolq", "BudmoJiggler", "BunnyRabbits", "CFBadNews", "EditPoints", "EditPointsFilled", "Fibography", "Floorlight", "HotSweat", "Karamuruh", "Klyukin", "LMSClifford", "MonbijouxClownpiece", "NINJAS", "Pinewood", "Romantiques", "Roundheads", "TH3MACHINE", "VTKSDURA3d", "alienleague", "balticbodden", "balticcoast", "balticdune", "balticstorm", "biko", "forta", "frankfrt", "museomod", "mxwasgard", "neon2", "neptuncat", "odibee", "prodeltco", "snowstorm", "tourney", "vg5000", "xtrusion")
         for (item in lockClockThemes) {
-            if (XtendedUtils.isClockFontEnabled(item)) {
+            if (ColtUtils.isClockFontEnabled(item)) {
                 return true
             }
         }
