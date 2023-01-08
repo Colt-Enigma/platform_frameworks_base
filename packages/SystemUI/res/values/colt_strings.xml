@@ -64,10 +64,6 @@
     <string name="global_action_reboot_bootloader">Bootloader</string>
     <string name="global_action_settings">Settings</string>
 
-    <!-- SystemUI tuner -->
-    <string name="lockscreen_default">Default</string>
-    <string name="lockscreen_hidden">None</string>
-
     <!-- Data usage info in QS footer -->
     <string name="usage_data">used today</string>
     <string name="usage_data_default_suffix">Data</string>
