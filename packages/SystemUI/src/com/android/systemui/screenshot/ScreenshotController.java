@@ -37,7 +37,6 @@ import android.annotation.MainThread;
 import android.annotation.Nullable;
 import android.app.ActivityManager;
 import android.app.ActivityOptions;
-import android.app.ActivityTaskManager;
 import android.app.ExitTransitionCoordinator;
 import android.app.ExitTransitionCoordinator.ExitTransitionCallbacks;
 import android.app.ICompatCameraControlCallback;
@@ -48,21 +47,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Insets;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.media.AudioAttributes;
-import android.media.AudioManager;
 import android.media.AudioSystem;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -97,8 +92,6 @@ import com.android.systemui.clipboardoverlay.ClipboardOverlayController;
 import com.android.systemui.dagger.qualifiers.Main;
 import com.android.systemui.screenshot.ScreenshotController.SavedImageData.ActionTransition;
 import com.android.systemui.screenshot.TakeScreenshotService.RequestCallback;
-import com.android.systemui.shared.system.ActivityManagerWrapper;
-import com.android.systemui.shared.system.TaskStackChangeListener;
 import com.android.systemui.util.Assert;
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -246,7 +239,7 @@ public class ScreenshotController {
     // From WizardManagerHelper.java
     private static final String SETTINGS_SECURE_USER_SETUP_COMPLETE = "user_setup_complete";
 
-    private static final int SCREENSHOT_CORNER_DEFAULT_TIMEOUT_MILLIS = 3000;
+    private static final int SCREENSHOT_CORNER_DEFAULT_TIMEOUT_MILLIS = 6000;
 
     private final WindowContext mContext;
     private final ScreenshotNotificationsController mNotificationsController;
@@ -261,14 +254,12 @@ public class ScreenshotController {
     private final WindowManager mWindowManager;
     private final WindowManager.LayoutParams mWindowLayoutParams;
     private final AccessibilityManager mAccessibilityManager;
-    private final AudioManager mAudioManager;
     private final ListenableFuture<MediaPlayer> mCameraSound;
     private final ScrollCaptureClient mScrollCaptureClient;
     private final PhoneWindow mWindow;
     private final DisplayManager mDisplayManager;
     private final ScrollCaptureController mScrollCaptureController;
     private final LongScreenshotData mLongScreenshotHolder;
-    private final Vibrator mVibrator;
     private final boolean mIsLowRamDevice;
     private final ScreenshotNotificationSmartActionsProvider
             mScreenshotNotificationSmartActionsProvider;
@@ -293,34 +284,6 @@ public class ScreenshotController {
                     | ActivityInfo.CONFIG_UI_MODE
                     | ActivityInfo.CONFIG_SCREEN_LAYOUT
                     | ActivityInfo.CONFIG_ASSETS_PATHS);
-
-    private ComponentName mTaskComponentName;
-    private PackageManager mPm;
-
-    private final TaskStackChangeListener mTaskListener = new TaskStackChangeListener() {
-        @Override
-        public void onTaskStackChanged() {
-            mBgExecutor.execute(() -> {
-                try {
-                    final ActivityTaskManager.RootTaskInfo focusedStack =
-                            ActivityTaskManager.getService().getFocusedRootTaskInfo();
-                    if (focusedStack != null && focusedStack.topActivity != null) {
-                        mTaskComponentName = focusedStack.topActivity;
-                    }
-                } catch (Exception e) {}
-            });
-        }
-    };
-
-    private String getForegroundAppLabel() {
-        if (mTaskComponentName != null) {
-            try {
-                final ActivityInfo ai = mPm.getActivityInfo(mTaskComponentName, 0);
-                return ai.applicationInfo.loadLabel(mPm).toString();
-            } catch (PackageManager.NameNotFoundException e) {}
-        }
-        return null;
-    }
 
     @Inject
     ScreenshotController(
@@ -384,10 +347,6 @@ public class ScreenshotController {
         // Setup the Camera shutter sound
         mCameraSound = loadCameraSound();
 
-        // Grab system services needed for screenshot sound
-        mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-        mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
-
         mCopyBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -400,15 +359,6 @@ public class ScreenshotController {
         mContext.registerReceiver(mCopyBroadcastReceiver, new IntentFilter(
                         ClipboardOverlayController.COPY_OVERLAY_ACTION),
                 ClipboardOverlayController.SELF_PERMISSION, null, Context.RECEIVER_NOT_EXPORTED);
-
-        // Grab PackageManager
-        mPm = mContext.getPackageManager();
-
-        // Register task stack listener
-        ActivityManagerWrapper.getInstance().registerTaskStackListener(mTaskListener);
-
-        // Initialize current foreground package name
-        mTaskListener.onTaskStackChanged();
     }
 
     @MainThread
@@ -498,7 +448,6 @@ public class ScreenshotController {
         removeWindow();
         releaseMediaPlayer();
         releaseContext();
-        TaskStackChangeListeners.getInstance().unregisterTaskStackListener(mTaskListener);
         mBgExecutor.shutdownNow();
     }
 
@@ -549,7 +498,8 @@ public class ScreenshotController {
 
             @Override
             public void onTouchOutside() {
-                dismissScreenshot(false);
+                // TODO(159460485): Remove this when focus is handled properly in the system
+                setWindowFocusable(false);
             }
         });
         mScreenshotView.setDefaultTimeoutMillis(mScreenshotHandler.getDefaultTimeoutMillis());
@@ -792,7 +742,6 @@ public class ScreenshotController {
                             mScreenshotView.startLongScreenshotTransition(
                                     transitionDestination, onTransitionEnd,
                                     longScreenshot));
-            mLongScreenshotHolder.setForegroundAppName(getForegroundAppLabel());
 
             final Intent intent = new Intent(mContext, LongScreenshotActivity.class);
             intent.setFlags(
@@ -890,27 +839,13 @@ public class ScreenshotController {
 
     private void playCameraSound() {
         mCameraSound.addListener(() -> {
-            switch (mAudioManager.getRingerMode()) {
-                case AudioManager.RINGER_MODE_SILENT:
-                    // do nothing
-                    break;
-                case AudioManager.RINGER_MODE_VIBRATE:
-                    if (mVibrator != null && mVibrator.hasVibrator()) {
-                        mVibrator.vibrate(VibrationEffect.createOneShot(50,
-                                VibrationEffect.DEFAULT_AMPLITUDE));
-                    }
-                    break;
-                case AudioManager.RINGER_MODE_NORMAL:
-                    // Play the shutter sound to notify that we've taken a screenshot
-                    try {
-                        MediaPlayer player = mCameraSound.get();
-                        if (player != null) {
-                            player.start();
-                        }
-                    } catch (InterruptedException | ExecutionException e) {
-                    }
+            try {
+                MediaPlayer player = mCameraSound.get();
+                if (player != null) {
+                    player.start();
+                }
+            } catch (InterruptedException | ExecutionException e) {
             }
-
         }, mBgExecutor);
     }
 
@@ -1009,7 +944,7 @@ public class ScreenshotController {
         mSaveInBgTask = new SaveImageInBackgroundTask(mContext, mImageExporter,
                 mScreenshotSmartActions, data, getActionTransitionSupplier(),
                 mScreenshotNotificationSmartActionsProvider);
-        mSaveInBgTask.execute(getForegroundAppLabel());
+        mSaveInBgTask.execute();
     }
 
 
