@@ -1281,6 +1281,7 @@ public final class NotificationPanelViewController implements Dumpable {
 
         mSplitShadeFullTransitionDistance =
                 mResources.getDimensionPixelSize(R.dimen.split_shade_full_transition_distance);
+        mCentralSurfaces.updateDismissAllVisibility(mBarState != StatusBarState.KEYGUARD && !isFullyCollapsed() && !isPanelVisibleBecauseOfHeadsUp());
     }
 
     private void onSplitShadeEnabledChanged() {
