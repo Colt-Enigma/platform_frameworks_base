@@ -425,11 +425,6 @@ public class CentralSurfacesImpl extends CoreStartable implements
     }
 
     /** */
-    public void toggleCameraFlash() {
-        mCommandQueueCallbacks.toggleCameraFlash();
-    }
-
-    /** */
     @Override
     public void animateCollapsePanels(int flags, boolean force) {
         mCommandQueueCallbacks.animateCollapsePanels(flags, force);

@@ -97,7 +97,6 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
     private final PowerManager mPowerManager;
     private final VibratorHelper mVibratorHelper;
     private final Optional<Vibrator> mVibratorOptional;
-    private final FlashlightController mFlashlightController;
     private final DisableFlagsLogger mDisableFlagsLogger;
     private final int mDisplayId;
     private final boolean mVibrateOnOpening;
@@ -131,7 +130,6 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
             PowerManager powerManager,
             VibratorHelper vibratorHelper,
             Optional<Vibrator> vibratorOptional,
-            FlashlightController flashlightController,
             DisableFlagsLogger disableFlagsLogger,
             @DisplayId int displayId,
             SystemBarAttributesListener systemBarAttributesListener) {
@@ -157,7 +155,6 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
         mPowerManager = powerManager;
         mVibratorHelper = vibratorHelper;
         mVibratorOptional = vibratorOptional;
-        mFlashlightController = flashlightController;
         mDisableFlagsLogger = disableFlagsLogger;
         mDisplayId = displayId;
 
@@ -610,10 +607,4 @@ public class CentralSurfacesCommandQueueCallbacks implements CommandQueue.Callba
         return VibrationEffect.createWaveform(timings, /* repeat= */ -1);
     }
 
-    @Override
-    public void toggleCameraFlash() {
-        if (mFlashlightController.isAvailable()) {
-            mFlashlightController.setFlashlight(!mFlashlightController.isEnabled());
-        }
-    }
 }

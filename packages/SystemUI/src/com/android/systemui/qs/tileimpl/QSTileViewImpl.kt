@@ -28,7 +28,6 @@ import android.graphics.drawable.RippleDrawable
 import android.os.Trace
 import android.graphics.Color
 import android.os.UserHandle
-import android.os.UserHandle
 import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.text.TextUtils
@@ -62,7 +61,7 @@ import java.util.Random
 
 import android.provider.Settings.System
 
-import com.android.internal.util.banana.BananaUtils.QSLayoutUtils
+import com.android.internal.util.colt.ColtUtils.QSLayoutUtils
 
 private const val TAG = "QSTileViewImpl"
 open class QSTileViewImpl @JvmOverloads constructor(
