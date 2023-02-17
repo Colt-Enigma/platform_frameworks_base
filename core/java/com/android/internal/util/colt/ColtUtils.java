@@ -48,6 +48,9 @@ import android.view.InputDevice;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import java.lang.InterruptedException;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.R;

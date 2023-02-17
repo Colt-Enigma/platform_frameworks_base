@@ -61,7 +61,6 @@ public class StatusBarMobileView extends FrameLayout implements DarkReceiver,
     private ImageView mMobile, mMobileType, mMobileRoaming;
     private View mMobileTypeSpace, mMobileRoamingSpace;
     private View mMobileSignalType;
-    private View mMobileRoamingSpace;
     @StatusBarIconView.VisibleState
     private int mVisibleState = STATE_HIDDEN;
     private DualToneHandler mDualToneHandler;
