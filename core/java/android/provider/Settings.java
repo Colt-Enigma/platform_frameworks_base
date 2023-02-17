@@ -5775,11 +5775,6 @@ public final class Settings {
         public static final String POWER_MENU_ANIMATIONS = "power_menu_animations";
 
         /**
-         * @hide
-         */
-        public static final String QS_TRANSPARENCY = "qs_transparency";
-
-        /**
          * Whether to enable the pixel navbar animation
          * @hide
          */
