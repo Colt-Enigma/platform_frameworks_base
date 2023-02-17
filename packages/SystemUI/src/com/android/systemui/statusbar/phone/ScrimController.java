@@ -175,6 +175,7 @@ public class ScrimController implements ViewTreeObserver.OnPreDrawListener, Dump
      */
     public static final float BUSY_SCRIM_ALPHA = 1f;
 
+
     /**
      * Scrim opacity that can have text on top.
      */
