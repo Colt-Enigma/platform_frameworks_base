@@ -105,7 +105,7 @@ import java.util.concurrent.Executor;
 @SuppressLint("ValidFragment")
 public class CollapsedStatusBarFragment extends Fragment implements CommandQueue.Callbacks,
         StatusBarStateController.StateListener,
-        SystemStatusAnimationCallback, Dumpable {
+        SystemStatusAnimationCallback, Dumpable, TunerService.Tunable {
 
     private static final String STATUSBAR_CLOCK_CHIP =
             "system:" + Settings.System.STATUSBAR_CLOCK_CHIP;
@@ -446,8 +446,6 @@ public class CollapsedStatusBarFragment extends Fragment implements CommandQueue
         }
     }
 
-=======
->>>>>>> e372133c8286 (Clock: Fix issues with hidden mode)
     /** Initializes views related to the notification icon area. */
     public void initNotificationIconArea() {
         ViewGroup notificationIconArea = mStatusBar.findViewById(R.id.notification_icon_area);
