@@ -554,7 +554,13 @@ public class QuickStatusBarHeader extends FrameLayout
             mIconsAlphaAnimator = mIconsAlphaAnimatorFixed;
             mIconsAlphaAnimator.setPosition(mKeyguardExpansionFraction);
             setBatteryRemainingOnClick(false);
+            if (mQQSWeather > 0 && mQsWeatherHeaderView != null) {
+                mQsWeatherHeaderView.setVisibility(View.GONE);
+            }
         } else {
+            if (mQQSWeather > 0 && mQsWeatherHeaderView != null) {
+                mQsWeatherHeaderView.setVisibility(View.VISIBLE);
+            }
             mIconsAlphaAnimator = null;
             mIconContainer.setAlpha(1);
             mBatteryRemainingIcon.setAlpha(1);
