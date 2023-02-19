@@ -222,7 +222,7 @@ internal class FooterActionsController @Inject constructor(
             }
         var nIntent: Intent = Intent(Intent.ACTION_DEFAULT)
         nIntent.setClassName("com.android.settings",
-            "com.android.settings.Settings\$ColtEnigmaActivity")
+            "com.android.settings.Settings\$ColtSettingsActivity")
         activityStarter.startActivity(nIntent, true /* dismissShade */, animationController)
     }
 
@@ -244,7 +244,7 @@ internal class FooterActionsController @Inject constructor(
         globalActionsDialog = globalActionsDialogProvider.get()
         servicesButtonContainer.setOnClickListener(onClickListener)
         settingsButtonContainer.setOnClickListener(onClickListener)
-        settingsButtonContainer.setOnLongClickListener { view ->
+	settingsButtonContainer.setOnLongClickListener { view ->
             startColtActivity()
             true
         }
