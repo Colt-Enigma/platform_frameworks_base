@@ -291,7 +291,7 @@ import com.android.internal.util.DumpUtils;
 import com.android.internal.util.Preconditions;
 import com.android.internal.util.XmlUtils;
 import com.android.internal.util.function.TriPredicate;
-import com.android.internal.util.evolution.EvolutionUtils;
+import com.android.internal.util.colt.ColtUtils;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.server.DeviceIdleInternal;
 import com.android.server.EventLogTags;
@@ -2383,7 +2383,7 @@ public class NotificationManagerService extends SystemService {
         mUseAttentionLight = resources.getBoolean(R.bool.config_useAttentionLight);
         mHasLight =
                 resources.getBoolean(com.android.internal.R.bool.config_intrusiveNotificationLed);
-        mHasTorch = EvolutionUtils.deviceHasFlashlight(getContext());
+        mHasTorch = ColtUtils.deviceHasFlashlight(getContext());
 
         // Don't start allowing notifications until the setup wizard has run once.
         // After that, including subsequent boots, init with notifications turned on.
