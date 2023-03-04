@@ -1458,7 +1458,7 @@ public class NavigationBar extends ViewController<NavigationBarView> implements 
         int gravity = Gravity.BOTTOM;
         boolean navBarCanMove = true;
         boolean IsHideIMESpaceEnabled = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                Settings.Secure.HIDE_IME_SPACE_ENABLE , 1, UserHandle.USER_CURRENT) != 0;
+                Settings.Secure.HIDE_IME_SPACE_ENABLE , 0, UserHandle.USER_CURRENT) != 0;
         final Context userContext = mUserContextProvider.createCurrentUserContext(mContext);
         if (mWindowManager != null && mWindowManager.getCurrentWindowMetrics() != null) {
             Rect displaySize = mWindowManager.getCurrentWindowMetrics().getBounds();
