@@ -55,6 +55,7 @@ import com.android.systemui.navigationbar.buttons.ReverseLinearLayout;
 import com.android.systemui.navigationbar.buttons.ReverseLinearLayout.ReverseRelativeLayout;
 import com.android.systemui.recents.OverviewProxyService;
 import com.android.systemui.shared.system.QuickStepContract;
+
 import com.android.systemui.tuner.TunerService;
 
 import java.io.PrintWriter;
@@ -68,7 +69,7 @@ public class NavigationBarInflaterView extends FrameLayout
     public static final String NAV_BAR_VIEWS = "sysui_nav_bar";
     public static final String NAV_BAR_LEFT = "sysui_nav_bar_left";
     public static final String NAV_BAR_RIGHT = "sysui_nav_bar_right";
-    public static final String NAV_BAR_INVERSE = "sysui_nav_bar_inverse";
+
     public static final String NAV_BAR_COMPACT = "system:" + Settings.System.NAV_BAR_COMPACT_LAYOUT;
 
     public static final String MENU_IME_ROTATE = "menu_ime";
@@ -124,7 +125,6 @@ public class NavigationBarInflaterView extends FrameLayout
     private OverviewProxyService mOverviewProxyService;
     private int mNavBarMode = NAV_BAR_MODE_3BUTTON;
 
-    private boolean mInverseLayout;
     private boolean mIsHintEnabled;
 
     private int mHomeHandleWidthMode = 1;
@@ -132,6 +132,7 @@ public class NavigationBarInflaterView extends FrameLayout
     private boolean mCompactLayout;
 
     private CustomSettingsObserver mCustomSettingsObserver;
+
     public NavigationBarInflaterView(Context context, AttributeSet attrs) {
         super(context, attrs);
         createInflaters();
@@ -205,7 +206,6 @@ public class NavigationBarInflaterView extends FrameLayout
 	mCustomSettingsObserver.observe();
         super.onAttachedToWindow();
         Dependency.get(TunerService.class).addTunable(this, KEY_NAVIGATION_HINT);
-        Dependency.get(TunerService.class).addTunable(this, NAV_BAR_INVERSE);
 	Dependency.get(TunerService.class).addTunable(this, NAV_BAR_COMPACT);
     }
 
@@ -246,7 +246,6 @@ public class NavigationBarInflaterView extends FrameLayout
     protected void onDetachedFromWindow() {
 	mCustomSettingsObserver.stop();
         Dependency.get(NavigationModeController.class).removeListener(this);
-        Dependency.get(TunerService.class).removeTunable(this);
         super.onDetachedFromWindow();
     }
 
@@ -256,9 +255,6 @@ public class NavigationBarInflaterView extends FrameLayout
             mIsHintEnabled = TunerService.parseIntegerSwitch(newValue, true);
             updateHint();
             onLikelyDefaultLayoutChange();
-        } else if (NAV_BAR_INVERSE.equals(key)) {
-            mInverseLayout = TunerService.parseIntegerSwitch(newValue, false);
-            updateLayoutInversion();
         } else if (NAV_BAR_COMPACT.equals(key)){
             boolean compactLayout = TunerService.parseIntegerSwitch(newValue, false);
             if (compactLayout != mCompactLayout){
@@ -425,19 +421,6 @@ public class NavigationBarInflaterView extends FrameLayout
                 true /* landscape */, false /* start */);
 
         updateButtonDispatchersCurrentView();
-    }
-
-    private void updateLayoutInversion() {
-        if (mInverseLayout) {
-            Configuration config = mContext.getResources().getConfiguration();
-            if (config.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-                setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-            } else {
-                setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            }
-        } else {
-            setLayoutDirection(View.LAYOUT_DIRECTION_INHERIT);
-        }
     }
 
     private void addGravitySpacer(LinearLayout layout) {
