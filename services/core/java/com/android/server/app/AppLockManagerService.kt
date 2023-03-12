@@ -865,7 +865,7 @@ class AppLockManagerService(
             currentUserId,
             Process.myUid()
         ).filter {
-            BananaUtils.launchablePackages(context).contains(it.packageName) ||
+            ColtUtils.launchablePackages(context).contains(it.packageName) ||
                 whiteListedSystemApps.contains(it.packageName)
         }.map { it.packageName }
         var changed = false

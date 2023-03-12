@@ -116,6 +116,7 @@ public class ThemeOverlayController extends CoreStartable implements Dumpable {
     private final BroadcastDispatcher mBroadcastDispatcher;
     private final Executor mBgExecutor;
     private final SecureSettings mSecureSettings;
+    private final SystemSettings mSystemSettings;
     private final Executor mMainExecutor;
     private final Handler mBgHandler;
     private final boolean mIsMonetEnabled;
@@ -386,6 +387,7 @@ public class ThemeOverlayController extends CoreStartable implements Dumpable {
         mBgHandler = bgHandler;
         mThemeManager = themeOverlayApplier;
         mSecureSettings = secureSettings;
+	mSystemSettings = systemSettings;
         mWallpaperManager = wallpaperManager;
         mUserTracker = userTracker;
         mResources = resources;

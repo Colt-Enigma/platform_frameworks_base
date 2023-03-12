@@ -6212,6 +6212,7 @@ public final class Settings {
         public static final String UDFPS_ICON = "udfps_icon";
 
         /**
+	 * @hide
          */
         public static final String CLOCK_USE_CUSTOM_FORMAT = "clock_use_custom_format";
 
