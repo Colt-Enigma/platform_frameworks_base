@@ -175,6 +175,8 @@ public class QuickStatusBarHeader extends FrameLayout
     private boolean mQsExpanding;
     private int mClockHeight;
 
+    private int mExpandedQsClockDateStart;
+
     public QuickStatusBarHeader(Context context, AttributeSet attrs) {
         super(context, attrs);
         mActivityStarter = Dependency.get(ActivityStarter.class);
@@ -208,6 +210,7 @@ public class QuickStatusBarHeader extends FrameLayout
         mClockDateView = findViewById(R.id.date_clock);
         mQsWeatherView = findViewById(R.id.qs_weather_view);
         mQsWeatherHeaderView = findViewById(R.id.weather_view_header);
+	mQSWeatherTemp = findViewById(R.id.weather_temp);
         mClockDateView.setOnClickListener(this);
         mClockDateView.setOnLongClickListener(this);
         mClockIconsSeparator = findViewById(R.id.separator);
@@ -370,6 +373,9 @@ public class QuickStatusBarHeader extends FrameLayout
 
         int statusBarHeight = SystemBarUtils.getStatusBarHeight(mContext);
 
+	mExpandedQsClockDateStart = resources.getDimensionPixelSize(
+                R.dimen.qs_expanded_clock_date_padding_start);
+
         mStatusBarPaddingStart = resources.getDimensionPixelSize(
                 R.dimen.status_bar_padding_start);
         mStatusBarPaddingEnd = resources.getDimensionPixelSize(
@@ -484,9 +490,9 @@ public class QuickStatusBarHeader extends FrameLayout
                 .addFloat(mClockDateView, "alpha", 1, 0, 0, 0, 0)
                 // Move the clock container
                 .addFloat(mClockContainer, "translationX",
-                    mHeaderPaddingLeft + mStatusBarPaddingEnd, mHeaderPaddingLeft + mStatusBarPaddingEnd)
+                    mHeaderPaddingLeft + mStatusBarPaddingEnd, mExpandedQsClockDateStart)
                 .addFloat(mDateView, "translationX",
-                    mHeaderPaddingLeft + mStatusBarPaddingEnd, mHeaderPaddingLeft + mStatusBarPaddingEnd)
+                     mHeaderPaddingLeft + mStatusBarPaddingEnd, mExpandedQsClockDateStart)
                 // Enlarge clock on expanding down
                 .addFloat(mClockView, "scaleX", 1, LARGE_CLOCK_SCALE_X)
                 .addFloat(mClockView, "scaleY", 1, LARGE_CLOCK_SCALE_Y)
@@ -502,8 +508,10 @@ public class QuickStatusBarHeader extends FrameLayout
                         mClockDateView.setVisibility(View.GONE);
                         mQSCarriers.setVisibility(View.VISIBLE);
                         updateRightLayout(true);
+			if (mQSWeatherTemp != null) {
+                           mQSWeatherTemp.setSelected(true);
                     }
-
+		}
                     @Override
                     public void onAnimationStarted() {
                         if (mShowDate) {
