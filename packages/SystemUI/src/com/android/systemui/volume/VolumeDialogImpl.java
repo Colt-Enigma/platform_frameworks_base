@@ -145,6 +145,7 @@ import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.AlphaTintDrawableWrapper;
 import com.android.systemui.util.DeviceConfigProxy;
 import com.android.systemui.util.RoundedCornerProgressDrawable;
+import com.android.systemui.tuner.TunerService;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -165,6 +166,11 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         ConfigurationController.ConfigurationListener,
         ViewTreeObserver.OnComputeInternalInsetsListener {
     private static final String TAG = Util.logTag(VolumeDialogImpl.class);
+    
+    public static final String VOLUME_TEXTVIEW =
+            "system:" + "VOLUME_TEXTVIEW";
+    public static final String VOLUME_TEXTVIEW_STYLE =
+            "system:" + "VOLUME_TEXTVIEW_STYLE";
 
     private static final String VOLUME_PANEL_ON_LEFT =
             Settings.Secure.VOLUME_PANEL_ON_LEFT;
@@ -306,16 +312,19 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private boolean mHasSeenODICaptionsTooltip;
     private ViewStub mODICaptionsTooltipViewStub;
     private View mODICaptionsTooltipView = null;
-    private TunerService mTunerService;
     private final boolean mVoiceCapable;
 
     // Volume panel placement left or right
     private boolean mVolumePanelOnLeft;
+    private TunerService mTunerService;
 
     private final boolean mUseBackgroundBlur;
     private Consumer<Boolean> mCrossWindowBlurEnabledListener;
     private BackgroundBlurDrawable mDialogRowsViewBackground;
     private final InteractionJankMonitor mInteractionJankMonitor;
+    
+    private int showHide;
+    private int mVolumePersenStyle;
 
     private boolean mSeparateNotification;
 
@@ -393,6 +402,9 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                         enabled ? dialogRowsViewColorAboveBlur : dialogRowsViewColorNoBlur);
                 mDialogRowsView.invalidate();
             };
+        }      
+        if (!mShowActiveStreamOnly) {
+            mTunerService.addTunable(mTunable, VOLUME_TEXTVIEW, VOLUME_TEXTVIEW_STYLE);
         }
 
         if (!mShowActiveStreamOnly) {
@@ -850,7 +862,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             }
         }
     }
-
+    
     private final TunerService.Tunable mTunable = new TunerService.Tunable() {
         @Override
         public void onTuningChanged(String key, String newValue) {
@@ -865,7 +877,23 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             } else if (VOLUME_DIALOG_TIMEOUT.equals(key)) {
                 mTimeOutDesired = TunerService.parseInteger(newValue, 3);
                 mTimeOut = mTimeOutDesired * 1000;
-            }
+            } else if (VOLUME_TEXTVIEW.equals(key)) {
+                final int showHider = TunerService.parseInteger(newValue, 0);
+                if (showHide != showHider) {
+                    showHide = showHider;
+                    mHandler.post(() -> {
+                        mControllerCallbackH.onConfigurationChanged();
+                    });
+                }
+            } else if (VOLUME_TEXTVIEW_STYLE.equals(key)) {
+                final int mVolumePersenStyler = TunerService.parseInteger(newValue, 0);
+                if (mVolumePersenStyle != mVolumePersenStyler) {
+                    mVolumePersenStyle = mVolumePersenStyler;
+                    mHandler.post(() -> {
+                        mControllerCallbackH.onConfigurationChanged();
+                    });
+                }
+	    }
         }
     };
 
@@ -995,6 +1023,11 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         row.slider = row.view.findViewById(R.id.volume_row_slider);
         row.slider.setOnSeekBarChangeListener(new VolumeSeekBarChangeListener(row));
         row.number = row.view.findViewById(R.id.volume_number);
+        
+        row.persenCok = row.view.findViewById(R.id.volume_persen);
+	row.persenCokNgisor = row.view.findViewById(R.id.volume_persen_bottom);      
+	ShowingTextBrightness(row);
+	GetValuePolum(row, row.slider.getProgress());
 
         row.anim = null;
 
@@ -1051,6 +1084,29 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 row.icon.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
             }
         }
+    }
+    
+    private void ShowingTextBrightness(VolumeRow row) {
+            if (showHide == 1) {
+		if (mVolumePersenStyle == 0) {    
+                    row.persenCok.setVisibility(View.VISIBLE);
+	            row.persenCokNgisor.setVisibility(View.GONE); 
+	        } else if (mVolumePersenStyle == 1) {
+	            row.persenCok.setVisibility(View.GONE);
+	            row.persenCokNgisor.setVisibility(View.VISIBLE);
+	        }    
+            } else {
+                row.persenCok.setVisibility(View.GONE);
+	        row.persenCokNgisor.setVisibility(View.GONE);         
+            }
+    }
+
+    private void GetValuePolum(VolumeRow row, int value) {
+            int make100 = value * 100 / row.slider.getMax();
+            row.persenCok.setText(String.valueOf(make100));
+	    row.persenCok.append("%");
+	    row.persenCokNgisor.setText(String.valueOf(make100));
+	    row.persenCokNgisor.append("%");
     }
 
     private void setRingerMode(int newRingerMode) {
@@ -2423,6 +2479,16 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
             row.number.setTextColor(colorTint);
             row.number.setAlpha(alpha);
         }
+        
+        if (row.persenCok != null) {
+            row.persenCok.setTextColor(colorTint);
+            row.persenCok.setAlpha(alpha);
+        }
+
+        if (row.persenCokNgisor != null) {
+            row.persenCokNgisor.setTextColor(colorTint);
+            row.persenCokNgisor.setAlpha(alpha);
+        }
     }
 
     private void updateVolumeRowSliderH(VolumeRow row, boolean enable, int vlevel, boolean maxChanged) {
@@ -2819,6 +2885,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
 
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            GetValuePolum(mRow, progress);
             if (mRow.ss == null) return;
             if (D.BUG) Log.d(TAG, AudioSystem.streamToString(mRow.stream)
                     + " onProgressChanged " + progress + " fromUser=" + fromUser);
@@ -2888,6 +2955,8 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private static class VolumeRow {
         private View view;
         private TextView header;
+        private TextView persenCok;   
+	private TextView persenCokNgisor;
         private ImageButton icon;
         private Drawable sliderProgressSolid;
         private AlphaTintDrawableWrapper sliderProgressIcon;
