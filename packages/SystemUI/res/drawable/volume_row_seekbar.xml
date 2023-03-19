@@ -20,14 +20,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"
     android:paddingMode="stack" >
-    <item android:id="@android:id/background"
-        android:gravity="center_vertical|fill_horizontal">
-            <shape>
-                <size android:height="@dimen/volume_dialog_track_width" />
-                <corners android:radius="@dimen/volume_dialog_track_corner_radius" />
-                <solid android:color="@color/volume_seekbar_bg" />
-            </shape>
-    </item>
+    <item 
+        android:id="@android:id/background"
+        android:drawable="@drawable/volume_seekbarbg_drawable"  
+        android:insetLeft="@dimen/rounded_slider_track_inset"
+        android:insetRight="@dimen/rounded_slider_track_inset"
+        android:gravity="center_vertical|fill_horizontal" />
     <item android:id="@android:id/progress"
         android:gravity="center_vertical|fill_horizontal">
         <com.android.systemui.util.RoundedCornerProgressDrawable

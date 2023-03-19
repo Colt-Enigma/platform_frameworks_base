@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+  xmlns:androidprv="http://schemas.android.com/apk/prv/res/android"     
+  xmlns:android="http://schemas.android.com/apk/res/android">
+     <size android:height="@dimen/volume_dialog_track_width" />
+     <corners android:radius="@dimen/volume_dialog_track_corner_radius" />
+     <solid android:color="?androidprv:attr/colorAccentSecondaryVariant" />
+</shape>
