@@ -164,4 +164,12 @@
     <java-symbol type="anim" name="activity_freeform_open_exit" />
     <java-symbol type="anim" name="activity_freeform_close_enter" />
     <java-symbol type="anim" name="activity_freeform_close_exit" />
+
+    <!-- Settings Restart -->
+    <java-symbol type="string" name="settings_restart_title" />
+    <java-symbol type="string" name="settings_restart_message" />
+
+    <!-- Soft restart dialog -->
+    <java-symbol type="string" name="system_restart_title" />
+    <java-symbol type="string" name="system_restart_message" />
 </resources>
