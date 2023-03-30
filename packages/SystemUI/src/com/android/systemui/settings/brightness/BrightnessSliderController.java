@@ -102,8 +102,7 @@ public class BrightnessSliderController extends ViewController<BrightnessSliderV
             return;
         }
         AsyncTask.execute(
-                    () -> vibrator.vibrate(VibrationEffect.createPredefined(
-                VibrationEffect.EFFECT_TICK)));
+                    () -> vibrator.vibrate(VibrationEffect.get(VibrationEffect.EFFECT_TEXTURE_TICK)));
 
     }
 
