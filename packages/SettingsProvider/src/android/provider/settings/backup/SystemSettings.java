@@ -101,5 +101,6 @@ public class SystemSettings {
         Settings.System.QS_LAYOUT,
         Settings.System.QQS_LAYOUT,
         Settings.System.USE_OLD_MOBILETYPE,
+        Settings.System.QS_PANEL_STYLE,
     };
 }
