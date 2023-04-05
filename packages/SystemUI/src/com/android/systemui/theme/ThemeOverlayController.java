@@ -253,6 +253,11 @@ public class ThemeOverlayController implements CoreStartable, Dumpable {
         return false;
     }
 
+    private boolean isNightMode() {
+        return (mResources.getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+    }
+    
     private void handleWallpaperColors(WallpaperColors wallpaperColors, int flags, int userId) {
         final int currentUser = mUserTracker.getUserId();
         final boolean hadWallpaperColors = mCurrentColors.get(userId) != null;
