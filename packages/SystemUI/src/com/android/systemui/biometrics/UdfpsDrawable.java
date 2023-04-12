@@ -41,7 +41,7 @@ import android.util.PathParser;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.android.internal.util.xtended.XtendedUtils;
+import com.android.internal.util.colt.ColtUtils;
 
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
@@ -65,7 +65,7 @@ public abstract class UdfpsDrawable extends Drawable {
 
     static final String UDFPS_ICON = "system:" + Settings.System.UDFPS_ICON;
 
-    String udfpsResourcesPackage = "com.xtended.udfps.resources";
+    String udfpsResourcesPackage = "com.colt.udfps.resources";
 
     @NonNull final Context mContext;
     @NonNull final ShapeDrawable mFingerprintDrawable;
@@ -104,7 +104,7 @@ public abstract class UdfpsDrawable extends Drawable {
                 Settings.System.OMNI_CUSTOM_FP_ICON,
                 UserHandle.USER_CURRENT);
 
-        if (XtendedUtils.isPackageInstalled(mContext, udfpsResourcesPackage)) {
+        if (ColtUtils.isPackageInstalled(mContext, udfpsResourcesPackage)) {
             try {
                 PackageManager pm = mContext.getPackageManager();
                 udfpsRes = pm.getResourcesForApplication(udfpsResourcesPackage);

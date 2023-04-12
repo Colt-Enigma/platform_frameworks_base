@@ -40,7 +40,7 @@ import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
 import androidx.asynclayoutinflater.view.AsyncLayoutInflater;
 
-import com.android.internal.util.xtended.XtendedUtils;
+import com.android.internal.util.colt.ColtUtils;
 
 import com.android.settingslib.Utils;
 import com.android.systemui.R;
@@ -129,7 +129,7 @@ public class UdfpsKeyguardView extends UdfpsAnimationView {
     private void updateIcon() {
         mCustomUdfpsIcon = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.UDFPS_ICON, 0) != 0
-                && XtendedUtils.isPackageInstalled(mContext, "com.xtended.udfps.resources");
+                && ColtUtils.isPackageInstalled(mContext, "com.colt.udfps.resources");
         mCustomFpIconEnabled = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.OMNI_CUSTOM_FP_ICON_ENABLED, 0) == 1;
         customIconURI = Settings.System.getStringForUser(getContext().getContentResolver(),
