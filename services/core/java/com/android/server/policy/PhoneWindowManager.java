@@ -203,7 +203,7 @@ import com.android.internal.policy.TransitionAnimation;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.util.ArrayUtils;
 import com.android.internal.util.ScreenshotHelper;
-import com.android.internal.util.xtended.XtendedUtils;
+import com.android.internal.util.colt.ColtUtils;
 import com.android.server.ExtconStateObserver;
 import com.android.server.ExtconUEventObserver;
 import com.android.server.GestureLauncherService;
@@ -2475,12 +2475,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (mTorchActionMode == 2 && longpress) {
             performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, false,
                     "Power - Long Press - Torch");
-            XtendedUtils.toggleCameraFlash();
+            ColtUtils.toggleCameraFlash();
             return true;
         } else if (mTorchActionMode == 1 && !longpress) {
             performHapticFeedback(HapticFeedbackConstants.LONG_PRESS, false,
                       "Power - Double Press - Torch");
-            XtendedUtils.toggleCameraFlash();
+            ColtUtils.toggleCameraFlash();
             return true;
         }
         return false;
