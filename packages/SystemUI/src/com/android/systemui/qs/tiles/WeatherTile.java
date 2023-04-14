@@ -51,7 +51,7 @@ import androidx.annotation.Nullable;
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.internal.util.xtended.OmniJawsClient;
-import com.android.internal.util.xtended.XtendedUtils;
+import com.android.internal.util.colt.ColtUtils;
 import com.android.systemui.R;
 import com.android.systemui.dagger.qualifiers.Background;
 import com.android.systemui.dagger.qualifiers.Main;
@@ -108,7 +108,7 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
 
     @Override
     public int getMetricsCategory() {
-        return MetricsEvent.XTENDED;
+        return MetricsEvent.COLT;
     }
 
     @Override
@@ -170,14 +170,14 @@ public class WeatherTile extends QSTileImpl<BooleanState> implements OmniJawsCli
         } else {
             PackageManager pm = mContext.getPackageManager();
             for (String app: ALTERNATIVE_WEATHER_APPS) {
-                if (XtendedUtils.isPackageInstalled(mContext, app)) {
+                if (ColtUtils.isPackageInstalled(mContext, app)) {
                     Intent intent = pm.getLaunchIntentForPackage(app);
                     if (intent != null) {
                         mActivityStarter.postStartActivityDismissingKeyguard(intent, 0);
                     }
                 }
             }
-            if (XtendedUtils.isPackageInstalled(mContext, "com.google.android.googlequicksearchbox")) {
+            if (ColtUtils.isPackageInstalled(mContext, "com.google.android.googlequicksearchbox")) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse("dynact://velour/weather/ProxyActivity"));
                 intent.setComponent(new ComponentName("com.google.android.googlequicksearchbox",

@@ -75,7 +75,7 @@ import com.android.systemui.tuner.TunerService;
 import com.android.systemui.util.Utils;
 import com.android.systemui.util.concurrency.DelayableExecutor;
 
-import com.android.internal.util.xtended.ImageHelper;
+import com.android.internal.util.colt.ImageHelper;
 
 import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
