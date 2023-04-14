@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.internal.util.xtended;
+package com.android.internal.util.colt;
 
 import android.util.Log;
 
