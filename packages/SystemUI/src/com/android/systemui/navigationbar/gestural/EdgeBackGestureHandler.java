@@ -69,7 +69,7 @@ import com.android.internal.config.sysui.SystemUiDeviceConfigFlags;
 import com.android.internal.policy.GestureNavigationSettingsObserver;
 import com.android.internal.util.hwkeys.ActionHandler;
 import com.android.internal.util.hwkeys.ActionUtils;
-import com.android.internal.util.xtended.XtendedUtils;
+import com.android.internal.util.colt.ColtUtils;
 import com.android.systemui.Dependency;
 import com.android.systemui.R;
 import com.android.systemui.dagger.qualifiers.Background;
@@ -1099,7 +1099,7 @@ public class EdgeBackGestureHandler implements PluginListener<NavigationEdgeBack
                 ActionUtils.switchScreenOff(mContext);
                 break;
             case 7: // Screenshot
-                XtendedUtils.takeScreenshot(true);
+                ColtUtils.takeScreenshot(true);
                 break;
             case 8: // Notification panel
                 ActionUtils.toggleNotifications();
@@ -1114,13 +1114,13 @@ public class EdgeBackGestureHandler implements PluginListener<NavigationEdgeBack
                 ActionUtils.toggleRingerModes(mContext);
                 break;
             case 12: // Kill app
-                XtendedUtils.killForegroundApp();
+                ColtUtils.killForegroundApp();
                 break;
             case 13: // Powermenu
-                XtendedUtils.showPowerMenu();
+                ColtUtils.showPowerMenu();
                 break;
             case 14: // Partial Screenshot
-                XtendedUtils.takeScreenshot(false);
+                ColtUtils.takeScreenshot(false);
                 break;
         }
     }

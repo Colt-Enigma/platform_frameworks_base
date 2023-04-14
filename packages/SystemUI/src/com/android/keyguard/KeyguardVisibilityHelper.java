@@ -31,8 +31,8 @@ import com.android.systemui.statusbar.phone.DozeParameters;
 import com.android.systemui.statusbar.phone.ScreenOffAnimationController;
 import com.android.systemui.statusbar.policy.KeyguardStateController;
 
-import com.android.systemui.xtended.AmbientText;
-import com.android.systemui.xtended.AmbientCustomImage;
+import com.android.systemui.colt.AmbientText;
+import com.android.systemui.colt.AmbientCustomImage;
 
 import com.android.systemui.R;
 
