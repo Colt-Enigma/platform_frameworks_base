@@ -187,4 +187,9 @@
 
     <!-- Lock gesture -->
     <java-symbol type="string" name="gesture_locked_warning" />    
+
+    <!-- PowerOffAlarmService -->
+    <java-symbol type="string" name="poweroff_alarm_cancelled"></java-symbol>
+    <java-symbol type="string" name="poweroff_alarm_set"></java-symbol>
+        
 </resources>
