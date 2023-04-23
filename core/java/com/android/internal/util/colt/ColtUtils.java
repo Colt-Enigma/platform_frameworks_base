@@ -218,10 +218,10 @@ public class ColtUtils {
 	try {
 	    Runtime.getRuntime().exec(command).waitFor();
 	} catch (IOException e) {
-            System.err.println("XtendedUtils: Error changing dpi");
+            System.err.println("ColtUtils: Error changing dpi");
             e.printStackTrace();
         } catch (InterruptedException e) {
-            System.err.println("XtendedUtils: Error changing dpi");
+            System.err.println("ColtUtils: Error changing dpi");
             e.printStackTrace();
         }
     }

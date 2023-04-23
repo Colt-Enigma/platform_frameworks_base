@@ -90,7 +90,7 @@ public class QSFooterView extends FrameLayout {
                         UserHandle.USER_CURRENT);
         if (isShow) {
             if (text == null || text == "") {
-                v.setText("Xtended");
+                v.setText("ColtOS");
                 v.setVisibility(View.VISIBLE);
             } else {
                 v.setText(text);
