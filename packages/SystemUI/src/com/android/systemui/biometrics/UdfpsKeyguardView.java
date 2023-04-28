@@ -92,7 +92,7 @@ public class UdfpsKeyguardView extends UdfpsAnimationView {
         mMaxBurnInOffsetY = context.getResources()
             .getDimensionPixelSize(R.dimen.udfps_burn_in_offset_y);
 
-        mPackageInstalled = com.android.internal.util.colt.coltUtils.isPackageInstalled(
+        mPackageInstalled = com.android.internal.util.colt.ColtUtils.isPackageInstalled(
                 mContext, "com.colt.udfps.resources");
     }
 

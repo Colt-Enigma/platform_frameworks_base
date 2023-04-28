@@ -26,7 +26,6 @@ import android.hardware.biometrics.BiometricSourceType
 import android.os.UserHandle
 import android.provider.Settings
 import androidx.annotation.VisibleForTesting
-import android.provider.Settings
 import com.android.keyguard.KeyguardUpdateMonitor
 import com.android.keyguard.KeyguardUpdateMonitorCallback
 import com.android.settingslib.Utils
