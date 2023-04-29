@@ -88,8 +88,8 @@ public class SystemSettings {
         Settings.System.ALARM_ALERT,
         Settings.System.NOTIFICATION_LIGHT_PULSE,
         Settings.System.DISABLE_RIPPLE_EFFECT,
+
         Settings.System.SCREEN_OFF_FOD,
-        Settings.System.COLOR_BUCKET_OVERLAY,
         Settings.System.USE_OLD_MOBILETYPE,
         Settings.System.NAVIGATION_BAR_INVERSE,
         Settings.System.NAVBAR_LAYOUT_VIEWS,

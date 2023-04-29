@@ -213,17 +213,6 @@ public class SystemSettingsValidators {
         VALIDATORS.put(System.TOUCHSCREEN_GESTURE_HAPTIC_FEEDBACK, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.HIGH_TOUCH_SENSITIVITY_ENABLE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.DOZE_ON_CHARGE, BOOLEAN_VALIDATOR);
-        VALIDATORS.put(
-                System.COLOR_BUCKET_OVERLAY,
-                new Validator() {
-                    @Override
-                    public boolean validate(String value) {
-                        if (value == null && value.isEmpty()) {
-                            return false;
-                        }
-                        return true;
-                    }
-                });
         VALIDATORS.put(System.USE_OLD_MOBILETYPE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.NAVIGATION_BAR_INVERSE, BOOLEAN_VALIDATOR);
         VALIDATORS.put(System.NAVBAR_LAYOUT_VIEWS,
