@@ -3089,7 +3089,10 @@ final public class MediaCodec {
                 mValid = false;
                 mNativeContext = 0;
             }
-            sPool.offer(this);
+
+            if (!mInternal) {
+                sPool.offer(this);
+            }
         }
 
         private native void native_recycle();
@@ -3157,6 +3160,7 @@ final public class MediaCodec {
             mNativeContext = context;
             mMappable = isMappable;
             mValid = (context != 0);
+            mInternal = true;
         }
 
         private static final BlockingQueue<LinearBlock> sPool =
@@ -3167,6 +3171,7 @@ final public class MediaCodec {
         private boolean mMappable = false;
         private ByteBuffer mMapped = null;
         private long mNativeContext = 0;
+        private boolean mInternal = false;
     }
 
     /**
