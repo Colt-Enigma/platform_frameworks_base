@@ -239,9 +239,31 @@ open class QSTileViewImpl @JvmOverloads constructor(
         background = if (isA11Style) null else createTileBackground()
 
 	if (isA11Style) {
+            val enableQsMorphing = Settings.System.getIntForUser(
+            context.contentResolver,
+            Settings.System.QS_ENABLE_MORPHING, 1,
+            UserHandle.USER_CURRENT) == 1
+            val invertQsMorphing = Settings.System.getIntForUser(
+            context.contentResolver,
+            Settings.System.QS_INVERT_MORPHING, 0,
+            UserHandle.USER_CURRENT) == 1
+            val fullQsMorphing = Settings.System.getIntForUser(
+            context.contentResolver,
+            Settings.System.QS_FULL_MORPHING, 0,
+            UserHandle.USER_CURRENT) == 1
             val iconContainerSize = context.resources.getDimensionPixelSize(R.dimen.qs_quick_tile_size)
             radiusActive = iconContainerSize / 2f
             radiusInactive = iconContainerSize / 4f
+            if (!enableQsMorphing || invertQsMorphing) {
+             radiusInactive = iconContainerSize / 2f
+	    }
+            if (invertQsMorphing) {
+            radiusActive = iconContainerSize / 4f
+            }
+            if (fullQsMorphing) {
+            radiusActive = iconContainerSize / 2f
+            radiusInactive = iconContainerSize / 2f
+            }
             iconContainer = LinearLayout(context)
             iconContainer.layoutParams = LayoutParams(iconContainerSize, iconContainerSize)
             iconContainer.clipChildren = false

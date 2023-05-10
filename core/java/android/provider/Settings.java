@@ -297,6 +297,7 @@ public final class Settings {
      */
     public static final String ACTION_ONE_HANDED_SETTINGS =
             "android.settings.action.ONE_HANDED_SETTINGS";
+
     /**
      * The return values for {@link Settings.Config#set}
      * @hide
@@ -6148,6 +6149,24 @@ public final class Settings {
          * @hide
          */
         public static final String VOLUME_DIALOG_TIMEOUT = "volume_dialog_timeout";
+
+        /**
+         * Enable Morphing for qs
+         * @hide
+         */
+        public static final String QS_ENABLE_MORPHING = "qs_enable_morphing";
+
+        /**
+         * Invert Morphing for qs
+         * @hide
+         */
+        public static final String QS_INVERT_MORPHING = "qs_invert_morphing";
+
+        /**
+         * Round Morphing for qs
+         * @hide
+         */
+        public static final String QS_FULL_MORPHING = "qs_full_morphing";
 
         /**
          * GameSpace: List of added games by user
