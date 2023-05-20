@@ -159,4 +159,9 @@
 
     <!-- Location indicator -->
     <java-symbol type="drawable" name="stat_sys_location" />
+
+    <java-symbol type="anim" name="activity_freeform_open_enter" />
+    <java-symbol type="anim" name="activity_freeform_open_exit" />
+    <java-symbol type="anim" name="activity_freeform_close_enter" />
+    <java-symbol type="anim" name="activity_freeform_close_exit" />
 </resources>
