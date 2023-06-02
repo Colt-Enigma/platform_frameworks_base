@@ -102,5 +102,6 @@ public class SystemSettings {
         Settings.System.QQS_LAYOUT,
         Settings.System.USE_OLD_MOBILETYPE,
         Settings.System.QS_PANEL_STYLE,
+        Settings.System.HAPTIC_ON_SLIDER,
     };
 }
