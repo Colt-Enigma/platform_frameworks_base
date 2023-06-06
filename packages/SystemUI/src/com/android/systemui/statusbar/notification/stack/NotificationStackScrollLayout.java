@@ -48,6 +48,7 @@ import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Trace;
 import android.provider.Settings;
@@ -145,6 +146,8 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
     public static final float BACKGROUND_ALPHA_DIMMED = 0.7f;
     private static final String TAG = "StackScroller";
     private static final boolean SPEW = Log.isLoggable(TAG, Log.VERBOSE);
+
+    private MediaPlayer mMediaPlayer;
 
     // Delay in milli-seconds before shade closes for clear all.
     private static final int DELAY_BEFORE_SHADE_CLOSE = 200;
@@ -666,8 +669,9 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
                 mShowDimissButton = TunerService.parseIntegerSwitch(newValue, false);
                 updateFooter();
             }
-        },  
-        NOTIFICATION_MATERIAL_DISMISS);
+        },  NOTIFICATION_MATERIAL_DISMISS);
+
+        mMediaPlayer = MediaPlayer.create(context, R.raw.op_clear_all);
     }
 
     /**
@@ -1467,6 +1471,12 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
      */
     void setOnStackYChanged(Consumer<Boolean> onStackYChanged) {
         mOnStackYChanged = onStackYChanged;
+    }
+
+    public void playClearAllSound() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.start();
+        }
     }
 
     /**
@@ -5525,6 +5535,8 @@ public class NotificationStackScrollLayout extends ViewGroup implements Dumpable
             mCentralSurfaces.getDismissAllButton().setOnClickListener(v -> {
                 if (mShowDimissButton) {
                     clearNotifications(ROWS_ALL, true /* closeShade */);
+                    // Play the dismiss all sound
+                    playClearAllSound();
                 }
             });
         }
