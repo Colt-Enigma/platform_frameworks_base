@@ -80,6 +80,15 @@ public class PixelPropsUtils {
 
     // Packages to Keep with original device
     private static final String[] packagesToKeep = {
+            "com.google.android.GoogleCamera",
+            "com.google.android.GoogleCamera.Cameight",
+            "com.google.android.GoogleCamera.Go",
+            "com.google.android.GoogleCamera.Urnyx",
+            "com.google.android.GoogleCameraAsp",
+            "com.google.android.GoogleCameraCVM",
+            "com.google.android.GoogleCameraEng",
+            "com.google.android.GoogleCameraEng2",
+            "com.google.android.GoogleCameraGood",
             "com.google.android.MTCL83",
             "com.google.android.UltraCVM",
             "com.google.android.apps.cameralite",
@@ -226,8 +235,7 @@ public class PixelPropsUtils {
         if (packageName.startsWith("com.google.")
                 || Arrays.asList(extraPackagesToChange).contains(packageName)) {
 
-            if (Arrays.asList(packagesToKeep).contains(packageName) ||
-                    packageName.startsWith("com.google.android.GoogleCamera")) {
+            if (Arrays.asList(packagesToKeep).contains(packageName)) {
                 return;
             }
 
