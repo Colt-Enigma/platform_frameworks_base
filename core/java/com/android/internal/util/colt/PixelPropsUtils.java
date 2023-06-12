@@ -69,8 +69,7 @@ public class PixelPropsUtils {
             "com.android.chrome",
             "com.android.vending",
             "com.breel.wallpapers20",
-            "com.nhs.online.nhsonline",
-            "com.netflix.mediaclient"
+            "com.nhs.online.nhsonline"
     };
 
     private static final String[] packagesToKeep = {
@@ -218,10 +217,6 @@ public class PixelPropsUtils {
                     if (isPixelDevice) return;
                     propsToChange.putAll(propsToChangePixel5);
                 }
-            } else if (packageName.equals("com.netflix.mediaclient") && 
-                        !SystemProperties.getBoolean("persist.sys.pixelprops.netflix", false)) {
-                    if (DEBUG) Log.d(TAG, "Netflix spoofing disabled by system prop");
-                    return;
             } else if (isPixelDevice) {
                 return;
             } else if (packageName.equals("com.android.vending")) {
