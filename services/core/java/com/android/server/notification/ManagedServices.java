@@ -1321,7 +1321,10 @@ abstract public class ManagedServices {
                 }
 
                 final Set<ComponentName> add = new HashSet<>(userComponents);
-                add.removeAll(mSnoozingForCurrentProfiles);
+                ArraySet<ComponentName> snoozed = mSnoozing.get(userId);
+                if (snoozed != null) {
+                    add.removeAll(snoozed);
+                }
 
                 componentsToBind.put(userId, add);
 
