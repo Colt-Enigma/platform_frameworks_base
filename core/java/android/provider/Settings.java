@@ -5857,11 +5857,6 @@ public final class Settings {
         public static final String GLOBAL_ACTIONS_EMERGENCY = "global_actions_emergency";
 
         /**
-         * @hide
-         */
-        public static final String ENABLE_TASKBAR = "enable_taskbar";
-
-	/**
          * Whether to display the torch option in the power menu
          * @hide
          */
