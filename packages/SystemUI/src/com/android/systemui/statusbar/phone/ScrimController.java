@@ -26,6 +26,7 @@ import android.animation.ValueAnimator;
 import android.annotation.IntDef;
 import android.app.AlarmManager;
 import android.graphics.Color;
+import android.provider.Settings;
 import android.os.Handler;
 import android.os.Trace;
 import android.util.Log;
