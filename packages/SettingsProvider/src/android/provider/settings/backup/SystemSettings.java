@@ -103,5 +103,15 @@ public class SystemSettings {
         Settings.System.USE_OLD_MOBILETYPE,
         Settings.System.QS_PANEL_STYLE,
         Settings.System.HAPTIC_ON_SLIDER,
+        Settings.System.QS_HEADER_IMAGE,
+        Settings.System.QS_HEADER_IMAGE_TINT,
+        Settings.System.QS_HEADER_IMAGE_TINT_CUSTOM,
+        Settings.System.QS_HEADER_IMAGE_ALPHA,
+        Settings.System.QS_HEADER_IMAGE_HEIGHT_PORTRAIT,
+        Settings.System.QS_HEADER_IMAGE_HEIGHT_LANDSCAPE,
+        Settings.System.QS_HEADER_IMAGE_LANDSCAPE_ENABLED,
+        Settings.System.QS_HEADER_IMAGE_PADDING_SIDE,
+        Settings.System.QS_HEADER_IMAGE_PADDING_TOP,
+        Settings.System.QS_HEADER_IMAGE_URI
     };
 }
