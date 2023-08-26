@@ -312,7 +312,6 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
     private boolean mHasSeenODICaptionsTooltip;
     private ViewStub mODICaptionsTooltipViewStub;
     private View mODICaptionsTooltipView = null;
-    private TunerService mTunerService;
     private final boolean mVoiceCapable;
 
     // Volume panel placement left or right
@@ -865,10 +864,21 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
         }
     }
     
-     private final TunerService.Tunable mTunable = new TunerService.Tunable() {
+    private final TunerService.Tunable mTunable = new TunerService.Tunable() {
         @Override
         public void onTuningChanged(String key, String newValue) {
-            if (VOLUME_TEXTVIEW.equals(key)) {
+            if (VOLUME_PANEL_ON_LEFT.equals(key)) {
+                final boolean volumePanelOnLeft = TunerService.parseIntegerSwitch(newValue, false);
+                if (mVolumePanelOnLeft != volumePanelOnLeft) {
+                    mVolumePanelOnLeft = volumePanelOnLeft;
+                    mHandler.post(() -> {
+                        mControllerCallbackH.onConfigurationChanged();
+                    });
+                }
+            } else if (VOLUME_DIALOG_TIMEOUT.equals(key)) {
+                mTimeOutDesired = TunerService.parseInteger(newValue, 3);
+                mTimeOut = mTimeOutDesired * 1000;
+            } else if (VOLUME_TEXTVIEW.equals(key)) {
                 final int showHider = TunerService.parseInteger(newValue, 0);
                 if (showHide != showHider) {
                     showHide = showHider;
@@ -884,25 +894,7 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                         mControllerCallbackH.onConfigurationChanged();
                     });
                 }
-            }
-        }
-    };
-
-    private final TunerService.Tunable mTunable = new TunerService.Tunable() {
-        @Override
-        public void onTuningChanged(String key, String newValue) {
-            if (VOLUME_PANEL_ON_LEFT.equals(key)) {
-                final boolean volumePanelOnLeft = TunerService.parseIntegerSwitch(newValue, false);
-                if (mVolumePanelOnLeft != volumePanelOnLeft) {
-                    mVolumePanelOnLeft = volumePanelOnLeft;
-                    mHandler.post(() -> {
-                        mControllerCallbackH.onConfigurationChanged();
-                    });
-                }
-            } else if (VOLUME_DIALOG_TIMEOUT.equals(key)) {
-                mTimeOutDesired = TunerService.parseInteger(newValue, 3);
-                mTimeOut = mTimeOutDesired * 1000;
-            }
+	    }
         }
     };
 
