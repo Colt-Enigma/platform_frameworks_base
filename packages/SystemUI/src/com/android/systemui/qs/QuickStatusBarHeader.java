@@ -95,6 +95,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
             "system:" + Settings.System.QS_HEADER_IMAGE_PADDING_TOP;
     private static final String QS_HEADER_IMAGE_URI =
             "system:" + Settings.System.QS_HEADER_IMAGE_URI;
+    private static final String QS_RANDOM_HEADER_IMAGE =
+	    "system:" + Settings.System.QS_RANDOM_HEADER_IMAGE;
 
     private final int MAX_TINT_OPACITY = 155;
 
@@ -108,6 +110,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
     private int qshiValue;
     private boolean qshiEnabled;
     private boolean qshiLandscapeEnabled;
+    private boolean mRandomHeaderEnabled;
     private int qshiHeightPortrait;
     private int qshiHeightLandscape;
     private int qshiAlpha;
@@ -146,7 +149,8 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
                 QS_HEADER_IMAGE_LANDSCAPE_ENABLED,
                 QS_HEADER_IMAGE_PADDING_SIDE,
                 QS_HEADER_IMAGE_PADDING_TOP,
-                QS_HEADER_IMAGE_URI);
+                QS_HEADER_IMAGE_URI,
+		QS_RANDOM_HEADER_IMAGE);
     }
 
     @Override
@@ -192,6 +196,11 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
             case QS_HEADER_IMAGE_URI:
                 updateResources();
                 break;
+	    case QS_RANDOM_HEADER_IMAGE:
+		mRandomHeaderEnabled =
+                TunerService.parseIntegerSwitch(newValue, false);
+		updateResources();
+                break;
             default:
                 break;
         }
@@ -231,7 +240,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
             }
         } else {
             int resId = getResources().getIdentifier("qs_header_image_" +
-                    String.valueOf(qshiValue), "drawable", "com.android.systemui");
+                    String.valueOf(mRandomHeaderEnabled ? (1 + (int) (Math.random() * (74))) : qshiValue), "drawable", "com.android.systemui");
             qshiView.setImageResource(resId);
         }
 
@@ -349,6 +358,7 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
         if (mExpanded == expanded) return;
         mExpanded = expanded;
         quickQSPanelController.setExpanded(expanded);
+	updateQSHeaderImage();
     }
 
     public void disable(int state1, int state2, boolean animate) {
